@@ -1,10 +1,26 @@
-#include < iostream>
+#include "windowManager/WindowManager.h"
+#include <iostream>
+#include <windows.h>
 
+namespace Chess {
+using namespace Rendering;
 
+int Run() {
+  WindowManager::CreateChessWindow();
+  WindowManager::Dispose();
 
-int main() {
-
-  std::cout << "Hello, World!" << std::endl;
-
-  return 0;
+  return EXIT_SUCCESS;
 }
+} // namespace Chess
+
+
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+  try {
+    return Chess::Run();
+  } catch (const std::runtime_error &e) {
+    MessageBoxA(nullptr, e.what(), "Runtime error", MB_OK | MB_ICONERROR);
+    return EXIT_FAILURE;
+  }
+}
+
+
