@@ -5,13 +5,14 @@
 namespace Chess {
 using namespace Rendering;
 
-
 int Run() {
   WindowManager::CreateChessWindow();
   WindowManager::Dispose();
+
   return EXIT_SUCCESS;
 }
 } // namespace Chess
+
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
   try {
