@@ -65,7 +65,7 @@ filesToCompile = filesToCompile.filter((filePath) => !filePath.endsWith(".h"));
 
 if (filesToCompile.length != 0) {
   execSync(
-    `cl.exe /Zi /Od /EHsc /nologo /I"lib/include" /Fobuild/objects/ /Fdbuild/compiler.pdb ${filesToCompile.join(
+    `cl.exe /Zi /Od /EHsc /nologo /I"lib/include" /std:c++17 /Fobuild/objects/ /Fdbuild/compiler.pdb ${filesToCompile.join(
       " "
     )} /c`,
     {
@@ -75,7 +75,7 @@ if (filesToCompile.length != 0) {
   );
 
   execSync(
-    `link.exe /OUT:"build/chess.exe" /DEBUG /PDB:"build/chess.pdb" build/objects/*.obj SDL3.lib /LIBPATH:"lib/SDL3" /SUBSYSTEM:WINDOWS`,
+    `link.exe /OUT:"build/chess.exe" /DEBUG /PDB:"build/chess.pdb" build/objects/*.obj SDL3.lib User32.lib /LIBPATH:"lib/SDL3" /SUBSYSTEM:WINDOWS`,
     {
       stdio: "inherit",
       shell: true,
