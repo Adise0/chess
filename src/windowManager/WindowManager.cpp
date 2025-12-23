@@ -40,16 +40,16 @@ void WindowManager::RunWindow() {
         break;
       }
     }
+    //TEMP
+    SDL_SetRenderDrawColor(renderer, 0, 40, 80, 255);
+    SDL_RenderClear(renderer);
+
+    //TODO: Draw here
+
+    SDL_RenderPresent(renderer);
+    //ENDTEMP
   }
 
-  //TEMP
-  SDL_SetRenderDrawColor(renderer, 0, 40, 80, 255);
-  SDL_RenderClear(renderer);
-
-  //TODO: Draw here
-
-  SDL_RenderPresent(renderer);
-  //ENDTEMP
 
   // #endregion
 }
