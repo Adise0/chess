@@ -1,7 +1,7 @@
 node_modules
 build
 .vscode
-app.pid
+chess.pid
 *.pdb
 tmp
 setupEnv.bat
