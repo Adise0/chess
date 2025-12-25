@@ -1,26 +1,23 @@
-#include "windowManager/WindowManager.h"
+#include "window.h"
 #include <iostream>
-#include <windows.h>
 
-namespace Chess {
-using namespace Rendering;
+int main() {
 
-int Run() {
-  WindowManager::CreateChessWindow();
-  WindowManager::Dispose();
+  std::cout << "Creating window\n";
 
-  return EXIT_SUCCESS;
-}
-} // namespace Chess
+  Window *pWindow = new Window();
 
+  bool running = true;
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-  try {
-    return Chess::Run();
-  } catch (const std::runtime_error &e) {
-    MessageBoxA(nullptr, e.what(), "Runtime error", MB_OK | MB_ICONERROR);
-    return EXIT_FAILURE;
+  while (running) {
+
+    if (!pWindow->ProcessMessages()) {
+      std::cout << "Closing";
+      running = false;
+    }
+
+    Sleep(10);
   }
+
+  delete pWindow;
 }
-
-
