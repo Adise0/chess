@@ -1,4 +1,4 @@
-#include "window.h"
+#include "window.h" // This fucking shit wont get included stupid gay library
 #include <iostream>
 
 int main() {
