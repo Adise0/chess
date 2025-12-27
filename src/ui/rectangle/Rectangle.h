@@ -1,20 +1,17 @@
 #pragma once
 #include "../../windowManager/WindowManager.h"
+#include "../element/Element.h"
 #include <SDL3/SDL.h>
 
 namespace Chess::Rendering::Elements {
 
-class Rectangle {
+class Rectangle : public Element {
 
 public:
   /// @brief The base color
   SDL_Color color;
   /// @brief The rect
   SDL_FRect rect;
-  /// @brief The sorting layer (z-index)
-  short sortingLayer;
-  /// @brief Whether the mouse is hovering this object
-  bool isHovering;
 
 public:
   /// @brief Creates a new rectangle
@@ -26,7 +23,7 @@ public:
   /// @param y The new y
   void SetPosition(int x, int y);
 
-  void Render();
+  void Render() override;
 
 private:
   /// @brief Checks if the position is within the rectangle
