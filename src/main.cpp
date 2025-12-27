@@ -1,3 +1,4 @@
+#include "gameManager/GameManager.h"
 #include "windowManager/WindowManager.h"
 #include <iostream>
 #include <windows.h>
@@ -6,9 +7,10 @@ namespace Chess {
 using namespace Rendering;
 
 int Run() {
-  WindowManager::CreateChessWindow();
-  WindowManager::Dispose();
 
+  WindowManager::InitializeWindow();
+  GameManager::Run();
+  WindowManager::Dispose();
   return EXIT_SUCCESS;
 }
 } // namespace Chess

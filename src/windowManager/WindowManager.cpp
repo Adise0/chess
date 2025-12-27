@@ -1,18 +1,17 @@
 #include "WindowManager.h"
 #include <iostream>
 
-
 #define DEFAULT_WINDOW_WIDTH 800
 #define DEFAULT_WINDOW_HEIGHT 600
 
 namespace Chess::Rendering {
 
-SDL_Renderer *WindowManager::renderer = nullptr;
 SDL_Window *WindowManager::window = nullptr;
-bool WindowManager::isRunning = false;
+SDL_Renderer *WindowManager::renderer = nullptr;
 
-void WindowManager::CreateChessWindow() {
-  // #region CreateChessWindow
+
+void WindowManager::InitializeWindow() {
+  // #region InitializeWindow
   if (!SDL_Init(SDL_INIT_VIDEO))
     throw std::runtime_error("Failed to initialize SDL video subsystem");
 
@@ -22,50 +21,47 @@ void WindowManager::CreateChessWindow() {
 
   renderer = SDL_CreateRenderer(window, nullptr);
   if (!renderer) throw std::runtime_error("Failed to create SDL renderer");
-
-  isRunning = true;
-  RunWindow();
   // #endregion
 }
 
-void WindowManager::RunWindow() {
-  // #region RunWindow
-  SDL_Event event;
+// void WindowManager::RunWindow() {
+//   // #region RunWindow
+//   SDL_Event event;
 
-  int g = 0;
-  while (isRunning) {
-    //Input
-    while (SDL_PollEvent(&event)) {
-      switch (event.type) {
-      case SDL_EVENT_QUIT:
-        isRunning = false;
+//   int g = 0;
+//   while (isRunning) {
+//     //Input
+//     while (SDL_PollEvent(&event)) {
+//       switch (event.type) {
+//       case SDL_EVENT_QUIT:
+//         isRunning = false;
 
-        break;
+//         break;
 
-      case SDL_EVENT_KEY_DOWN:
-        if (event.key.key == SDLK_E) {
-          g = rand() % 256;
-        }
-        break;
+//       case SDL_EVENT_KEY_DOWN:
+//         if (event.key.key == SDLK_E) {
+//           g = rand() % 256;
+//         }
+//         break;
 
-      default:
-        break;
-      }
-    }
+//       default:
+//         break;
+//       }
+//     }
 
-    // Game logic
+//     // Game logic
 
-    //Rendering
+//     //Rendering
 
-    //TEMP
-    SDL_SetRenderDrawColor(renderer, 0, g, 80, 255);
-    SDL_RenderClear(renderer);
-    //ENDTEMP
+//     //TEMP
+//     SDL_SetRenderDrawColor(renderer, 0, g, 80, 255);
+//     SDL_RenderClear(renderer);
+//     //ENDTEMP
 
-    SDL_RenderPresent(renderer);
-  }
-  // #endregion
-}
+//     SDL_RenderPresent(renderer);
+//   }
+//   // #endregion
+// }
 
 void WindowManager::Dispose() {
   // #region Dispose
