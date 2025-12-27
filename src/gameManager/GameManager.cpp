@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "../ui/rectangle/Rectangle.h"
 #include "../windowManager/WindowManager.h"
 #include <chrono>
 
@@ -31,6 +32,14 @@ void GameManager::Render() {
   // #region Render
   SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
   SDL_RenderClear(WindowManager::renderer);
+
+
+  SDL_FRect rect = {50, 50, 50, 50};
+  SDL_Color col = {255, 165, 0, 255};
+  Elements::Rectangle testRectangle(rect, col);
+
+  testRectangle.Render();
+
   SDL_RenderPresent(WindowManager::renderer);
   // #endregion
 }

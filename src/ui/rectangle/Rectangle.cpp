@@ -19,4 +19,11 @@ void Rectangle::SetPosition(int x, int y) {
   // #endregion
 }
 
+void Rectangle::Render() {
+  // #region Render
+  SDL_SetRenderDrawColor(WindowManager::renderer, color.r, color.g, color.b, color.a);
+  SDL_RenderFillRect(WindowManager::renderer, &rect);
+  // #endregion
+}
+
 } // namespace Chess::Rendering::Elements

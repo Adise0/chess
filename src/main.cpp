@@ -2,13 +2,14 @@
 #include "windowManager/WindowManager.h"
 #include <iostream>
 #include <windows.h>
-
 namespace Chess {
 using namespace Rendering;
 
 int Run() {
 
   WindowManager::InitializeWindow();
+
+
   GameManager::Run();
   WindowManager::Dispose();
   return EXIT_SUCCESS;
