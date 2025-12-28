@@ -19,6 +19,9 @@ private:
   /// @brief Renders the current game state
   static void Render();
 
+private:
+  static SDL_Texture *backgroundTexture;
+
 public:
   /// @brief Runs the main game loop
   static void Run();
