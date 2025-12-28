@@ -1,5 +1,5 @@
 #include "Rectangle.h"
-
+#include <windows.h>
 namespace Chess::Rendering::Elements {
 
 bool Rectangle::IsWithinRect(float x, float y) {
@@ -26,9 +26,7 @@ void Rectangle::Render() {
     SDL_RenderFillRect(WindowManager::renderer, &rect);
     return;
   }
-
-  else
-    SDL_RenderTexture(WindowManager::renderer, texture, &rect, &rect);
+  SDL_RenderTexture(WindowManager::renderer, texture, NULL, &rect);
   // #endregion
 }
 

@@ -14,7 +14,7 @@ public:
   SDL_FRect rect;
 
   /// @brief The texture if any
-  SDL_Texture *texture = nullptr;
+  SDL_Texture *texture;
 
 public:
   /// @brief Creates a new rectangle
