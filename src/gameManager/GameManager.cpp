@@ -3,10 +3,10 @@
 #include "../ui/element/Element.h"
 #include "../ui/rectangle/Rectangle.h"
 #include "../windowManager/WindowManager.h"
+#include <SDL3_image/SDL_image.h>
 #include <chrono>
 #include <string>
 #include <windows.h>
-// #include <SDL3_image/SDL3_image.h>
 
 namespace Chess {
 
