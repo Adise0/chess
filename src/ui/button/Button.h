@@ -23,7 +23,7 @@ public:
   /// @param rect The button rect
   /// @param color button base color
   Button(SDL_FRect rect, SDL_Color color);
-
+  Button(SDL_FRect rect, SDL_Texture *texture);
   /// @brief Handles the button events
   /// @param event Reference to each event
   void HandleEvent(SDL_Event &event) override;

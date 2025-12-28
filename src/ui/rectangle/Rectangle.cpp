@@ -21,8 +21,14 @@ void Rectangle::SetPosition(float x, float y) {
 
 void Rectangle::Render() {
   // #region Render
-  SDL_SetRenderDrawColor(WindowManager::renderer, color.r, color.g, color.b, color.a);
-  SDL_RenderFillRect(WindowManager::renderer, &rect);
+  if (texture == nullptr) {
+    SDL_SetRenderDrawColor(WindowManager::renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderFillRect(WindowManager::renderer, &rect);
+    return;
+  }
+
+  else
+    SDL_RenderTexture(WindowManager::renderer, texture, &rect, &rect);
   // #endregion
 }
 

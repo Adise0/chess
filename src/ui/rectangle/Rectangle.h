@@ -13,17 +13,25 @@ public:
   /// @brief The rect
   SDL_FRect rect;
 
+  /// @brief The texture if any
+  SDL_Texture *texture = nullptr;
+
 public:
   /// @brief Creates a new rectangle
   /// @param rect The rect to use
+  /// @param color The color to use
   Rectangle(SDL_FRect rect, SDL_Color color) : rect(rect), color(color) {}
+  /// @brief Creates a new rectangle with a texture
+  /// @param rect The rect to use
+  /// @param texture The texture to use
+  Rectangle(SDL_FRect rect, SDL_Texture *texture) : rect(rect), texture(texture) {}
 
   /// @brief Sets the position of the rectangle
   /// @param x The new x
   /// @param y The new y
   void SetPosition(float x, float y);
 
-protected: // Bro t'he cambiat això. Ho necessito :/
+protected:
   void Render() override;
   /// @brief Checks if the position is within the rectangle
   /// @param x The x coord

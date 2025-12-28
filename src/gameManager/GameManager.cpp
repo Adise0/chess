@@ -45,14 +45,14 @@ void GameManager::Update(float deltaTime) {
 
 void GameManager::Render() {
   // #region Render
-  SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
-  SDL_RenderClear(WindowManager::renderer);
+  // SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
+  // SDL_RenderClear(WindowManager::renderer);
 
-  if (GameManager::backgroundTexture) {
-    SDL_FRect srect{0, 0, 860, 537};
-    SDL_FRect rrect{0, 0, 860, 537};
-    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, &srect, &rrect);
-  }
+  // if (GameManager::backgroundTexture) {
+  //   SDL_FRect srect{0, 0, 860, 537};
+  //   SDL_FRect rrect{0, 0, 860, 537};
+  //   SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, &srect, &rrect);
+  // }
   for (Element *element : Element::elements) {
     element->Render();
   }
@@ -64,16 +64,16 @@ void GameManager::Render() {
 
 void GameManager::Run() {
   // #region Run
-
+  GameManager::backgroundTexture =
+      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton.png");
 
   SDL_FRect rect3{300, 200, 50, 50};
-  SDL_Color gayColor{255, 100, 200, 255};
-  Elements::Button bigAssButton(rect3, gayColor);
+  Elements::Button bigAssButton(rect3, GameManager::backgroundTexture);
 
 
 
-  GameManager::backgroundTexture =
-      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
+  // GameManager::backgroundTexture =
+  //     IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
 
   isRunning = true;
 

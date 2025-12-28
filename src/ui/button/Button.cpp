@@ -14,6 +14,9 @@ Button::Button(SDL_FRect rect, SDL_Color color) : Rectangle(rect, color) {
   pressedColor = GetPressedColor();
   isPressed = false;
 }
+Button::Button(SDL_FRect rect, SDL_Texture *texture) : Rectangle(rect, texture) {
+  isPressed = false;
+}
 
 void Button::HandleEvent(SDL_Event &event) {
   // #region HandleEvent
@@ -31,7 +34,7 @@ void Button::HandleEvent(SDL_Event &event) {
 
 void Button::Render() {
   // #region Render
-  color = isPressed ? pressedColor : baseColor;
+  if (texture != nullptr) color = isPressed ? pressedColor : baseColor;
   Rectangle::Render();
   // #endregion
 }
