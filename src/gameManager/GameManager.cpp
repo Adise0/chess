@@ -6,6 +6,7 @@
 #include <chrono>
 #include <string>
 #include <windows.h>
+// #include <SDL3_image/SDL3_image.h>
 
 namespace Chess {
 
@@ -73,6 +74,7 @@ void GameManager::Run() {
   SDL_Color gayColor{255, 100, 200, 255};
   Elements::Button bigAssButton(rect3.x, rect3.y, rect3.w, rect3.h, gayColor);
 
+  // IMG_LoadPNG_IO
 
   isRunning = true;
 

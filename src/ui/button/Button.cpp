@@ -15,15 +15,10 @@ Button::Button(float x, float y, float width, float height, SDL_Color baseColor)
   pressedColor = {(Uint8)(baseColor.r * 0.7f), (Uint8)(baseColor.g * 0.7f),
                   (Uint8)(baseColor.b * 0.7f), baseColor.a};
 }
-
-void Button::HandleEvent(
-    const SDL_Event
-        &event) { // Isn't this checking if the button was pressed? Why the else if below?
+void Button::HandleEvent(const SDL_Event &event) {
   if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-    if (event.button.button ==
-        SDL_BUTTON_LEFT) { // Why button.button, where are those buttons coming from?
-      if (IsWithinRect((int)event.button.x,
-                       (int)event.button.y)) { // IsWithinRect is giving me error
+    if (event.button.button == SDL_BUTTON_LEFT) {
+      if (IsWithinRect((int)event.button.x, (int)event.button.y)) {
         isPressed = true;
       }
     }
@@ -39,12 +34,9 @@ void Button::HandleEvent(
   }
 }
 
-
-void Button::
-    Render() { // So to override means to fuck the other's code and do the fuck we want with it?
-  SDL_Color currentColor =
-      isPressed ? pressedColor
-                : normalColor; // if isPressed is true, currentColor is pressedColor, else is else.
+/// @brief A button that changes its color when you press it
+void Button::Render() {
+  SDL_Color currentColor = isPressed ? pressedColor : normalColor;
   color = currentColor;
   Rectangle::Render();
 }
