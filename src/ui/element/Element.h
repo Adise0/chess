@@ -25,6 +25,11 @@ public:
   /// @brief Renders the element
   virtual void Render();
 
+  /// @brief Handles the element events
+  /// @param event The current event
+  virtual void HandleEvent(SDL_Event &event);
+
+
   Element();
   virtual ~Element();
 };

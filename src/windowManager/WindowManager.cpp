@@ -24,45 +24,6 @@ void WindowManager::InitializeWindow() {
   // #endregion
 }
 
-// void WindowManager::RunWindow() {
-//   // #region RunWindow
-//   SDL_Event event;
-
-//   int g = 0;
-//   while (isRunning) {
-//     //Input
-//     while (SDL_PollEvent(&event)) {
-//       switch (event.type) {
-//       case SDL_EVENT_QUIT:
-//         isRunning = false;
-
-//         break;
-
-//       case SDL_EVENT_KEY_DOWN:
-//         if (event.key.key == SDLK_E) {
-//           g = rand() % 256;
-//         }
-//         break;
-
-//       default:
-//         break;
-//       }
-//     }
-
-//     // Game logic
-
-//     //Rendering
-
-//     //TEMP
-//     SDL_SetRenderDrawColor(renderer, 0, g, 80, 255);
-//     SDL_RenderClear(renderer);
-//     //ENDTEMP
-
-//     SDL_RenderPresent(renderer);
-//   }
-//   // #endregion
-// }
-
 void WindowManager::Dispose() {
   // #region Dispose
   if (renderer) {

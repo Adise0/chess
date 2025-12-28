@@ -1,8 +1,13 @@
 #include "GameManager.h"
+#include "../ui/button/Button.h"
 #include "../ui/element/Element.h"
 #include "../ui/rectangle/Rectangle.h"
 #include "../windowManager/WindowManager.h"
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_render.h>
+#include <SDL3_image/SDL_image.h>
 #include <chrono>
+#include <iostream>
 #include <string>
 #include <windows.h>
 
@@ -12,6 +17,7 @@ using namespace Rendering;
 using namespace Elements;
 
 bool GameManager::isRunning = false;
+SDL_Texture *GameManager::backgroundTexture = nullptr;
 
 void GameManager::ProcessInput(SDL_Event &event) {
   // #region ProcessInput
@@ -20,6 +26,12 @@ void GameManager::ProcessInput(SDL_Event &event) {
     switch (event.type) {
     case SDL_EVENT_QUIT:
       isRunning = false;
+      break;
+
+    default:
+      for (Element *element : Element::elements) {
+        element->HandleEvent(event);
+      }
       break;
     }
   }
@@ -37,6 +49,9 @@ void GameManager::Render() {
   SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
   SDL_RenderClear(WindowManager::renderer);
 
+  if (GameManager::backgroundTexture) {
+    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
+  }
   for (Element *element : Element::elements) {
     element->Render();
   }
@@ -45,7 +60,6 @@ void GameManager::Render() {
   SDL_RenderPresent(WindowManager::renderer);
   // #endregion
 }
-
 
 void GameManager::Run() {
   // #region Run
@@ -58,6 +72,12 @@ void GameManager::Run() {
   SDL_Color col2 = {100, 165, 100, 255};
   Elements::Rectangle testRectangle2(rect2, col2);
 
+  SDL_FRect rect3{200, 200, 600, 400};
+  SDL_Color gayColor{255, 100, 200, 255};
+  Elements::Button bigAssButton(rect3, gayColor);
+
+  GameManager::backgroundTexture =
+      IMG_LoadTexture(WindowManager::renderer, "../src/Sprites/BackgroundForChess.png");
   isRunning = true;
 
   SDL_Event event;

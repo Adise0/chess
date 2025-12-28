@@ -1,5 +1,8 @@
 {
-  "watch": ["*.cpp", "*.h"],
+  "watch": [
+    "*.cpp",
+    "*.h"
+  ],
   "ext": "cpp,h",
-  "exec": "clear && build.bat && call build\\chess.exe"
+  "exec": "build.bat && call build\\chess.exe"
 }
