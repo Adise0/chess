@@ -13,6 +13,9 @@ private:
   /// @brief Whether the button is currently being pressed
   bool isPressed;
 
+  /// @brief Whether the button is color-based
+  bool hasColor;
+
   /// @brief The color when pressed
   SDL_Color pressedColor;
   /// @brief The base color when unpressed
@@ -22,7 +25,7 @@ public:
   /// @brief Creates a clickabale button
   /// @param rect The button rect
   /// @param color button base color
-  Button(SDL_FRect rect, SDL_Color color);
+  Button(SDL_FRect rect, Renderer renderer);
 
   /// @brief Handles the button events
   /// @param event Reference to each event

@@ -1,4 +1,5 @@
 #pragma once
+#include "../renderer/Renderer.h"
 #include <SDL3/SDL.h>
 #include <vector>
 
@@ -20,6 +21,9 @@ public:
 public:
   /// @brief The rect
   SDL_FRect rect;
+
+  /// @brief The element renderer
+  Renderer renderer;
 
 public:
   /// @brief Renders the element

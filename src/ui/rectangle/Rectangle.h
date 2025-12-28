@@ -1,6 +1,7 @@
 #pragma once
 #include "../../windowManager/WindowManager.h"
 #include "../element/Element.h"
+#include "../renderer/Renderer.h"
 #include <SDL3/SDL.h>
 
 namespace Chess::Rendering::Elements {
@@ -13,18 +14,19 @@ public:
   /// @brief The rect
   SDL_FRect rect;
 
+
 public:
-  /// @brief Creates a new rectangle
+  /// @brief Creates a new rectangle with a texture
   /// @param rect The rect to use
-  Rectangle(SDL_FRect rect, SDL_Color color) : rect(rect), color(color) {}
+  /// @param renderer The renderer to use
+  Rectangle(SDL_FRect rect, Renderer renderer) : rect(rect) { this->renderer = renderer; }
 
   /// @brief Sets the position of the rectangle
   /// @param x The new x
   /// @param y The new y
   void SetPosition(float x, float y);
 
-protected: // Bro t'he cambiat això. Ho necessito :/
-  void Render() override;
+protected:
   /// @brief Checks if the position is within the rectangle
   /// @param x The x coord
   /// @param y The y coord
