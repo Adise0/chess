@@ -6,6 +6,8 @@ class GameManager {
 private:
   /// @brief Whether the game is runninng
   static bool isRunning;
+  /// @brief Test bg texture
+  static SDL_Texture *backgroundTexture;
 
 private:
   /// @brief Process user input
@@ -18,6 +20,8 @@ private:
 
   /// @brief Renders the current game state
   static void Render();
+
+
 
 public:
   /// @brief Runs the main game loop

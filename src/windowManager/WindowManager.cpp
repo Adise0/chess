@@ -1,8 +1,8 @@
 #include "WindowManager.h"
 #include <iostream>
 
-#define DEFAULT_WINDOW_WIDTH 800
-#define DEFAULT_WINDOW_HEIGHT 600
+#define DEFAULT_WINDOW_WIDTH 860
+#define DEFAULT_WINDOW_HEIGHT 537
 
 namespace Chess::Rendering {
 
@@ -15,53 +15,13 @@ void WindowManager::InitializeWindow() {
   if (!SDL_Init(SDL_INIT_VIDEO))
     throw std::runtime_error("Failed to initialize SDL video subsystem");
 
-  window =
-      SDL_CreateWindow("Chess", DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
+  window = SDL_CreateWindow("Chess", DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, 0);
   if (!window) throw std::runtime_error("Failed to create SDL window");
 
   renderer = SDL_CreateRenderer(window, nullptr);
   if (!renderer) throw std::runtime_error("Failed to create SDL renderer");
   // #endregion
 }
-
-// void WindowManager::RunWindow() {
-//   // #region RunWindow
-//   SDL_Event event;
-
-//   int g = 0;
-//   while (isRunning) {
-//     //Input
-//     while (SDL_PollEvent(&event)) {
-//       switch (event.type) {
-//       case SDL_EVENT_QUIT:
-//         isRunning = false;
-
-//         break;
-
-//       case SDL_EVENT_KEY_DOWN:
-//         if (event.key.key == SDLK_E) {
-//           g = rand() % 256;
-//         }
-//         break;
-
-//       default:
-//         break;
-//       }
-//     }
-
-//     // Game logic
-
-//     //Rendering
-
-//     //TEMP
-//     SDL_SetRenderDrawColor(renderer, 0, g, 80, 255);
-//     SDL_RenderClear(renderer);
-//     //ENDTEMP
-
-//     SDL_RenderPresent(renderer);
-//   }
-//   // #endregion
-// }
 
 void WindowManager::Dispose() {
   // #region Dispose

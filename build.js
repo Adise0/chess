@@ -75,7 +75,7 @@ if (filesToCompile.length != 0) {
   );
 
   execSync(
-    `link.exe /OUT:"build/chess.exe" /DEBUG /PDB:"build/chess.pdb" build/objects/*.obj SDL3.lib User32.lib /LIBPATH:"lib/SDL3" /SUBSYSTEM:WINDOWS`,
+    `link.exe /OUT:"build/chess.exe" /DEBUG /PDB:"build/chess.pdb" build/objects/*.obj SDL3.lib SDL3_image.lib User32.lib /LIBPATH:"lib/SDL3" /SUBSYSTEM:WINDOWS`,
     {
       stdio: "inherit",
       shell: true,
