@@ -4,7 +4,6 @@
 #include "../ui/rectangle/Rectangle.h"
 #include "../windowManager/WindowManager.h"
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_error.h> // meh
 #include <SDL3/SDL_render.h>
 #include <SDL3_image/SDL_image.h>
 #include <chrono>
@@ -55,7 +54,7 @@ void GameManager::Render() {
   SDL_RenderClear(WindowManager::renderer);
 
   if (GameManager::backgroundTexture) {
-    SDL_RenderCopy(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
+    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
   }
   for (Element *element : Element::elements) {
     element->Render();
@@ -83,7 +82,7 @@ void GameManager::Run() {
   Elements::Button bigAssButton(rect3.x, rect3.y, rect3.w, rect3.h, gayColor);
 
   GameManager::backgroundTexture =
-      IMG_LoadTexture(WindowManager::renderer, "Sprites/BackgroundForChess.png");
+      IMG_LoadTexture(WindowManager::renderer, "../src/Sprites/BackgroundForChess.png");
   isRunning = true;
 
   SDL_Event event;
