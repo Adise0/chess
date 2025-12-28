@@ -9,7 +9,6 @@
 #include <chrono>
 #include <iostream>
 #include <string>
-#include <windows.h>
 
 namespace Chess {
 
@@ -50,7 +49,9 @@ void GameManager::Render() {
   SDL_RenderClear(WindowManager::renderer);
 
   if (GameManager::backgroundTexture) {
-    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
+    SDL_FRect srect{0, 0, 860, 537};
+    SDL_FRect rrect{0, 0, 860, 537};
+    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, &srect, &rrect);
   }
   for (Element *element : Element::elements) {
     element->Render();
@@ -64,20 +65,16 @@ void GameManager::Render() {
 void GameManager::Run() {
   // #region Run
 
-  SDL_FRect rect = {50, 50, 50, 50};
-  SDL_Color col = {255, 165, 0, 255};
-  Elements::Rectangle testRectangle(rect, col);
 
-  SDL_FRect rect2 = {100, 100, 50, 300};
-  SDL_Color col2 = {100, 165, 100, 255};
-  Elements::Rectangle testRectangle2(rect2, col2);
-
-  SDL_FRect rect3{200, 200, 600, 400};
+  SDL_FRect rect3{300, 200, 50, 50};
   SDL_Color gayColor{255, 100, 200, 255};
   Elements::Button bigAssButton(rect3, gayColor);
 
+
+
   GameManager::backgroundTexture =
-      IMG_LoadTexture(WindowManager::renderer, "../src/Sprites/BackgroundForChess.png");
+      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
+
   isRunning = true;
 
   SDL_Event event;
