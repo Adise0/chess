@@ -23,9 +23,8 @@ public:
   /// @param y The new y
   void SetPosition(int x, int y);
 
+protected: // Bro t'he cambiat això. Ho necessito :/
   void Render() override;
-
-private:
   /// @brief Checks if the position is within the rectangle
   /// @param x The x coord
   /// @param y The y coord

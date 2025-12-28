@@ -14,6 +14,5 @@ if errorlevel 1 (
   exit /b %errorlevel%
 ) else (
   echo Build succeeded. 
-  cls
 )
 
