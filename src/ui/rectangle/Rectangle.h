@@ -1,6 +1,7 @@
 #pragma once
 #include "../../windowManager/WindowManager.h"
 #include "../element/Element.h"
+#include "../renderer/Renderer.h"
 #include <SDL3/SDL.h>
 
 namespace Chess::Rendering::Elements {
@@ -13,18 +14,12 @@ public:
   /// @brief The rect
   SDL_FRect rect;
 
-  /// @brief The texture if any
-  SDL_Texture *texture;
 
 public:
-  /// @brief Creates a new rectangle
-  /// @param rect The rect to use
-  /// @param color The color to use
-  Rectangle(SDL_FRect rect, SDL_Color color) : rect(rect), color(color) {}
   /// @brief Creates a new rectangle with a texture
   /// @param rect The rect to use
-  /// @param texture The texture to use
-  Rectangle(SDL_FRect rect, SDL_Texture *texture) : rect(rect), texture(texture) {}
+  /// @param renderer The renderer to use
+  Rectangle(SDL_FRect rect, Renderer renderer) : rect(rect) { this->renderer = renderer; }
 
   /// @brief Sets the position of the rectangle
   /// @param x The new x
@@ -32,7 +27,6 @@ public:
   void SetPosition(float x, float y);
 
 protected:
-  void Render() override;
   /// @brief Checks if the position is within the rectangle
   /// @param x The x coord
   /// @param y The y coord

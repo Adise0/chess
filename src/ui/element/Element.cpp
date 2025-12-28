@@ -21,7 +21,7 @@ void Element::UnregisterElement(Element *element) {
   }
 }
 
-void Element::Render() { throw std::runtime_error("Element rennder not implemented"); };
+void Element::Render() { renderer.Render(Texture::color, rect); };
 
 void Element::HandleEvent(SDL_Event &event) {}
 

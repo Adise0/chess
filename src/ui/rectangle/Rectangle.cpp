@@ -19,15 +19,6 @@ void Rectangle::SetPosition(float x, float y) {
   // #endregion
 }
 
-void Rectangle::Render() {
-  // #region Render
-  if (texture == nullptr) {
-    SDL_SetRenderDrawColor(WindowManager::renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderFillRect(WindowManager::renderer, &rect);
-    return;
-  }
-  SDL_RenderTexture(WindowManager::renderer, texture, NULL, &rect);
-  // #endregion
-}
+
 
 } // namespace Chess::Rendering::Elements

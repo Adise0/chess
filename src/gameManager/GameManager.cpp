@@ -49,9 +49,7 @@ void GameManager::Render() {
   SDL_RenderClear(WindowManager::renderer);
 
   if (GameManager::backgroundTexture) {
-    SDL_FRect srect{0, 0, 860, 537};
-    SDL_FRect rrect{0, 0, 860, 537};
-    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, &srect, &rrect);
+    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
   }
   for (Element *element : Element::elements) {
     element->Render();
@@ -64,12 +62,14 @@ void GameManager::Render() {
 
 void GameManager::Run() {
   // #region Run
-  SDL_Texture *testTexture =
+  SDL_Texture *baseTexture =
       IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton.png");
+  SDL_Texture *pressedTexture =
+      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton_pressed.png");
 
   SDL_FRect rect3{300, 200, 50, 50};
-  SDL_Color col{100, 255, 255, 255};
-  Elements::Button bigAssButton(rect3, testTexture);
+  Renderer renderer(NULL, baseTexture, NULL, pressedTexture);
+  Elements::Button bigAssButton(rect3, renderer);
 
 
 

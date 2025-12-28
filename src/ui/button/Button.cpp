@@ -9,14 +9,17 @@ namespace Chess::Rendering::Elements {
 
 
 
-Button::Button(SDL_FRect rect, SDL_Color color) : Rectangle(rect, color) {
-  baseColor = color;
-  pressedColor = GetPressedColor();
+Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
+  if (renderer.color) hasColor = true;
+  else hasColor = false;
+
+  if (hasColor) {
+    baseColor = *renderer.color;
+    pressedColor = GetPressedColor();
+  }
   isPressed = false;
 }
-Button::Button(SDL_FRect rect, SDL_Texture *texture) : Rectangle(rect, texture) {
-  isPressed = false;
-}
+
 
 void Button::HandleEvent(SDL_Event &event) {
   // #region HandleEvent
@@ -34,15 +37,25 @@ void Button::HandleEvent(SDL_Event &event) {
 
 void Button::Render() {
   // #region Render
-  if (texture != nullptr) color = isPressed ? pressedColor : baseColor;
-  Rectangle::Render();
+  if (hasColor) {
+    renderer.color = &(isPressed ? pressedColor : baseColor);
+    Rectangle::Render();
+    return;
+  }
+
+  Texture textureType = Texture::base;
+  if (isPressed) textureType = Texture::pressed;
+
+  renderer.Render(textureType, rect);
+
   // #endregion
 }
 
 
 SDL_Color Button::GetPressedColor() {
   // #region GetPressedColor
-  return {(Uint8)(color.r * 0.7f), (Uint8)(color.g * 0.7f), (Uint8)(color.b * 0.7f), color.a};
+  return {(Uint8)(baseColor.r * 0.7f), (Uint8)(baseColor.g * 0.7f), (Uint8)(baseColor.b * 0.7f),
+          baseColor.a};
   // #endregion
 }
 
