@@ -29,12 +29,8 @@ void GameManager::ProcessInput(SDL_Event &event) {
       break;
 
     default:
-      for (Element *elem :
-           Element::elements) { // No se que pollas fa això però son les 3.15 del mati i tinc son
-        Button *btn = dynamic_cast<Button *>(elem);
-        if (btn) {
-          btn->HandleEvent(event);
-        }
+      for (Element *element : Element::elements) {
+        element->HandleEvent(event);
       }
       break;
     }
@@ -65,7 +61,6 @@ void GameManager::Render() {
   // #endregion
 }
 
-
 void GameManager::Run() {
   // #region Run
 
@@ -77,9 +72,9 @@ void GameManager::Run() {
   SDL_Color col2 = {100, 165, 100, 255};
   Elements::Rectangle testRectangle2(rect2, col2);
 
-  SDL_FRect rect3{100, 100, 600, 400};
+  SDL_FRect rect3{200, 200, 600, 400};
   SDL_Color gayColor{255, 100, 200, 255};
-  Elements::Button bigAssButton(rect3.x, rect3.y, rect3.w, rect3.h, gayColor);
+  Elements::Button bigAssButton(rect3, gayColor);
 
   GameManager::backgroundTexture =
       IMG_LoadTexture(WindowManager::renderer, "../src/Sprites/BackgroundForChess.png");

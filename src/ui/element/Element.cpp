@@ -1,5 +1,6 @@
 #include "Element.h"
 #include <algorithm>
+#include <stdexcept>
 
 
 namespace Chess::Rendering::Elements {
@@ -20,8 +21,9 @@ void Element::UnregisterElement(Element *element) {
   }
 }
 
-void Element::Render() {};
+void Element::Render() { throw std::runtime_error("Element rennder not implemented"); };
 
+void Element::HandleEvent(SDL_Event &event) {}
 
 Element::Element() { RegisterElement(this); }
 Element::~Element() { UnregisterElement(this); }
