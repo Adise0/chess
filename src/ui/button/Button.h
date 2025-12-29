@@ -35,6 +35,7 @@ public:
   /// @brief Whether the button is currently being pressed
   bool isPressed;
 
+  /// @brief Handles the background texture
   bool deleteBackground;
 
 

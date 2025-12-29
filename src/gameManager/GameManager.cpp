@@ -9,6 +9,7 @@
 #include <chrono>
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace Chess {
 
@@ -62,9 +63,9 @@ void GameManager::Render() {
 
 void GameManager::Run() {
   // #region Run
+
   GameManager::backgroundTexture =
       IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
-
 
   SDL_Texture *baseTexture =
       IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton.png");
@@ -74,9 +75,8 @@ void GameManager::Run() {
   SDL_FRect rect3{300, 200, 50, 50};
   Renderer renderer(NULL, baseTexture, NULL, pressedTexture);
   Elements::Button bigAssButton(rect3, renderer);
-
+  Element::elements.push_back(&bigAssButton);
   isRunning = true;
-
   SDL_Event event;
   auto lastFrame = std::chrono::high_resolution_clock::now();
 
@@ -88,7 +88,10 @@ void GameManager::Run() {
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
 
-    if (bigAssButton.deleteBackground == true) SDL_DestroyTexture(GameManager::backgroundTexture);
+    if (bigAssButton.deleteBackground == true) {
+      SDL_DestroyTexture(GameManager::backgroundTexture);
+      Element::elements.pop_back();
+    };
 
     Update(deltaTime);
     Render();
