@@ -77,6 +77,7 @@ void GameManager::Run() {
   Renderer renderer(NULL, baseTexture, NULL, pressedTexture);
   Elements::Button bigAssButton(rect3, renderer);
   Element::elements.push_back(&bigAssButton);
+
   isRunning = true;
   SDL_Event event;
   auto lastFrame = std::chrono::high_resolution_clock::now();
