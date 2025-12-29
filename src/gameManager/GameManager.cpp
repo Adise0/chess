@@ -6,6 +6,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3_image/SDL_image.h>
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <string>
@@ -90,7 +91,10 @@ void GameManager::Run() {
 
     if (bigAssButton.deleteBackground == true) {
       SDL_DestroyTexture(GameManager::backgroundTexture);
-      Element::elements.pop_back();
+      auto it = find(Element::elements.begin(), Element::elements.end(), &bigAssButton);
+      if (it != Element::elements.end()) {
+        Element::elements.erase(it);
+      }
     };
 
     Update(deltaTime);
