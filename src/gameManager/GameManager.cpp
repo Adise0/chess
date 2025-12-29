@@ -85,7 +85,6 @@ void GameManager::Run() {
   auto lastFrame = std::chrono::high_resolution_clock::now();
 
 
-
   while (isRunning) {
     ProcessInput(event);
     auto thisFrame = std::chrono::high_resolution_clock::now();
@@ -97,9 +96,15 @@ void GameManager::Run() {
       auto it = find(Element::elements.begin(), Element::elements.end(), &bigAssButton);
       if (it != Element::elements.end()) {
         Element::elements.erase(it);
+        new ChessBoard();
       }
-      new ChessBoard();
     };
+
+    SDL_FRect rect = {300, 300, 100.0f, 100.0f};
+    SDL_Color currentColor = {200, 200, 200, 200};
+    Renderer renderer(&currentColor, nullptr, nullptr, nullptr);
+    Rectangle *testRectangle = new Rectangle(rect, renderer);
+    Element::elements.push_back(testRectangle);
 
     Update(deltaTime);
     Render();

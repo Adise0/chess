@@ -4,6 +4,7 @@ namespace Chess::Rendering::Elements {
 
 ChessBoard::ChessBoard() {
 
+  bool stop = false;
   float xPosition = 1200.0f / 8;
   float yPosition = 800.0f / 8;
 
