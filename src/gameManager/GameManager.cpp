@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "../ui/board/board.h"
 #include "../ui/button/Button.h"
 #include "../ui/element/Element.h"
 #include "../ui/rectangle/Rectangle.h"
@@ -67,6 +68,7 @@ void GameManager::Run() {
 
   GameManager::backgroundTexture =
       IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
+  SDL_SetTextureScaleMode(backgroundTexture, SDL_SCALEMODE_NEAREST);
 
   SDL_Texture *baseTexture =
       IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton.png");
@@ -90,12 +92,13 @@ void GameManager::Run() {
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
 
-    if (bigAssButton.deleteBackground == true) {
+    if (bigAssButton.deleteBackground == true) { // Add the board cretion function here
       SDL_DestroyTexture(GameManager::backgroundTexture);
       auto it = find(Element::elements.begin(), Element::elements.end(), &bigAssButton);
       if (it != Element::elements.end()) {
         Element::elements.erase(it);
       }
+      new ChessBoard();
     };
 
     Update(deltaTime);

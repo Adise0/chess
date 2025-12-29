@@ -1,8 +1,8 @@
 #include "WindowManager.h"
 #include <iostream>
 
-#define DEFAULT_WINDOW_WIDTH 860
-#define DEFAULT_WINDOW_HEIGHT 537
+#define DEFAULT_WINDOW_WIDTH 1280
+#define DEFAULT_WINDOW_HEIGHT 800
 
 namespace Chess::Rendering {
 

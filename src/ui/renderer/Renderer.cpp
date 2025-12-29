@@ -31,7 +31,6 @@ void Renderer::Render(Texture textureType, SDL_FRect rect) {
     break;
   }
 
-
   SDL_RenderTexture(WindowManager::renderer, texture, NULL, &rect);
   // #endregion
 }

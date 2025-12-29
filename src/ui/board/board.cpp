@@ -4,11 +4,11 @@ namespace Chess::Rendering::Elements {
 
 ChessBoard::ChessBoard() {
 
-  float xPosition = 0.0f;
-  float yPosition = 0.0f;
+  float xPosition = 1200.0f / 8;
+  float yPosition = 800.0f / 8;
 
   for (int i = 0; i < 8; i++) {
-    xPosition = 0.0f; // Reset xPosition each row
+    xPosition = 80.0f; // Reset xPosition each row
     for (int j = 0; j < 8; j++) {
       SDL_FRect rect = {xPosition, yPosition, (float)SQUARE_WIDTH, (float)SQUARE_HEIGHT};
       SDL_Color currentColor = ((i + j) % 2 == 0) ? light : dark;

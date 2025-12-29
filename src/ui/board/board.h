@@ -15,8 +15,8 @@ private:
   std::vector<Rectangle *> squares;
 
 public:
-  const int SQUARE_WIDTH = 50;
-  const int SQUARE_HEIGHT = 50;
+  const int SQUARE_WIDTH = 150;
+  const int SQUARE_HEIGHT = 100;
 
   SDL_Color light = {240, 217, 181, 255};
   SDL_Color dark = {181, 136, 99, 255};
