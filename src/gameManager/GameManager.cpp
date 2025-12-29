@@ -62,6 +62,10 @@ void GameManager::Render() {
 
 void GameManager::Run() {
   // #region Run
+  GameManager::backgroundTexture =
+      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
+
+
   SDL_Texture *baseTexture =
       IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton.png");
   SDL_Texture *pressedTexture =
@@ -71,15 +75,11 @@ void GameManager::Run() {
   Renderer renderer(NULL, baseTexture, NULL, pressedTexture);
   Elements::Button bigAssButton(rect3, renderer);
 
-
-
-  GameManager::backgroundTexture =
-      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
-
   isRunning = true;
 
   SDL_Event event;
   auto lastFrame = std::chrono::high_resolution_clock::now();
+
 
 
   while (isRunning) {
@@ -87,6 +87,8 @@ void GameManager::Run() {
     auto thisFrame = std::chrono::high_resolution_clock::now();
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
+
+    if (bigAssButton.deleteBackground == true) SDL_DestroyTexture(GameManager::backgroundTexture);
 
     Update(deltaTime);
     Render();

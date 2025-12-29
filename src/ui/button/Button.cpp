@@ -20,7 +20,6 @@ Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
   isPressed = false;
 }
 
-
 void Button::HandleEvent(SDL_Event &event) {
   // #region HandleEvent
   if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
@@ -29,7 +28,10 @@ void Button::HandleEvent(SDL_Event &event) {
   }
 
   else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
-    if (isPressed) isPressed = false;
+    if (isPressed) {
+      isPressed = false;
+      deleteBackground = true;
+    }
   }
   // #endregion
 }

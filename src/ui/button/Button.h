@@ -10,9 +10,6 @@ namespace Chess::Rendering::Elements {
 class Button : public Rectangle {
 
 private:
-  /// @brief Whether the button is currently being pressed
-  bool isPressed;
-
   /// @brief Whether the button is color-based
   bool hasColor;
 
@@ -33,6 +30,13 @@ public:
 
   /// @brief The overriden button render
   void Render() override;
+
+
+  /// @brief Whether the button is currently being pressed
+  bool isPressed;
+
+  bool deleteBackground;
+
 
 private:
   /// @brief Gets the default pressed color
