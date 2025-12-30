@@ -6,6 +6,7 @@ using namespace Elements;
 
 class MainMenu {
 
+
 private:
   /// @brief The background image
   Rectangle background;

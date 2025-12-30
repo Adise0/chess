@@ -7,18 +7,6 @@ namespace Chess::Rendering::Elements {
 class Element {
 
 public:
-  /// @brief The elements store
-  static std::vector<Element *> elements;
-
-  /// @brief Registers a UI element to the store
-  /// @param element The element to register
-  static void RegisterElement(Element *element);
-
-  /// @brief Unregisters an elmenet from the store
-  /// @param element The element to unregister
-  static void UnregisterElement(Element *element);
-
-public:
   /// @brief The rect
   SDL_FRect rect;
 
