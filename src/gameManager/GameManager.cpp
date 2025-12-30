@@ -1,8 +1,8 @@
 #include "GameManager.h"
 #include "../ui/board/board.h"
-#include "../ui/button/Button.h"
-#include "../ui/element/Element.h"
-#include "../ui/rectangle/Rectangle.h"
+#include "../ui/elements/button/Button.h"
+#include "../ui/elements/element/Element.h"
+#include "../ui/elements/rectangle/Rectangle.h"
 #include "../windowManager/WindowManager.h"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
