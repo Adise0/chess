@@ -1,7 +1,7 @@
 #pragma once
-#include "../../windowManager/WindowManager.h"
+#include "../../../windowManager/WindowManager.h"
+#include "../../renderer/Renderer.h"
 #include "../element/Element.h"
-#include "../renderer/Renderer.h"
 #include <SDL3/SDL.h>
 
 namespace Chess::Rendering::Elements {
