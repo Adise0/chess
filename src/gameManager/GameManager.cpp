@@ -3,6 +3,7 @@
 #include "../ui/elements/button/Button.h"
 #include "../ui/elements/element/Element.h"
 #include "../ui/elements/rectangle/Rectangle.h"
+#include "../ui/screens/screen/Screen.h"
 #include "../windowManager/WindowManager.h"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
@@ -14,14 +15,13 @@
 #include <string>
 #include <vector>
 #include <windows.h>
-
 namespace Chess {
 
 using namespace Rendering;
 using namespace Elements;
+using namespace Screens;
 
 bool GameManager::isRunning = false;
-SDL_Texture *GameManager::backgroundTexture = nullptr;
 
 void GameManager::ProcessInput(SDL_Event &event) {
   // #region ProcessInput
@@ -32,11 +32,11 @@ void GameManager::ProcessInput(SDL_Event &event) {
       isRunning = false;
       break;
 
-    default:
-      for (Element *element : Element::elements) {
-        element->HandleEvent(event);
-      }
-      break;
+      // default:
+      //   for (Element *element : Element::elements) {
+      //     element->HandleEvent(event);
+      //   }
+      //   break;
     }
   }
   // #endregion
@@ -53,13 +53,13 @@ void GameManager::Render() {
   SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
   SDL_RenderClear(WindowManager::renderer);
 
-  if (GameManager::backgroundTexture) {
-    SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
-  }
+  // if (GameManager::backgroundTexture) {
+  //   SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
+  // }
 
-  for (Element *element : Element::elements) {
-    element->Render();
-  }
+  // for (Element *element : Element::elements) {
+  //   element->Render();
+  // }
 
   SDL_RenderPresent(WindowManager::renderer);
   // #endregion
@@ -67,9 +67,9 @@ void GameManager::Render() {
 
 void GameManager::Run() {
   // #region Run
-
-  GameManager::backgroundTexture =
-      WindowManager::LoadSprite("assets/sprites/BackgroundForChess.png");
+  LoadScreens();
+  // GameManager::backgroundTexture =
+  //     WindowManager::LoadSprite("assets/sprites/BackgroundForChess.png");
 
 
   SDL_Texture *baseTexture =
@@ -82,10 +82,10 @@ void GameManager::Run() {
   Elements::Button *bigAssButton = new Button(rect3, renderer);
 
 
-  bigAssButton->OnClick([bigAssButton, baseTexture] {
-    SDL_DestroyTexture(GameManager::backgroundTexture);
-    delete bigAssButton;
-  });
+  // bigAssButton->OnClick([bigAssButton, baseTexture] {
+  //   SDL_DestroyTexture(GameManager::backgroundTexture);
+  //   delete bigAssButton;
+  // });
 
 
   isRunning = true;
@@ -118,6 +118,12 @@ void GameManager::Run() {
     Render();
   }
   // #endregion
+}
+
+void GameManager::LoadScreens() {
+  for (Screen *screen : Screen::screens) {
+    screen->Load();
+  }
 }
 
 } // namespace Chess

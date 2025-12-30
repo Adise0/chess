@@ -2,7 +2,9 @@
 #include <stdexcept>
 
 namespace Chess::Rendering::Screens {
-std::vector<Screen *> screens;
+
+MainMenu Screen::mainMenu = MainMenu();
+std::vector<Screen *> Screen::screens;
 
 void Screen::RegisterScreen(Screen *screen) {
   // #region RegisterScreen
@@ -19,7 +21,10 @@ void Screen::UnregisterScreen(Screen *screen) {
 }
 
 
-Screen::Screen() { isPresented = false; }
+Screen::Screen() {
+  isPresented = false;
+  RegisterScreen(this);
+}
 
 void Screen::Present(bool present) {
   if (!isPresented && present) {
@@ -30,5 +35,6 @@ void Screen::Present(bool present) {
 }
 
 void Screen::PresentInt() { throw std::runtime_error("Screen present not implemented"); }
+void Screen::Load() { throw std::runtime_error("Screen load not implemented"); }
 
 }; // namespace Chess::Rendering::Screens

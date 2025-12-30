@@ -1,11 +1,17 @@
+#pragma once
 #include "../../elements/element/Element.h"
+#include "../mainMenu/MainMenu.h"
 #include <vector>
+
 
 
 
 namespace Chess::Rendering::Screens {
 using namespace Elements;
 class Screen {
+
+public:
+  static MainMenu mainMenu;
 
 public:
   /// @brief The screen store
@@ -28,6 +34,7 @@ public:
 public:
   Screen();
   void Present(bool present);
+  virtual void Load();
 
 protected:
   virtual void PresentInt();
