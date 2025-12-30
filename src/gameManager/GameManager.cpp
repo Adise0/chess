@@ -56,10 +56,10 @@ void GameManager::Render() {
   if (GameManager::backgroundTexture) {
     SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
   }
+
   for (Element *element : Element::elements) {
     element->Render();
   }
-
 
   SDL_RenderPresent(WindowManager::renderer);
   // #endregion
