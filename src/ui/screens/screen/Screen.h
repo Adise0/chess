@@ -1,8 +1,6 @@
 #pragma once
 #include "../../elements/element/Element.h"
-#include "../mainMenu/MainMenu.h"
 #include <vector>
-
 
 
 
@@ -10,8 +8,7 @@ namespace Chess::Rendering::Screens {
 using namespace Elements;
 class Screen {
 
-public:
-  static MainMenu mainMenu;
+
 
 public:
   /// @brief The screen store
@@ -25,8 +22,7 @@ public:
   /// @param screen The screen to unregister
   static void UnregisterScreen(Screen *screen);
 
-private:
-  std::vector<Element> screenElements;
+
 
 public:
   bool isPresented;
@@ -35,8 +31,10 @@ public:
   Screen();
   void Present(bool present);
   virtual void Load();
+  virtual std::vector<Element *> GetElementsToRender();
 
 protected:
+  std::vector<Element *> screenElements;
   virtual void PresentInt();
 };
 } // namespace Chess::Rendering::Screens

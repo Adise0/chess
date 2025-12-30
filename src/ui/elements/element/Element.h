@@ -23,6 +23,5 @@ public:
 
 
   Element();
-  virtual ~Element();
 };
 } // namespace Chess::Rendering::Elements

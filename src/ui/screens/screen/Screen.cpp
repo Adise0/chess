@@ -3,7 +3,6 @@
 
 namespace Chess::Rendering::Screens {
 
-MainMenu Screen::mainMenu = MainMenu();
 std::vector<Screen *> Screen::screens;
 
 void Screen::RegisterScreen(Screen *screen) {
@@ -36,5 +35,8 @@ void Screen::Present(bool present) {
 
 void Screen::PresentInt() { throw std::runtime_error("Screen present not implemented"); }
 void Screen::Load() { throw std::runtime_error("Screen load not implemented"); }
+std::vector<Element *> Screen::GetElementsToRender() {
+  throw std::runtime_error("Get elemennts not implemented");
+}
 
 }; // namespace Chess::Rendering::Screens

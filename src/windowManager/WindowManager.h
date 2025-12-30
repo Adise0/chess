@@ -10,6 +10,11 @@ public:
   /// @brief The SDL renderer instance
   static SDL_Renderer *renderer;
 
+  /// @brief The Width of the window
+  const static short resolutionX;
+  /// @brief The height of the window
+  const static short resolutionY;
+
 public:
   /// @brief Creates and initializes the window manager
   static void InitializeWindow();

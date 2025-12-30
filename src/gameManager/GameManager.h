@@ -1,11 +1,16 @@
 #pragma once
+#include "../ui/screens/mainMenu/MainMenu.h"
 #include <SDL3/SDL.h>
 
 namespace Chess {
+using namespace Rendering::Screens;
 class GameManager {
 private:
   /// @brief Whether the game is runninng
   static bool isRunning;
+
+public:
+  static MainMenu mainMenu;
 
 private:
   /// @brief Process user input

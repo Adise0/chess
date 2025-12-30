@@ -3,13 +3,13 @@
 #include <iostream>
 
 
-#define DEFAULT_WINDOW_WIDTH 1280
-#define DEFAULT_WINDOW_HEIGHT 800
-
 namespace Chess::Rendering {
 
 SDL_Window *WindowManager::window = nullptr;
 SDL_Renderer *WindowManager::renderer = nullptr;
+
+const short WindowManager::resolutionX = 1280;
+const short WindowManager::resolutionY = 800;
 
 
 void WindowManager::InitializeWindow() {
@@ -17,7 +17,7 @@ void WindowManager::InitializeWindow() {
   if (!SDL_Init(SDL_INIT_VIDEO))
     throw std::runtime_error("Failed to initialize SDL video subsystem");
 
-  window = SDL_CreateWindow("Chess", DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, 0);
+  window = SDL_CreateWindow("Chess", resolutionX, resolutionY, 0);
   if (!window) throw std::runtime_error("Failed to create SDL window");
 
   renderer = SDL_CreateRenderer(window, nullptr);

@@ -9,5 +9,6 @@ void Element::Render() { renderer.Render(Texture::color, rect); };
 
 void Element::HandleEvent(SDL_Event &event) {}
 
+Element::Element() {}
 
 } // namespace Chess::Rendering::Elements

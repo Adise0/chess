@@ -1,5 +1,4 @@
 #include "GameManager.h"
-#include "../ui/board/board.h"
 #include "../ui/elements/button/Button.h"
 #include "../ui/elements/element/Element.h"
 #include "../ui/elements/rectangle/Rectangle.h"
@@ -22,6 +21,7 @@ using namespace Elements;
 using namespace Screens;
 
 bool GameManager::isRunning = false;
+MainMenu GameManager::mainMenu = MainMenu();
 
 void GameManager::ProcessInput(SDL_Event &event) {
   // #region ProcessInput
@@ -32,11 +32,15 @@ void GameManager::ProcessInput(SDL_Event &event) {
       isRunning = false;
       break;
 
-      // default:
-      //   for (Element *element : Element::elements) {
-      //     element->HandleEvent(event);
-      //   }
-      //   break;
+    default:
+      for (Screen *screen : Screen::screens) {
+        if (!screen->isPresented) continue;
+        std::vector<Element *> sceeenElements = screen->GetElementsToRender();
+        for (Element *element : sceeenElements) {
+          element->HandleEvent(event);
+        }
+      }
+      break;
     }
   }
   // #endregion
@@ -53,13 +57,16 @@ void GameManager::Render() {
   SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
   SDL_RenderClear(WindowManager::renderer);
 
-  // if (GameManager::backgroundTexture) {
-  //   SDL_RenderTexture(WindowManager::renderer, GameManager::backgroundTexture, NULL, NULL);
-  // }
+  MessageBoxA(nullptr, "asdsad" + Screen::screens.size(), "Runtime error", MB_OK | MB_ICONERROR);
+  for (Screen *screen : Screen::screens) {
+    if (!screen->isPresented) continue;
+    std::vector<Element *> sceeenElements = screen->GetElementsToRender();
+    for (Element *element : sceeenElements) {
+      element->Render();
+    }
+  }
 
-  // for (Element *element : Element::elements) {
-  //   element->Render();
-  // }
+
 
   SDL_RenderPresent(WindowManager::renderer);
   // #endregion
@@ -68,25 +75,7 @@ void GameManager::Render() {
 void GameManager::Run() {
   // #region Run
   LoadScreens();
-  // GameManager::backgroundTexture =
-  //     WindowManager::LoadSprite("assets/sprites/BackgroundForChess.png");
-
-
-  SDL_Texture *baseTexture =
-      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton.png");
-  SDL_Texture *pressedTexture =
-      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton_pressed.png");
-
-  SDL_FRect rect3{300, 200, 50, 50};
-  Renderer renderer(NULL, baseTexture, NULL, pressedTexture);
-  Elements::Button *bigAssButton = new Button(rect3, renderer);
-
-
-  // bigAssButton->OnClick([bigAssButton, baseTexture] {
-  //   SDL_DestroyTexture(GameManager::backgroundTexture);
-  //   delete bigAssButton;
-  // });
-
+  mainMenu.Present(true);
 
   isRunning = true;
   SDL_Event event;
@@ -99,20 +88,6 @@ void GameManager::Run() {
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
 
-    // if (bigAssButton.deleteBackground == true) { // Add the board cretion function here
-    //   SDL_DestroyTexture(GameManager::backgroundTexture);
-    //   auto it = find(Element::elements.begin(), Element::elements.end(), &bigAssButton);
-    //   if (it != Element::elements.end()) {
-    //     Element::elements.erase(it);
-    //     new ChessBoard();
-    //   }
-    // };
-
-    // SDL_FRect rect = {300, 300, 100.0f, 100.0f};
-    // SDL_Color currentColor = {200, 200, 200, 200};
-    // Renderer renderer(&currentColor, nullptr, nullptr, nullptr);
-    // Rectangle *testRectangle = new Rectangle(rect, renderer);
-    // Element::elements.push_back(testRectangle);
 
     Update(deltaTime);
     Render();
