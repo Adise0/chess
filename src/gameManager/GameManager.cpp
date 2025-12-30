@@ -9,9 +9,11 @@
 #include <SDL3_image/SDL_image.h>
 #include <algorithm>
 #include <chrono>
+#include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <windows.h>
 
 namespace Chess {
 
@@ -67,8 +69,8 @@ void GameManager::Run() {
   // #region Run
 
   GameManager::backgroundTexture =
-      IMG_LoadTexture(WindowManager::renderer, "assets/sprites/BackgroundForChess.png");
-  SDL_SetTextureScaleMode(backgroundTexture, SDL_SCALEMODE_NEAREST);
+      WindowManager::LoadSprite("assets/sprites/BackgroundForChess.png");
+
 
   SDL_Texture *baseTexture =
       IMG_LoadTexture(WindowManager::renderer, "assets/sprites/playButton.png");
@@ -77,8 +79,14 @@ void GameManager::Run() {
 
   SDL_FRect rect3{300, 200, 50, 50};
   Renderer renderer(NULL, baseTexture, NULL, pressedTexture);
-  Elements::Button bigAssButton(rect3, renderer);
-  Element::elements.push_back(&bigAssButton);
+  Elements::Button *bigAssButton = new Button(rect3, renderer);
+
+
+  bigAssButton->OnClick([bigAssButton, baseTexture] {
+    SDL_DestroyTexture(GameManager::backgroundTexture);
+    delete bigAssButton;
+  });
+
 
   isRunning = true;
   SDL_Event event;
@@ -91,20 +99,20 @@ void GameManager::Run() {
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
 
-    if (bigAssButton.deleteBackground == true) { // Add the board cretion function here
-      SDL_DestroyTexture(GameManager::backgroundTexture);
-      auto it = find(Element::elements.begin(), Element::elements.end(), &bigAssButton);
-      if (it != Element::elements.end()) {
-        Element::elements.erase(it);
-        new ChessBoard();
-      }
-    };
+    // if (bigAssButton.deleteBackground == true) { // Add the board cretion function here
+    //   SDL_DestroyTexture(GameManager::backgroundTexture);
+    //   auto it = find(Element::elements.begin(), Element::elements.end(), &bigAssButton);
+    //   if (it != Element::elements.end()) {
+    //     Element::elements.erase(it);
+    //     new ChessBoard();
+    //   }
+    // };
 
-    SDL_FRect rect = {300, 300, 100.0f, 100.0f};
-    SDL_Color currentColor = {200, 200, 200, 200};
-    Renderer renderer(&currentColor, nullptr, nullptr, nullptr);
-    Rectangle *testRectangle = new Rectangle(rect, renderer);
-    Element::elements.push_back(testRectangle);
+    // SDL_FRect rect = {300, 300, 100.0f, 100.0f};
+    // SDL_Color currentColor = {200, 200, 200, 200};
+    // Renderer renderer(&currentColor, nullptr, nullptr, nullptr);
+    // Rectangle *testRectangle = new Rectangle(rect, renderer);
+    // Element::elements.push_back(testRectangle);
 
     Update(deltaTime);
     Render();

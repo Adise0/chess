@@ -1,5 +1,7 @@
 #include "WindowManager.h"
+#include <SDL3_image/SDL_image.h>
 #include <iostream>
+
 
 #define DEFAULT_WINDOW_WIDTH 1280
 #define DEFAULT_WINDOW_HEIGHT 800
@@ -20,6 +22,14 @@ void WindowManager::InitializeWindow() {
 
   renderer = SDL_CreateRenderer(window, nullptr);
   if (!renderer) throw std::runtime_error("Failed to create SDL renderer");
+  // #endregion
+}
+
+SDL_Texture *WindowManager::LoadSprite(const char *spritePath) {
+  // #region LoadSprite
+  SDL_Texture *texture = IMG_LoadTexture(renderer, spritePath);
+  SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
+  return texture;
   // #endregion
 }
 

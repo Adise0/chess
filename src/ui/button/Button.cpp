@@ -10,6 +10,7 @@ namespace Chess::Rendering::Elements {
 
 
 Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
+  // #region Button
   if (renderer.color) hasColor = true;
   else hasColor = false;
 
@@ -18,6 +19,7 @@ Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
     pressedColor = GetPressedColor();
   }
   isPressed = false;
+  // #endregion
 }
 
 void Button::HandleEvent(SDL_Event &event) {
@@ -30,12 +32,11 @@ void Button::HandleEvent(SDL_Event &event) {
   else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
     if (isPressed) {
       isPressed = false;
-      deleteBackground = true;
+      if (IsWithinRect(event.button.x, event.button.y)) OnClickEvent();
     }
   }
   // #endregion
 }
-
 
 void Button::Render() {
   // #region Render
@@ -53,6 +54,20 @@ void Button::Render() {
   // #endregion
 }
 
+void Button::OnClick(std::function<void()> listener) {
+  // #region OnClick
+  onClickListeners.push_back(listener);
+  // #endregion
+}
+
+void Button::OnClickEvent() {
+  // #region OnClickEvent
+  for (const std::function<void()> &listener : onClickListeners) {
+    listener();
+  }
+
+  // #endregion
+}
 
 SDL_Color Button::GetPressedColor() {
   // #region GetPressedColor

@@ -14,6 +14,11 @@ public:
   /// @brief Creates and initializes the window manager
   static void InitializeWindow();
 
+  /// @brief Loads a sprite
+  /// @param spritePath The sprite path
+  /// @return The loaded texture
+  static SDL_Texture *LoadSprite(const char *spritePath);
+
   /// @brief Disposes and cleans the window manager
   static void Dispose();
 };
