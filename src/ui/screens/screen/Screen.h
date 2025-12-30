@@ -26,6 +26,10 @@ public:
   bool isPresented;
 
 public:
-  virtual void Present(bool present);
+  Screen();
+  void Present(bool present);
+
+protected:
+  virtual void PresentInt();
 };
 } // namespace Chess::Rendering::Screens
