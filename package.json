@@ -20,5 +20,6 @@
   "homepage": "https://github.com/Adise0/cpp-template#readme",
   "devDependencies": {
     "nodemon": "^3.1.11"
-  }
+  },
+  "type": "module"
 }

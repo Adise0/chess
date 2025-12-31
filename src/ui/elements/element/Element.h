@@ -13,6 +13,8 @@ public:
   /// @brief The element renderer
   Renderer renderer;
 
+  static std::vector<Element *> elements;
+
 public:
   /// @brief Renders the element
   virtual void Render();
@@ -23,5 +25,6 @@ public:
 
 
   Element();
+  virtual ~Element();
 };
 } // namespace Chess::Rendering::Elements

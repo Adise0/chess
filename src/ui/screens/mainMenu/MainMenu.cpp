@@ -23,7 +23,7 @@ void MainMenu::Load() {
   SDL_Texture *pressedPlayButtonTexture =
       WindowManager::LoadSprite("assets/sprites/playButton_pressed.png");
 
-  SDL_FRect playButtonRect = {300, 200, 50, 50};
+  SDL_FRect playButtonRect = {300.0f, 200.0f, 50.0f, 50.0f};
   Renderer playButtonRenderer(NULL, basePlayButtonTexture, NULL, pressedPlayButtonTexture);
   background = new Button(playButtonRect, playButtonRenderer);
   screenElements.push_back(background);
