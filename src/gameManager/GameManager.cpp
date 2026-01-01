@@ -57,7 +57,7 @@ void GameManager::Render() {
   SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
   SDL_RenderClear(WindowManager::renderer);
 
-  MessageBoxA(nullptr, "asdsad" + Screen::screens.size(), "Runtime error", MB_OK | MB_ICONERROR);
+  // MessageBoxA(nullptr, "asdsad" + Screen::screens.size(), "Runtime error", MB_OK | MB_ICONERROR);
   for (Screen *screen : Screen::screens) {
     if (!screen->isPresented) continue;
     std::vector<Element *> sceeenElements = screen->GetElementsToRender();
