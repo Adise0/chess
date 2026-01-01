@@ -26,6 +26,8 @@ public:
   /// @param y The new y
   void SetPosition(float x, float y);
 
+  void Render() override;
+
 protected:
   /// @brief Checks if the position is within the rectangle
   /// @param x The x coord

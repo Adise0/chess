@@ -1,4 +1,5 @@
 #include "Rectangle.h"
+#include <SDL3/SDL.h>
 #include <windows.h>
 namespace Chess::Rendering::Elements {
 
@@ -18,6 +19,15 @@ void Rectangle::SetPosition(float x, float y) {
   rect.y = y;
   // #endregion
 }
+
+void Rectangle::Render() {
+  SDL_SetRenderDrawColor(WindowManager::renderer, 255, 0, 0, 255);
+  SDL_RenderFillRect(WindowManager::renderer, &rect);
+
+  if (renderer.baseImage != nullptr) {
+    SDL_RenderTexture(WindowManager::renderer, renderer.baseImage, nullptr, &rect);
+  }
+};
 
 
 
