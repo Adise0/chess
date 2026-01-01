@@ -25,8 +25,8 @@ void MainMenu::Load() {
 
   SDL_FRect playButtonRect = {300.0f, 200.0f, 50.0f, 50.0f};
   Renderer playButtonRenderer(NULL, basePlayButtonTexture, NULL, pressedPlayButtonTexture);
-  background = new Button(playButtonRect, playButtonRenderer);
-  screenElements.push_back(background);
+  playButton = new Button(playButtonRect, playButtonRenderer);
+  screenElements.push_back(playButton);
   // #endregion
 }
 
