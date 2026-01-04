@@ -4,7 +4,6 @@
 namespace Chess::Rendering::Screens {
 
 
-MainMenu::MainMenu() {};
 
 void MainMenu::Load() {
   // #region Load
@@ -25,8 +24,8 @@ void MainMenu::Load() {
 
   SDL_FRect playButtonRect = {300, 200, 50, 50};
   Renderer playButtonRenderer(NULL, basePlayButtonTexture, NULL, pressedPlayButtonTexture);
-  background = new Button(playButtonRect, playButtonRenderer);
-  screenElements.push_back(background);
+  playButton = new Button(playButtonRect, playButtonRenderer);
+  screenElements.push_back(playButton);
   // #endregion
 }
 

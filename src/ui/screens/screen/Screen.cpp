@@ -1,21 +1,22 @@
 #include "Screen.h"
+#include <Windows.h>
 #include <stdexcept>
+#include <string>
 
 namespace Chess::Rendering::Screens {
 
-std::vector<Screen *> Screen::screens;
 
 void Screen::RegisterScreen(Screen *screen) {
   // #region RegisterScreen
-  screens.push_back(screen);
+  GetScreens().push_back(screen);
   // #endregion
 }
 void Screen::UnregisterScreen(Screen *screen) {
 
-  auto foundScreenIterator = std::find(screens.begin(), screens.end(), screen);
+  auto foundScreenIterator = std::find(GetScreens().begin(), GetScreens().end(), screen);
 
-  if (foundScreenIterator != screens.end()) {
-    screens.erase(foundScreenIterator);
+  if (foundScreenIterator != GetScreens().end()) {
+    GetScreens().erase(foundScreenIterator);
   }
 }
 
@@ -36,7 +37,7 @@ void Screen::Present(bool present) {
 void Screen::PresentInt() { throw std::runtime_error("Screen present not implemented"); }
 void Screen::Load() { throw std::runtime_error("Screen load not implemented"); }
 std::vector<Element *> Screen::GetElementsToRender() {
-  throw std::runtime_error("Get elemennts not implemented");
+  throw std::runtime_error("Get elements not implemented");
 }
 
 }; // namespace Chess::Rendering::Screens

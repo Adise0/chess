@@ -13,6 +13,10 @@ public:
   /// @brief The element renderer
   Renderer renderer;
 
+protected:
+  /// @brief Whether the element is color-based
+  bool hasColor;
+
 public:
   /// @brief Renders the element
   virtual void Render();

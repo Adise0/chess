@@ -8,11 +8,12 @@ namespace Chess::Rendering::Screens {
 using namespace Elements;
 class Screen {
 
-
-
 public:
   /// @brief The screen store
-  static std::vector<Screen *> screens;
+  static std::vector<Screen *> &GetScreens() {
+    static std::vector<Screen *> instance;
+    return instance;
+  };
 
   /// @brief Registers a screen to the store
   /// @param screen The screen to register

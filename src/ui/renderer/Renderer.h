@@ -20,8 +20,9 @@ public:
 
 
   /// @brief Renders the requested image
-  /// @param textureType The texture type to use
   /// @param rect The rect to render to
-  virtual void Render(Texture textureType, SDL_FRect rect);
+  /// @param textureType The texture type to use
+  virtual void Render(SDL_FRect rect, Texture textureType);
+  virtual void Render(SDL_FRect rect) { Render(rect, Texture::color); };
 };
 } // namespace Chess::Rendering

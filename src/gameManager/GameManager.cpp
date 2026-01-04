@@ -18,7 +18,7 @@ namespace Chess {
 
 using namespace Rendering;
 using namespace Elements;
-using namespace Screens;
+using namespace Rendering::Screens;
 
 bool GameManager::isRunning = false;
 MainMenu GameManager::mainMenu = MainMenu();
@@ -33,7 +33,7 @@ void GameManager::ProcessInput(SDL_Event &event) {
       break;
 
     default:
-      for (Screen *screen : Screen::screens) {
+      for (Screen *screen : Screen::GetScreens()) {
         if (!screen->isPresented) continue;
         std::vector<Element *> sceeenElements = screen->GetElementsToRender();
         for (Element *element : sceeenElements) {
@@ -57,16 +57,14 @@ void GameManager::Render() {
   SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
   SDL_RenderClear(WindowManager::renderer);
 
-  MessageBoxA(nullptr, "asdsad" + Screen::screens.size(), "Runtime error", MB_OK | MB_ICONERROR);
-  for (Screen *screen : Screen::screens) {
+  for (Screen *screen : Screen::GetScreens()) {
     if (!screen->isPresented) continue;
-    std::vector<Element *> sceeenElements = screen->GetElementsToRender();
-    for (Element *element : sceeenElements) {
+    std::vector<Element *> elements = screen->GetElementsToRender();
+
+    for (Element *element : elements) {
       element->Render();
     }
   }
-
-
 
   SDL_RenderPresent(WindowManager::renderer);
   // #endregion
@@ -75,8 +73,8 @@ void GameManager::Render() {
 void GameManager::Run() {
   // #region Run
   LoadScreens();
-  mainMenu.Present(true);
 
+  mainMenu.Present(true);
   isRunning = true;
   SDL_Event event;
   auto lastFrame = std::chrono::high_resolution_clock::now();
@@ -96,7 +94,7 @@ void GameManager::Run() {
 }
 
 void GameManager::LoadScreens() {
-  for (Screen *screen : Screen::screens) {
+  for (Screen *screen : Screen::GetScreens()) {
     screen->Load();
   }
 }
