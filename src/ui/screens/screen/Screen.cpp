@@ -1,6 +1,6 @@
 #include "Screen.h"
 #include <Windows.h>
-#include <stdexcept>
+#include <iostream>
 #include <string>
 
 namespace Chess::Rendering::Screens {
@@ -39,5 +39,7 @@ void Screen::Load() { throw std::runtime_error("Screen load not implemented"); }
 std::vector<Element *> Screen::GetElementsToRender() {
   throw std::runtime_error("Get elements not implemented");
 }
+
+void Screen::AppendElement(Element *element) { screenElements.push_back(element); }
 
 }; // namespace Chess::Rendering::Screens

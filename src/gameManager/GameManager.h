@@ -14,6 +14,7 @@ public:
   static MainMenu mainMenu;
   static InGame inGame;
 
+
 private:
   /// @brief Process user input
   /// @param event

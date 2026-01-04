@@ -1,9 +1,10 @@
 #pragma once
+#include "../../ui/elements/rectangle/Rectangle.h"
 #include "../pice/Pice.h"
 #include <vector>
 
 namespace Chess::Game {
-
+using namespace Rendering;
 class Board {
 public:
   /// @brief The current board pices
@@ -12,6 +13,8 @@ public:
 private:
   /// @brief The current turn
   TEAM currrentTurn;
+
+  Rectangle *t;
 
 public:
   Board();

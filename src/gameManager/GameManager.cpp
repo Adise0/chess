@@ -23,6 +23,7 @@ using namespace Rendering::Screens;
 bool GameManager::isRunning = false;
 MainMenu GameManager::mainMenu = MainMenu();
 InGame GameManager::inGame = InGame();
+float GameManager::vVel = 0;
 
 void GameManager::ProcessInput(SDL_Event &event) {
   // #region ProcessInput
@@ -49,7 +50,6 @@ void GameManager::ProcessInput(SDL_Event &event) {
 
 void GameManager::Update(float deltaTime) {
   // #region Update
-
   // #endregion
 }
 
@@ -61,7 +61,7 @@ void GameManager::Render() {
   for (Screen *screen : Screen::GetScreens()) {
     if (!screen->isPresented) continue;
     std::vector<Element *> elements = screen->GetElementsToRender();
-
+    // std::cout << elements.size() << std::endl;
     for (Element *element : elements) {
       element->Render();
     }

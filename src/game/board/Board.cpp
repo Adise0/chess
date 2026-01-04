@@ -1,15 +1,20 @@
 #include "Board.h"
 #include "../../gameManager/GameManager.h"
-#include "../../ui/elements/rectangle/Rectangle.h"
 #include "../../windowManager/WindowManager.h"
 
 namespace Chess::Game {
 
-using namespace Rendering;
 
 
+Board::Board() {
+  SDL_FRect rect = {200, 200, 150, 150};
+  Renderer rend({255, 0, 0, 255});
+  t = new Rectangle(rect, rend);
 
-TEAM Board::GetTurn() { return 0; }
+  GameManager::inGame.AppendElement(t);
+}
+
+TEAM Board::GetTurn() { return currrentTurn; }
 
 POSITION Board::ToScreenPosition(POSITION boardPosition) {
   return {(short)(boardPosition.x * WindowManager::piceX),

@@ -33,6 +33,7 @@ public:
   void Present(bool present);
   virtual void Load();
   virtual std::vector<Element *> GetElementsToRender();
+  void AppendElement(Element *element);
 
 protected:
   std::vector<Element *> screenElements;
