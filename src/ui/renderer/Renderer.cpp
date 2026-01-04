@@ -5,7 +5,9 @@
 
 namespace Chess::Rendering {
 
-void Renderer::Render(Texture textureType, SDL_FRect rect) {
+
+
+void Renderer::Render(SDL_FRect rect, Texture textureType) {
   // #region Render
   SDL_Texture *texture;
 

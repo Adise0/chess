@@ -11,9 +11,6 @@ namespace Chess::Rendering::Elements {
 class Button : public Rectangle {
 
 private:
-  /// @brief Whether the button is color-based
-  bool hasColor;
-
   /// @brief The color when pressed
   SDL_Color pressedColor;
   /// @brief The base color when unpressed

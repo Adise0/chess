@@ -16,7 +16,7 @@ private:
   Button *playButton;
 
 public:
-  MainMenu();
+  MainMenu() : Screen() {};
   void Load() override;
   virtual std::vector<Element *> GetElementsToRender() override;
 

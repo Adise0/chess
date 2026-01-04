@@ -2,6 +2,13 @@
 #include <windows.h>
 namespace Chess::Rendering::Elements {
 
+Rectangle::Rectangle(SDL_FRect rect, Renderer renderer) : Element() {
+  this->rect = rect;
+  this->renderer = renderer;
+}
+
+
+
 bool Rectangle::IsWithinRect(float x, float y) {
   // #region IsWithinRect
   if (x < rect.x) return false;

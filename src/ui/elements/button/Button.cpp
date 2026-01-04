@@ -11,8 +11,6 @@ namespace Chess::Rendering::Elements {
 
 Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
   // #region Button
-  if (renderer.color) hasColor = true;
-  else hasColor = false;
 
   if (hasColor) {
     baseColor = *renderer.color;
@@ -49,7 +47,7 @@ void Button::Render() {
   Texture textureType = Texture::base;
   if (isPressed) textureType = Texture::pressed;
 
-  renderer.Render(textureType, rect);
+  renderer.Render(rect, textureType);
 
   // #endregion
 }
