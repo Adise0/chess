@@ -22,6 +22,7 @@ using namespace Rendering::Screens;
 
 bool GameManager::isRunning = false;
 MainMenu GameManager::mainMenu = MainMenu();
+InGame GameManager::inGame = InGame();
 
 void GameManager::ProcessInput(SDL_Event &event) {
   // #region ProcessInput
@@ -70,11 +71,19 @@ void GameManager::Render() {
   // #endregion
 }
 
+void GameManager::LoadScreens() {
+  // #region LoadScreens
+  for (Screen *screen : Screen::GetScreens()) {
+    screen->Load();
+  }
+  // #endregion
+}
+
 void GameManager::Run() {
   // #region Run
   LoadScreens();
-
   mainMenu.Present(true);
+
   isRunning = true;
   SDL_Event event;
   auto lastFrame = std::chrono::high_resolution_clock::now();
@@ -93,11 +102,13 @@ void GameManager::Run() {
   // #endregion
 }
 
-void GameManager::LoadScreens() {
-  for (Screen *screen : Screen::GetScreens()) {
-    screen->Load();
-  }
+void GameManager::StartGame() {
+  // #region StartGame
+  mainMenu.Present(false);
+  inGame.Present(true);
+  // #endregion
 }
+
 
 } // namespace Chess
 

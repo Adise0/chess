@@ -1,4 +1,5 @@
 #pragma once
+#include "../ui/screens/inGame/InGame.h"
 #include "../ui/screens/mainMenu/MainMenu.h"
 #include <SDL3/SDL.h>
 
@@ -11,6 +12,7 @@ private:
 
 public:
   static MainMenu mainMenu;
+  static InGame inGame;
 
 private:
   /// @brief Process user input
@@ -27,8 +29,12 @@ private:
   /// @brief Loads screens
   static void LoadScreens();
 
+
 public:
   /// @brief Runs the main game loop
   static void Run();
+
+  /// @brief Starts the game
+  static void StartGame();
 };
 } // namespace Chess

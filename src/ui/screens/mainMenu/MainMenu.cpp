@@ -1,4 +1,5 @@
 #include "MainMenu.h"
+#include "../../../gameManager/GameManager.h"
 #include "../../../windowManager/WindowManager.h"
 #include <SDL3/SDL.h>
 namespace Chess::Rendering::Screens {
@@ -25,7 +26,13 @@ void MainMenu::Load() {
   SDL_FRect playButtonRect = {300, 200, 50, 50};
   Renderer playButtonRenderer(NULL, basePlayButtonTexture, NULL, pressedPlayButtonTexture);
   playButton = new Button(playButtonRect, playButtonRenderer);
+
+  playButton->OnClick([] { GameManager::StartGame(); });
+
   screenElements.push_back(playButton);
+
+
+
   // #endregion
 }
 
