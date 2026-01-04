@@ -13,7 +13,7 @@ Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
   // #region Button
 
   if (hasColor) {
-    baseColor = *renderer.color;
+    baseColor = renderer.color;
     pressedColor = GetPressedColor();
   }
   isPressed = false;
@@ -39,7 +39,7 @@ void Button::HandleEvent(SDL_Event &event) {
 void Button::Render() {
   // #region Render
   if (hasColor) {
-    renderer.color = &(isPressed ? pressedColor : baseColor);
+    renderer.color = (isPressed ? pressedColor : baseColor);
     Rectangle::Render();
     return;
   }

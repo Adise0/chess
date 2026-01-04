@@ -55,7 +55,7 @@ void GameManager::Update(float deltaTime) {
 
 void GameManager::Render() {
   // #region Render
-  SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
+  // SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
   SDL_RenderClear(WindowManager::renderer);
 
   for (Screen *screen : Screen::GetScreens()) {

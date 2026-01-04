@@ -9,13 +9,14 @@
 namespace Chess::Game {
 using namespace Rendering;
 
-Pice::Pice(Board &board, POSITION startPosition, PiceType piceType, TEAM team)
-    : board(board), position(startPosition), piceType(piceType), team(team) {
+Pice::Pice(POSITION startPosition, PiceType piceType, TEAM team)
+    : position(startPosition), piceType(piceType), team(team) {
 
-  POSITION screenPosition = board.ToScreenPosition(startPosition);
-  SDL_FRect rect = {screenPosition.x, screenPosition.y, WindowManager::piceX, WindowManager::piceY};
+  // POSITION screenPosition = board.ToScreenPosition(startPosition);
+  // SDL_FRect rect = {screenPosition.x, screenPosition.y, WindowManager::piceX, WindowManager::piceY};
+  SDL_FRect rect = {0, 0, WindowManager::piceX, WindowManager::piceY};
   SDL_Texture *piceTexture = WindowManager::LoadSprite(GetPiceSprite());
-  Renderer piceRenderer(NULL, piceTexture);
+  Renderer piceRenderer(piceTexture);
   element = new Button(rect, piceRenderer);
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 #include "../../ui/elements/button/Button.h"
-#include "../board/Board.h"
 #include <vector>
 
 namespace Chess::Game {
@@ -22,8 +21,6 @@ typedef short TEAM;
 
 class Pice {
 public:
-  /// @brief The board this pice belongs to
-  Board &board;
   /// @brief The current pice position
   POSITION position;
   /// @brief The type of the pice
@@ -34,7 +31,7 @@ public:
   Button *element;
 
 public:
-  Pice(Board &board, POSITION startPosition, PiceType piceType, TEAM team);
+  Pice(POSITION startPosition, PiceType piceType, TEAM team);
 
   /// @brief Gets the legal moves of this pice
   /// @param board The board

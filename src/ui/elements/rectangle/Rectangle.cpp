@@ -5,6 +5,9 @@ namespace Chess::Rendering::Elements {
 Rectangle::Rectangle(SDL_FRect rect, Renderer renderer) : Element() {
   this->rect = rect;
   this->renderer = renderer;
+
+  if (renderer.baseImage) hasColor = false;
+  else hasColor = true;
 }
 
 

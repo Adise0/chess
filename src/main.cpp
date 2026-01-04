@@ -20,6 +20,10 @@ int Run() {
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
   try {
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+      freopen("CONOUT$", "w", stdout);
+      freopen("CONOUT$", "w", stderr);
+    }
     return Chess::Run();
   } catch (const std::runtime_error &e) {
     MessageBoxA(nullptr, e.what(), "Runtime error", MB_OK | MB_ICONERROR);

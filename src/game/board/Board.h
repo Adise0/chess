@@ -14,6 +14,8 @@ private:
   TEAM currrentTurn;
 
 public:
+  Board();
+
   /// @brief Gets the currennt turn
   /// @return Whether the current turnn is black or white
   TEAM GetTurn();

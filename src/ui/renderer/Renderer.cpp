@@ -1,6 +1,6 @@
 #include "Renderer.h"
 #include "../../windowManager/WindowManager.h"
-#include <stdexcept>
+#include <iostream>
 
 
 namespace Chess::Rendering {
@@ -13,12 +13,13 @@ void Renderer::Render(SDL_FRect rect, Texture textureType) {
 
 
   if (textureType == Texture::color) {
-    SDL_SetRenderDrawColor(WindowManager::renderer, color->r, color->g, color->b, color->a);
+    SDL_SetRenderDrawColor(WindowManager::renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(WindowManager::renderer, &rect);
     return;
   }
 
   switch (textureType) {
+
   case Texture::base:
     texture = baseImage;
     break;

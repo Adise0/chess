@@ -2,6 +2,7 @@
 #include "../../elements/button/Button.h"
 #include "../../elements/rectangle/Rectangle.h"
 #include "../screen/Screen.h"
+#include <SDL3/SDL.h>
 
 namespace Chess::Rendering::Screens {
 using namespace Elements;
