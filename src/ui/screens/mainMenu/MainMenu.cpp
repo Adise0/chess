@@ -15,7 +15,7 @@ void MainMenu::Load() {
 
   SDL_FRect backgroundRect = {0, 0, WindowManager::resolutionX, WindowManager::resolutionY};
 
-  Renderer backgroundRenderer(backgroundTexture);
+  Renderer backgroundRenderer(backgroundTexture, NULL, NULL, -2);
   background = new Rectangle(backgroundRect, backgroundRenderer);
   screenElements.push_back(background);
 

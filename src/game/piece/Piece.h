@@ -14,34 +14,41 @@ typedef struct POSITION {
   short y;
 } POSITION;
 
-enum PiceType { Pawn, Rook, Knight, Bishop, Queen, King };
+enum PieceType { // Mamon has escrit piece malament a tot arreu
+  Pawn,
+  Rook,
+  Knight,
+  Bishop,
+  Queen,
+  King
+};
 
-/// @brief The pice tteam (0 For Black, 1 for White)
+/// @brief The piece tteam (0 For Black, 1 for White)
 typedef short TEAM;
 
-class Pice {
+class Piece {
 public:
-  /// @brief The current pice position
+  /// @brief The current piece position
   POSITION position;
-  /// @brief The type of the pice
-  PiceType piceType;
-  /// @brief The team of the pice
+  /// @brief The type of the piece
+  PieceType pieceType;
+  /// @brief The team of the piece
   TEAM team;
   /// @brief The underlying button element
   Button *element;
 
 public:
-  Pice(POSITION startPosition, PiceType piceType, TEAM team);
+  Piece(POSITION startPosition, PieceType pieceType, TEAM team);
 
-  /// @brief Gets the legal moves of this pice
+  /// @brief Gets the legal moves of this piece
   /// @param board The board
   /// @return A vector of the avialbale movees
   std::vector<POSITION> GetLegalMoves();
 
 
 private:
-  /// @brief Gets the pice sprite
-  /// @return The sprite corresponding to this pice type
-  const char *GetPiceSprite();
+  /// @brief Gets the piece sprite
+  /// @return The sprite corresponding to this piece type
+  const char *GetPieceSprite();
 };
 } // namespace Chess::Game

@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
+#include <map>
+#include <string>
 namespace Chess::Rendering {
 class WindowManager {
 private:
@@ -15,10 +17,8 @@ public:
   /// @brief The height of the window
   const static short resolutionY;
 
-  /// @brief The width of a pice
-  const static short piceX;
-  /// @brief The height of a pice
-  const static short piceY;
+  static std::map<std::string, SDL_Texture *> loadedSprites;
+
 
 public:
   /// @brief Creates and initializes the window manager

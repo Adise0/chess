@@ -36,8 +36,9 @@ void GameManager::ProcessInput(SDL_Event &event) {
     default:
       for (Screen *screen : Screen::GetScreens()) {
         if (!screen->isPresented) continue;
-        std::vector<Element *> sceeenElements = screen->GetElementsToRender();
-        for (Element *element : sceeenElements) {
+        std::vector<Element *> sceenElements = screen->GetElementsToRender();
+
+        for (Element *element : sceenElements) {
           element->HandleEvent(event);
         }
       }
@@ -60,9 +61,13 @@ void GameManager::Render() {
   for (Screen *screen : Screen::GetScreens()) {
     if (!screen->isPresented) continue;
     std::vector<Element *> elements = screen->GetElementsToRender();
+    std::stable_sort(elements.begin(), elements.end(), [](const Element *a, const Element *b) {
+      return a->renderer.sortingLayer < b->renderer.sortingLayer;
+    });
+
     // std::cout << elements.size() << std::endl;
-    for (Element *element : elements) {
-      element->Render();
+    for (Element *e : elements) {
+      e->Render();
     }
   }
 
