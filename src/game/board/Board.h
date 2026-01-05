@@ -15,8 +15,6 @@ public:
   static constexpr short tileSize = 90;
 
 public:
-  /// @brief The current board pices
-  std::vector<Pice *> pices;
   /// @brief The board array
   Pice *board[boardSize][boardSize]{
       // #region Initial array

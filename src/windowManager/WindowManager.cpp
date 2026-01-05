@@ -5,6 +5,8 @@
 
 namespace Chess::Rendering {
 
+
+std::map<std::string, SDL_Texture *> WindowManager::loadedSprites;
 SDL_Window *WindowManager::window = nullptr;
 SDL_Renderer *WindowManager::renderer = nullptr;
 
@@ -28,8 +30,15 @@ void WindowManager::InitializeWindow() {
 
 SDL_Texture *WindowManager::LoadSprite(const char *spritePath) {
   // #region LoadSprite
+
+  if (loadedSprites.find(spritePath) != loadedSprites.end()) {
+    return loadedSprites[spritePath];
+  }
+
   SDL_Texture *texture = IMG_LoadTexture(renderer, spritePath);
   SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
+
+  loadedSprites[spritePath] = texture;
   return texture;
   // #endregion
 }
