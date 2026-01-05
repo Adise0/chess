@@ -1,8 +1,8 @@
+#include "Piece.h"
 #include "../../gameManager/GameManager.h"
 #include "../../ui/renderer/Renderer.h"
 #include "../../windowManager/WindowManager.h"
 #include "../board/Board.h"
-#include "Piece.h"
 #include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
