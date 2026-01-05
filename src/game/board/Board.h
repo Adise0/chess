@@ -24,7 +24,7 @@ public:
   TEAM GetTurn();
 
   /// @brief Transforms a board position to a screen position
-  /// @param boardPosition The booard position to transform
+  /// @param boardPosition The board position to transform
   /// @return The transformed screen position
   POSITION ToScreenPosition(POSITION boardPosition);
 };
