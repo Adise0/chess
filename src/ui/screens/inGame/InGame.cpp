@@ -11,17 +11,11 @@ void InGame::Load() {
   // #region Load
 
   SDL_FRect backgroundRect = {0, 0, WindowManager::resolutionX, WindowManager::resolutionY};
-  Renderer backgroundRenderer({118, 150, 86, 1});
+  Renderer backgroundRenderer({48, 46, 43, 1});
   background = new Rectangle(backgroundRect, backgroundRenderer);
   screenElements.push_back(background);
 
-  SDL_FRect rect = {0, 0, 50, 50};
-  Renderer rend({255, 0, 0, 255});
-  Rectangle *t = new Rectangle(rect, rend);
-  screenElements.push_back(t);
-
   board = new Board();
-
   // #endregion
 }
 

@@ -4,58 +4,56 @@
 
 namespace Chess::Game {
 
+#define BOARD_PADDING 20
 
 
-Board::Board() {
-  // SDL_FRect rect = {200, 200, 150, 150};
-  // Renderer rend({255, 0, 0, 255});
-  // t = new Rectangle(rect, rend);
+Board::Board() { ConstructBoard(); }
 
-  float xPosition = 275;
-  float yPosition = 50;
-  float squareWidth = 90.0f;
-  float squareHeight = 90.0f;
+void Board::ConstructBoard() {
+  // #region ConstructBoard
+  int initialX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
+  int initialY = BOARD_PADDING;
+  int currentX = initialX;
+  int currentY = initialY;
 
-  Renderer light({240, 217, 181, 255});
-  Renderer dark({181, 136, 99, 255});
+  Renderer lightTileRenderer({240, 217, 181, 255});
+  Renderer darkTileRenderer({181, 136, 99, 255});
 
-  for (int i = 0; i < 8; i++) {
-    xPosition = 275;
-    for (int j = 0; j < 8; j++) {
-      SDL_FRect rect = {xPosition, yPosition, squareWidth, squareHeight};
 
-      if (i % 2 == 0) {
-        if (j % 2 == 0) {
-          Rectangle *square = new Rectangle(rect, light);
-          GameManager::inGame.AppendElement(square);
-        } else if (j % 2 == 1) {
-          Rectangle *square = new Rectangle(rect, dark);
-          GameManager::inGame.AppendElement(square);
-        }
+  for (size_t row = 0; row < boardSize; row++) {
+    currentX = initialX;
+    for (size_t col = 0; col < boardSize; col++) {
+      SDL_FRect tileRect = {currentX, currentY, tileSize, tileSize};
+
+      Renderer *renderer;
+      if (row % 2 == 0) {
+        if (col % 2 == 0) renderer = &lightTileRenderer;
+        else renderer = &darkTileRenderer;
+      } else {
+        if (col % 2 == 0) renderer = &darkTileRenderer;
+        else renderer = &lightTileRenderer;
       }
 
-      else {
-        if (j % 2 == 0) {
-          Rectangle *square = new Rectangle(rect, dark);
-          GameManager::inGame.AppendElement(square);
-        } else if (j % 2 == 1) {
-          Rectangle *square = new Rectangle(rect, light);
-          GameManager::inGame.AppendElement(square);
-        }
-      }
-      xPosition += squareWidth;
+      CreateTile(tileRect, *renderer);
+      currentX += tileSize;
     }
-    yPosition += squareHeight;
+    currentY += tileSize;
   }
 
+  // #endregion
+}
 
-  // GameManager::inGame.AppendElement(t);
+
+void Board::CreateTile(SDL_FRect rect, Renderer renderer) {
+  // #region CreateTile
+  Rectangle *createdTile = new Rectangle(rect, renderer);
+  GameManager::inGame.AppendElement(createdTile);
+  // #endregion
 }
 
 TEAM Board::GetTurn() { return currrentTurn; }
 
 POSITION Board::ToScreenPosition(POSITION boardPosition) {
-  return {(short)(boardPosition.x * WindowManager::piceX),
-          (short)(boardPosition.y * WindowManager::piceY)};
+  return {(short)(boardPosition.x * tileSize), (short)(boardPosition.y * tileSize)};
 }
 } // namespace Chess::Game

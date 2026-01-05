@@ -15,10 +15,7 @@ public:
   /// @brief The height of the window
   const static short resolutionY;
 
-  /// @brief The width of a pice
-  const static short piceX;
-  /// @brief The height of a pice
-  const static short piceY;
+
 
 public:
   /// @brief Creates and initializes the window manager
