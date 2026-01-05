@@ -9,7 +9,7 @@
 namespace Chess::Game {
 using namespace Rendering;
 
-Pice::Pice(POSITION startPosition, PiceType piceType, TEAM team)
+Pice::Pice(POSITION startPosition, PieceType piceType, TEAM team)
     : position(startPosition), piceType(piceType), team(team) {
 
   // POSITION screenPosition = board.ToScreenPosition(startPosition);
@@ -23,11 +23,49 @@ Pice::Pice(POSITION startPosition, PiceType piceType, TEAM team)
 
 const char *Pice::GetPiceSprite() {
   switch (piceType) {
-  case PiceType::Pawn:
-    return "assets/pices/pawn.png";
+  case PieceType::wPawn:
+    return "assets/pices/whitePawn.png";
+    break;
+  case PieceType::wRook:
+    return "assets/pices/whiteRook.png";
+    break;
+  case PieceType::wKnight:
+    return "assets/pices/whiteKnight.png";
+    break;
+  case PieceType::wBishop:
+    return "assets/pices/whiteBishop.png";
+    break;
+  case PieceType::wQueen:
+    return "assets/pices/whiteQueen.png";
+    break;
+  case PieceType::wKing:
+    return "assets/pices/whiteKing.png";
+    break;
+  // Blackerrrs
+  case PieceType::bPawn:
+    return "assets/pices/blackPawn.png";
+    break;
+  case PieceType::bRook:
+    return "assets/pices/blackRook.png";
+    break;
+  case PieceType::bKnight:
+    return "assets/pices/blackKnight.png";
+    break;
+  case PieceType::bBishop:
+    return "assets/pices/blackBishop.png";
+    break;
+  case PieceType::bQueen:
+    return "assets/pices/blackQueen.png";
+    break;
+  case PieceType::bKing:
+    return "assets/pices/blackKing.png";
+    break;
 
   default:
     throw std::runtime_error("Unknown pice type: " + std::to_string(piceType));
   }
 }
+
 } // namespace Chess::Game
+
+// namespace Chess::Game

@@ -14,7 +14,20 @@ typedef struct POSITION {
   short y;
 } POSITION;
 
-enum PiceType { Pawn, Rook, Knight, Bishop, Queen, King };
+enum PieceType { // Mamon has escrit piece malament a tot arreu
+  wPawn,
+  wRook,
+  wKnight,
+  wBishop,
+  wQueen,
+  wKing,
+  bPawn,
+  bRook,
+  bKnight,
+  bBishop,
+  bQueen,
+  bKing
+};
 
 /// @brief The pice tteam (0 For Black, 1 for White)
 typedef short TEAM;
@@ -24,14 +37,14 @@ public:
   /// @brief The current pice position
   POSITION position;
   /// @brief The type of the pice
-  PiceType piceType;
+  PieceType piceType;
   /// @brief The team of the pice
   TEAM team;
   /// @brief The underlying button element
   Button *element;
 
 public:
-  Pice(POSITION startPosition, PiceType piceType, TEAM team);
+  Pice(POSITION startPosition, PieceType piceType, TEAM team);
 
   /// @brief Gets the legal moves of this pice
   /// @param board The board
