@@ -1,6 +1,6 @@
 #pragma once
 #include "../../ui/elements/rectangle/Rectangle.h"
-#include "../pice/Pice.h"
+#include "../piece/Piece.h"
 #include <vector>
 
 namespace Chess::Game {
@@ -9,94 +9,94 @@ class Board {
 public:
   /// @brief The size of the board in tiles
   static constexpr short boardSize = 8;
-  /// @brief The size of a pice in pixels
-  static constexpr short piceSize = 70;
+  /// @brief The size of a piece in pixels
+  static constexpr short pieceSize = 70;
   /// @brief The size of a tile in pixels
   static constexpr short tileSize = 90;
 
 public:
   /// @brief The board array
-  Pice *board[boardSize][boardSize]{
+  Piece *board[boardSize][boardSize]{
       // #region Initial array
       {
-          new Pice({0, 0}, PieceType::Rook, 0),
-          new Pice({0, 1}, PieceType::Pawn, 0),
+          new Piece({0, 0}, PieceType::Rook, 0),
+          new Piece({0, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({0, 6}, PieceType::Pawn, 1),
-          new Pice({0, 7}, PieceType::Rook, 1),
+          new Piece({0, 6}, PieceType::Pawn, 1),
+          new Piece({0, 7}, PieceType::Rook, 1),
       },
       {
-          new Pice({1, 0}, PieceType::Knight, 0),
-          new Pice({1, 1}, PieceType::Pawn, 0),
+          new Piece({1, 0}, PieceType::Knight, 0),
+          new Piece({1, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({1, 6}, PieceType::Pawn, 1),
-          new Pice({1, 7}, PieceType::Knight, 1),
+          new Piece({1, 6}, PieceType::Pawn, 1),
+          new Piece({1, 7}, PieceType::Knight, 1),
       },
       {
-          new Pice({2, 0}, PieceType::Bishop, 0),
-          new Pice({2, 1}, PieceType::Pawn, 0),
+          new Piece({2, 0}, PieceType::Bishop, 0),
+          new Piece({2, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({2, 6}, PieceType::Pawn, 1),
-          new Pice({2, 7}, PieceType::Bishop, 1),
+          new Piece({2, 6}, PieceType::Pawn, 1),
+          new Piece({2, 7}, PieceType::Bishop, 1),
       },
       {
-          new Pice({3, 0}, PieceType::Queen, 0),
-          new Pice({3, 1}, PieceType::Pawn, 0),
+          new Piece({3, 0}, PieceType::Queen, 0),
+          new Piece({3, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({3, 6}, PieceType::Pawn, 1),
-          new Pice({3, 7}, PieceType::Queen, 1),
+          new Piece({3, 6}, PieceType::Pawn, 1),
+          new Piece({3, 7}, PieceType::Queen, 1),
       },
       {
-          new Pice({4, 0}, PieceType::King, 0),
-          new Pice({4, 1}, PieceType::Pawn, 0),
+          new Piece({4, 0}, PieceType::King, 0),
+          new Piece({4, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({4, 6}, PieceType::Pawn, 1),
-          new Pice({4, 7}, PieceType::King, 1),
+          new Piece({4, 6}, PieceType::Pawn, 1),
+          new Piece({4, 7}, PieceType::King, 1),
       },
       {
-          new Pice({5, 0}, PieceType::Bishop, 0),
-          new Pice({5, 1}, PieceType::Pawn, 0),
+          new Piece({5, 0}, PieceType::Bishop, 0),
+          new Piece({5, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({5, 6}, PieceType::Pawn, 1),
-          new Pice({5, 7}, PieceType::Bishop, 1),
+          new Piece({5, 6}, PieceType::Pawn, 1),
+          new Piece({5, 7}, PieceType::Bishop, 1),
       },
       {
-          new Pice({6, 0}, PieceType::Knight, 0),
-          new Pice({6, 1}, PieceType::Pawn, 0),
+          new Piece({6, 0}, PieceType::Knight, 0),
+          new Piece({6, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({6, 6}, PieceType::Pawn, 1),
-          new Pice({6, 7}, PieceType::Knight, 1),
+          new Piece({6, 6}, PieceType::Pawn, 1),
+          new Piece({6, 7}, PieceType::Knight, 1),
       },
       {
-          new Pice({7, 0}, PieceType::Rook, 0),
-          new Pice({7, 1}, PieceType::Pawn, 0),
+          new Piece({7, 0}, PieceType::Rook, 0),
+          new Piece({7, 1}, PieceType::Pawn, 0),
           nullptr,
           nullptr,
           nullptr,
           nullptr,
-          new Pice({7, 6}, PieceType::Pawn, 1),
-          new Pice({7, 7}, PieceType::Rook, 1),
+          new Piece({7, 6}, PieceType::Pawn, 1),
+          new Piece({7, 7}, PieceType::Rook, 1),
       },
       // #endregion
   };
@@ -122,6 +122,6 @@ public:
 
   void CreateTile(SDL_FRect rect, Renderer renderer);
 
-  void SetPicePosition(POSITION boardPosition);
+  void SetPiecePosition(POSITION boardPosition);
 };
 } // namespace Chess::Game

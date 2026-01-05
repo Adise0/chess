@@ -41,7 +41,7 @@ void Board::ConstructBoard() {
       }
 
       CreateTile(tileRect, *renderer);
-      SetPicePosition({
+      SetPiecePosition({
           (short)row,
           (short)col,
       });
@@ -67,21 +67,21 @@ POSITION Board::ToScreenPosition(POSITION boardPosition) {
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
   float offsetY = BOARD_PADDING;
 
-  offsetX += (tileSize - piceSize) / 2;
-  offsetY += (tileSize - piceSize) / 2;
+  offsetX += (tileSize - pieceSize) / 2;
+  offsetY += (tileSize - pieceSize) / 2;
 
   return {(short)(boardPosition.x * tileSize + offsetX),
           (short)(boardPosition.y * tileSize + offsetY)};
 }
 
 
-void Board::SetPicePosition(POSITION boardPosition) {
-  // #region SetPicePosition
-  Pice *pice = board[boardPosition.x][boardPosition.y];
-  if (!pice) return;
+void Board::SetPiecePosition(POSITION boardPosition) {
+  // #region SetPiecePosition
+  Piece *piece = board[boardPosition.x][boardPosition.y];
+  if (!piece) return;
   POSITION screenPosition = ToScreenPosition(boardPosition);
 
-  pice->element->SetPosition(screenPosition.x, screenPosition.y);
+  piece->element->SetPosition(screenPosition.x, screenPosition.y);
   // #endregion
 }
 } // namespace Chess::Game
