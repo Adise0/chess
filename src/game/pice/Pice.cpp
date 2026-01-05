@@ -2,6 +2,7 @@
 #include "../../gameManager/GameManager.h"
 #include "../../ui/renderer/Renderer.h"
 #include "../../windowManager/WindowManager.h"
+#include "../board/Board.h"
 #include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
@@ -15,7 +16,7 @@ Pice::Pice(POSITION startPosition, PieceType piceType, TEAM team)
 
   // POSITION screenPosition = board.ToScreenPosition(startPosition);
   // SDL_FRect rect = {screenPosition.x, screenPosition.y, WindowManager::piceX, WindowManager::piceY};
-  SDL_FRect rect = {0, 0, 70, 70};
+  SDL_FRect rect = {0, 0, Board::piceSize, Board::piceSize};
   SDL_Texture *piceTexture = WindowManager::LoadSprite(GetPiceSprite());
   Renderer piceRenderer(piceTexture, NULL, NULL, 1);
   element = new Button(rect, piceRenderer);

@@ -3,6 +3,7 @@
 #include "../../windowManager/WindowManager.h"
 #include <iostream>
 #include <string>
+
 namespace Chess::Game {
 
 #define BOARD_PADDING 20
@@ -25,9 +26,9 @@ void Board::ConstructBoard() {
   Renderer darkTileRenderer({181, 136, 99, 255}, -1);
 
 
-  for (size_t row = 0; row < boardSize; row++) {
-    currentX = initialX;
-    for (size_t col = 0; col < boardSize; col++) {
+  for (size_t col = 0; col < boardSize; col++) {
+    currentY = initialY;
+    for (size_t row = 0; row < boardSize; row++) {
       SDL_FRect tileRect = {currentX, currentY, tileSize, tileSize};
 
       Renderer *renderer;
@@ -40,10 +41,13 @@ void Board::ConstructBoard() {
       }
 
       CreateTile(tileRect, *renderer);
-      SetPicePosition({(short)row, (short)col});
-      currentX += tileSize;
+      SetPicePosition({
+          (short)row,
+          (short)col,
+      });
+      currentY += tileSize;
     }
-    currentY += tileSize;
+    currentX += tileSize;
   }
 
   // #endregion
@@ -63,6 +67,8 @@ POSITION Board::ToScreenPosition(POSITION boardPosition) {
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
   float offsetY = BOARD_PADDING;
 
+  offsetX += (tileSize - piceSize) / 2;
+  offsetY += (tileSize - piceSize) / 2;
 
   return {(short)(boardPosition.x * tileSize + offsetX),
           (short)(boardPosition.y * tileSize + offsetY)};
@@ -73,8 +79,8 @@ void Board::SetPicePosition(POSITION boardPosition) {
   // #region SetPicePosition
   Pice *pice = board[boardPosition.x][boardPosition.y];
   if (!pice) return;
-  POSITION screenPosition = ToScreenPosition(pice->position);
-  // std::cout << screenPosition.x << " " << screenPosition.y << std::endl;
+  POSITION screenPosition = ToScreenPosition(boardPosition);
+
   pice->element->SetPosition(screenPosition.x, screenPosition.y);
   // #endregion
 }
