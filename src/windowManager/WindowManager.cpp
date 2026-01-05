@@ -10,8 +10,6 @@ SDL_Renderer *WindowManager::renderer = nullptr;
 
 const short WindowManager::resolutionX = 1280;
 const short WindowManager::resolutionY = 800;
-const short WindowManager::piceX = 50;
-const short WindowManager::piceY = 50;
 
 
 

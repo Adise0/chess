@@ -16,7 +16,7 @@ if errorlevel 1 (
   echo Build failed.
   exit /b %errorlevel%
 ) else (
-  cls
+  @REM cls
   echo Build succeeded. 
 )
 

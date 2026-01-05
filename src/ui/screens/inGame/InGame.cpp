@@ -11,7 +11,7 @@ void InGame::Load() {
   // #region Load
 
   SDL_FRect backgroundRect = {0, 0, WindowManager::resolutionX, WindowManager::resolutionY};
-  Renderer backgroundRenderer({48, 46, 43, 1});
+  Renderer backgroundRenderer({48, 46, 43, 1}, -2);
   background = new Rectangle(backgroundRect, backgroundRenderer);
   screenElements.push_back(background);
 

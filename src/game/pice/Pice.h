@@ -15,18 +15,12 @@ typedef struct POSITION {
 } POSITION;
 
 enum PieceType { // Mamon has escrit piece malament a tot arreu
-  wPawn,
-  wRook,
-  wKnight,
-  wBishop,
-  wQueen,
-  wKing,
-  bPawn,
-  bRook,
-  bKnight,
-  bBishop,
-  bQueen,
-  bKing
+  Pawn,
+  Rook,
+  Knight,
+  Bishop,
+  Queen,
+  King
 };
 
 /// @brief The pice tteam (0 For Black, 1 for White)
