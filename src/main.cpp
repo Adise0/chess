@@ -11,7 +11,7 @@ int Run() {
 
 
   GameManager::Run();
-  SDL_Quit(); // Shuts down all SDL sybsystems
+  SDL_Quit();
   WindowManager::Dispose();
   return EXIT_SUCCESS;
 }

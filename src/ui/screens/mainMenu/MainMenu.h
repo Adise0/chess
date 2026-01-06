@@ -18,7 +18,11 @@ private:
 
 public:
   MainMenu() : Screen() {};
+  /// @brief Main menu set up (background, button, on click button starts game)
   void Load() override;
+
+  /// @brief Stores element pointers
+  /// @return
   virtual std::vector<Element *> GetElementsToRender() override;
 
 private:

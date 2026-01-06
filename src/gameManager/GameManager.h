@@ -11,7 +11,9 @@ private:
   static bool isRunning;
 
 public:
+  /// @brief The main menu
   static MainMenu mainMenu;
+  /// @brief The class that inherits from screen to present the game
   static InGame inGame;
 
 

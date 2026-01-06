@@ -14,14 +14,7 @@ typedef struct POSITION {
   short y;
 } POSITION;
 
-enum PieceType { // Mamon has escrit piece malament a tot arreu
-  Pawn,
-  Rook,
-  Knight,
-  Bishop,
-  Queen,
-  King
-};
+enum PieceType { Pawn, Rook, Knight, Bishop, Queen, King };
 
 /// @brief The piece tteam (0 For Black, 1 for White)
 typedef short TEAM;

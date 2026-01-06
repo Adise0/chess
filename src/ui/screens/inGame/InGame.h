@@ -12,12 +12,16 @@ class InGame : public Screen {
 private:
   /// @brief The background rectangle
   Rectangle *background;
-
+  /// @brief The board
   Board *board;
 
 public:
+  /// @brief Handles the in game mechanics
   InGame() : Screen() {};
+  /// @brief Loads the board
   void Load() override;
+  /// @brief Loads the chess pieces
+  /// @return
   virtual std::vector<Element *> GetElementsToRender() override;
 
 private:

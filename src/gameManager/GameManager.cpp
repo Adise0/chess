@@ -55,7 +55,7 @@ void GameManager::Update(float deltaTime) {
 
 void GameManager::Render() {
   // #region Render
-  // SDL_SetRenderDrawColor(WindowManager::renderer, 0, 100, 80, 255);
+
   SDL_RenderClear(WindowManager::renderer);
 
   for (Screen *screen : Screen::GetScreens()) {
@@ -65,7 +65,6 @@ void GameManager::Render() {
       return a->renderer.sortingLayer < b->renderer.sortingLayer;
     });
 
-    // std::cout << elements.size() << std::endl;
     for (Element *e : elements) {
       e->Render();
     }

@@ -107,21 +107,29 @@ private:
   TEAM currrentTurn;
 
 public:
+  /// @brief Constructor
   Board();
 
   /// @brief Gets the currennt turn
   /// @return Whether the current turnn is black or white
   TEAM GetTurn();
 
+
   /// @brief Transforms a board position to a screen position
   /// @param boardPosition The board position to transform
   /// @return The transformed screen position
   POSITION ToScreenPosition(POSITION boardPosition);
 
+  /// @brief Creates the board
   void ConstructBoard();
 
+  /// @brief Creates a square
+  /// @param rect x, y, width, height
+  /// @param renderer a renderer
   void CreateTile(SDL_FRect rect, Renderer renderer);
 
+  /// @brief Sets the position of a piece in ints
+  /// @param boardPosition The board position to "atach" to the piece
   void SetPiecePosition(POSITION boardPosition);
 };
 } // namespace Chess::Game

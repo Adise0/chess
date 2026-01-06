@@ -14,8 +14,6 @@ using namespace Rendering;
 Piece::Piece(POSITION startPosition, PieceType pieceType, TEAM team)
     : position(startPosition), pieceType(pieceType), team(team) {
 
-  // POSITION screenPosition = board.ToScreenPosition(startPosition);
-  // SDL_FRect rect = {screenPosition.x, screenPosition.y, WindowManager::pieceX, WindowManager::pieceY};
   SDL_FRect rect = {0, 0, Board::pieceSize, Board::pieceSize};
   SDL_Texture *pieceTexture = WindowManager::LoadSprite(GetPieceSprite());
   Renderer pieceRenderer(pieceTexture, NULL, NULL, 1);

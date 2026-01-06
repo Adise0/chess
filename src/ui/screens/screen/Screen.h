@@ -26,6 +26,7 @@ public:
 
 
 public:
+  /// @brief Checks if its presented or not
   bool isPresented;
 
 public:
