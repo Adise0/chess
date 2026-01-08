@@ -1,23 +1,12 @@
 #pragma once
 #include "../../ui/elements/button/Button.h"
+#include "../types/Types.h"
 #include <vector>
 
 namespace Chess::Game {
 
 using namespace Rendering::Elements;
 
-/// @brief Defines a position
-typedef struct POSITION {
-  /// @brief The x
-  short x;
-  /// @brief The y
-  short y;
-} POSITION;
-
-enum PieceType { Pawn, Rook, Knight, Bishop, Queen, King };
-
-/// @brief The piece tteam (0 For Black, 1 for White)
-typedef short TEAM;
 
 class Piece {
 public:
