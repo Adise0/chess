@@ -2,6 +2,7 @@
 #include "../ui/screens/inGame/InGame.h"
 #include "../ui/screens/mainMenu/MainMenu.h"
 #include <SDL3/SDL.h>
+#include <vector>
 
 namespace Chess {
 using namespace Rendering::Screens;
@@ -28,6 +29,10 @@ private:
 
   /// @brief Renders the current game state
   static void Render();
+
+  /// @brief Sorts the element vector by their sorting layer. IN PLACE
+  /// @param  elements The vector to sort
+  static void SortElements(std::vector<Element *> &elements);
 
   /// @brief Loads screens
   static void LoadScreens();

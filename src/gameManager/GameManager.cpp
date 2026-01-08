@@ -12,7 +12,6 @@
 #include <functional>
 #include <iostream>
 #include <string>
-#include <vector>
 #include <windows.h>
 namespace Chess {
 
@@ -55,15 +54,13 @@ void GameManager::Update(float deltaTime) {
 
 void GameManager::Render() {
   // #region Render
-
   SDL_RenderClear(WindowManager::renderer);
 
   for (Screen *screen : Screen::GetScreens()) {
     if (!screen->isPresented) continue;
     std::vector<Element *> elements = screen->GetElementsToRender();
-    std::stable_sort(elements.begin(), elements.end(), [](const Element *a, const Element *b) {
-      return a->renderer.sortingLayer < b->renderer.sortingLayer;
-    });
+
+    SortElements(elements);
 
     for (Element *e : elements) {
       e->Render();
@@ -71,6 +68,14 @@ void GameManager::Render() {
   }
 
   SDL_RenderPresent(WindowManager::renderer);
+  // #endregion
+}
+
+void GameManager::SortElements(std::vector<Element *> &elements) {
+  // #region SortElements
+  std::stable_sort(elements.begin(), elements.end(), [](const Element *a, const Element *b) {
+    return a->renderer.sortingLayer < b->renderer.sortingLayer;
+  });
   // #endregion
 }
 
