@@ -17,6 +17,7 @@ public:
   /// @brief The height of the window
   const static short resolutionY;
 
+  /// @brief The loaded sprite PATHS
   static std::map<std::string, SDL_Texture *> loadedSprites;
 
 
