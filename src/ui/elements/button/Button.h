@@ -1,8 +1,9 @@
 #pragma once
-#include "../../windowManager/WindowManager.h"
+#include "../../../windowManager/WindowManager.h"
 #include "../element/Element.h"
 #include "../rectangle/Rectangle.h"
 #include <SDL3/SDL.h>
+#include <functional>
 #define SDL_BUTTON_LEFT 1
 
 namespace Chess::Rendering::Elements {
@@ -10,16 +11,13 @@ namespace Chess::Rendering::Elements {
 class Button : public Rectangle {
 
 private:
-  /// @brief Whether the button is currently being pressed
-  bool isPressed;
-
-  /// @brief Whether the button is color-based
-  bool hasColor;
-
   /// @brief The color when pressed
   SDL_Color pressedColor;
   /// @brief The base color when unpressed
   SDL_Color baseColor;
+
+  /// @brief The OnClick listeners
+  std::vector<std::function<void()>> onClickListeners;
 
 public:
   /// @brief Creates a clickabale button
@@ -34,9 +32,21 @@ public:
   /// @brief The overriden button render
   void Render() override;
 
+  /// @brief Registers an onClick listener
+  /// @param listener The listener to register
+  void OnClick(std::function<void()> listener);
+
+  /// @brief Whether the button is currently being pressed
+  bool isPressed;
+
+
 private:
   /// @brief Gets the default pressed color
   /// @return The pressed color
   SDL_Color GetPressedColor();
+
+
+  /// @brief Handles the on click event
+  void OnClickEvent();
 };
 } // namespace Chess::Rendering::Elements
