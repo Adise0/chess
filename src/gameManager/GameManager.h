@@ -12,9 +12,9 @@ private:
   static bool isRunning;
 
 public:
-  /// @brief The main menu
+  /// @brief The main menu screen
   static MainMenu mainMenu;
-  /// @brief The class that inherits from screen to present the game
+  /// @brief The in-game screen
   static InGame inGame;
 
 
@@ -27,7 +27,7 @@ private:
   /// @param deltaTime Time elapsed since last frame
   static void Update(float deltaTime);
 
-  /// @brief Renders the current game state
+  /// @brief Renders the presented screens
   static void Render();
 
   /// @brief Sorts the element vector by their sorting layer. IN PLACE
