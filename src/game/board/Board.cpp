@@ -9,13 +9,14 @@ namespace Chess::Game {
 #define BOARD_PADDING 20
 
 
-Board::Board() { ConstructBoard(); }
+Board::Board() {
+  // #region Board
+  ConstructBoard();
+  // #endregion
+}
 
 void Board::ConstructBoard() {
   // #region ConstructBoard
-
-  // PopulateBoard();
-
 
   int initialX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
   int initialY = BOARD_PADDING;
@@ -53,7 +54,6 @@ void Board::ConstructBoard() {
   // #endregion
 }
 
-
 void Board::CreateTile(SDL_FRect rect, Renderer renderer) {
   // #region CreateTile
   Rectangle *createdTile = new Rectangle(rect, renderer);
@@ -61,9 +61,14 @@ void Board::CreateTile(SDL_FRect rect, Renderer renderer) {
   // #endregion
 }
 
-TEAM Board::GetTurn() { return currrentTurn; }
+TEAM Board::GetTurn() {
+  // #region GetTurn
+  return currrentTurn;
+  // #endregion
+}
 
 POSITION Board::ToScreenPosition(POSITION boardPosition) {
+  // #region ToScreenPosition
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
   float offsetY = BOARD_PADDING;
 
@@ -72,8 +77,8 @@ POSITION Board::ToScreenPosition(POSITION boardPosition) {
 
   return {(short)(boardPosition.x * tileSize + offsetX),
           (short)(boardPosition.y * tileSize + offsetY)};
+  // #endregion
 }
-
 
 void Board::SetPiecePosition(POSITION boardPosition) {
   // #region SetPiecePosition
