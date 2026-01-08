@@ -35,12 +35,9 @@ SDL_Texture *WindowManager::LoadSprite(std::string spritePath) {
     return loadedSprites[spritePath];
   }
 
-  while (!renderer)
-    _sleep(100);
-  SDL_Texture *texture = IMG_LoadTexture(renderer, spritePath.c_str());
-  // SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
-  std::cout << "Loaded texture: " << spritePath << " Sucess: " << !!texture << std::endl;
+  SDL_Texture *texture = IMG_LoadTexture(renderer, spritePath.c_str());
+  SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
   loadedSprites[spritePath] = texture;
   return texture;
