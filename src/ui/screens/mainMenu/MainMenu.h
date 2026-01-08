@@ -17,15 +17,14 @@ private:
   Button *playButton;
 
 public:
+  /// @brief Creates the main menu screen
   MainMenu() : Screen() {};
-  /// @brief Main menu set up (background, button, on click button starts game)
+
+  /// @brief Loads the screen
   void Load() override;
 
-  /// @brief Stores element pointers
-  /// @return
+  /// @brief Getter for the elements to render
+  /// @return The vector of elements to render this frame
   virtual std::vector<Element *> GetElementsToRender() override;
-
-private:
-  void PresentInt() override;
 };
 } // namespace Chess::Rendering::Screens

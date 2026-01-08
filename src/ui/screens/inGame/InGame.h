@@ -16,15 +16,14 @@ private:
   Board *board;
 
 public:
-  /// @brief Handles the in game mechanics
+  /// @brief Creates the in game screen
   InGame() : Screen() {};
-  /// @brief Loads the board
-  void Load() override;
-  /// @brief Loads the chess pieces
-  /// @return
-  virtual std::vector<Element *> GetElementsToRender() override;
 
-private:
-  void PresentInt() override;
+  /// @brief Loads the screen
+  void Load() override;
+
+  /// @brief Getter for the elements to render
+  /// @return The vector of elements to render this frame
+  virtual std::vector<Element *> GetElementsToRender() override;
 };
 } // namespace Chess::Rendering::Screens

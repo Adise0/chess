@@ -29,17 +29,24 @@ Screen::Screen() {
   // #endregion
 }
 
+std::vector<Screen *> &Screen::GetScreens() {
+  // #region GetScreens
+  static std::vector<Screen *> instance;
+  return instance;
+  // #endregion
+};
+
 void Screen::Present(bool present) {
   // #region Present
   if (!isPresented && present) {
     isPresented = true;
-    PresentInt();
+    OnPresent();
   }
   if (isPresented && !present) isPresented = false;
   // #endregion
 }
 
-void Screen::PresentInt() {}
+void Screen::OnPresent() {}
 
 void Screen::Load() {
   // #region Load
