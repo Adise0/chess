@@ -28,15 +28,19 @@ void WindowManager::InitializeWindow() {
   // #endregion
 }
 
-SDL_Texture *WindowManager::LoadSprite(const char *spritePath) {
+SDL_Texture *WindowManager::LoadSprite(std::string spritePath) {
   // #region LoadSprite
 
   if (loadedSprites.find(spritePath) != loadedSprites.end()) {
     return loadedSprites[spritePath];
   }
 
-  SDL_Texture *texture = IMG_LoadTexture(renderer, spritePath);
-  SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
+  while (!renderer)
+    _sleep(100);
+  SDL_Texture *texture = IMG_LoadTexture(renderer, spritePath.c_str());
+  // SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
+
+  std::cout << "Loaded texture: " << spritePath << " Sucess: " << !!texture << std::endl;
 
   loadedSprites[spritePath] = texture;
   return texture;
