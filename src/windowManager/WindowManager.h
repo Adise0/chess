@@ -28,7 +28,7 @@ public:
   /// @brief Loads a sprite
   /// @param spritePath The sprite path
   /// @return The loaded texture
-  static SDL_Texture *LoadSprite(const char *spritePath);
+  static SDL_Texture *LoadSprite(std::string spritePath);
 
   /// @brief Disposes and cleans the window manager
   static void Dispose();

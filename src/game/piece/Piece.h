@@ -31,9 +31,6 @@ public:
 private:
   /// @brief Gets the piece sprite
   /// @return The sprite corresponding to this piece type
-  const char *GetPieceSprite();
-
-  /// @brief Creates the underlying visual element
-  void CreateElement();
+  std::string GetPieceSprite();
 };
 } // namespace Chess::Game

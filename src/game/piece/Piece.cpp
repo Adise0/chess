@@ -31,7 +31,7 @@ void Piece::CreateElement() {
 }
 
 
-const char *Piece::GetPieceSprite() {
+std::string Piece::GetPieceSprite() {
 
   std::string teamStr = team == 0 ? "black" : "white";
   std::string name;
@@ -58,7 +58,7 @@ const char *Piece::GetPieceSprite() {
     throw std::runtime_error("Unknown piece type: " + std::to_string(pieceType));
   }
 
-  return ("assets/sprites/pieces/" + teamStr + name + ".png").c_str();
+  return ("assets/sprites/pieces/" + teamStr + name + ".png");
 }
 
 } // namespace Chess::Game
