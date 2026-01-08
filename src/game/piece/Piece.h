@@ -29,6 +29,9 @@ public:
 
 
 private:
+  /// @brief Creates the visual element
+  void CreateElement();
+
   /// @brief Gets the piece sprite
   /// @return The sprite corresponding to this piece type
   std::string GetPieceSprite();

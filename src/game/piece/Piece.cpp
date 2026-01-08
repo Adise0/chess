@@ -32,7 +32,7 @@ void Piece::CreateElement() {
 
 
 std::string Piece::GetPieceSprite() {
-
+  // #region GetPieceSprite
   std::string teamStr = team == 0 ? "black" : "white";
   std::string name;
   switch (pieceType) {
@@ -59,8 +59,6 @@ std::string Piece::GetPieceSprite() {
   }
 
   return ("assets/sprites/pieces/" + teamStr + name + ".png");
+  // #endregion
 }
-
 } // namespace Chess::Game
-
-// namespace Chess::Game
