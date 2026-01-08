@@ -28,7 +28,4 @@ void Rectangle::SetPosition(float x, float y) {
   rect.y = y;
   // #endregion
 }
-
-
-
 } // namespace Chess::Rendering::Elements

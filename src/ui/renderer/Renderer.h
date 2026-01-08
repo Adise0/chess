@@ -16,40 +16,41 @@ public:
   SDL_Texture *hoverImage = nullptr;
   /// @brief The pressed texture of an image
   SDL_Texture *pressedImage = nullptr;
-  /// @brief White
+  /// @brief The color of the renderer. Default: `White`
   SDL_Color color{255, 255, 255, 255};
+  /// @brief The sorting layer of the renderer. Default: `0`
   short sortingLayer = 0;
 
 public:
-  /// @brief Renderer function that only takes a color
-  /// @param color It's a color
+  /// @brief Creates a new renderer object
+  /// @param color The color to use
   Renderer(SDL_Color color) : color(color) {}
-  /// @brief Renderer function that takes a color and a sorting layer (to print elements correctly)
-  /// @param color It' s a color
-  /// @param sortingLayer The sorting layer needed to correctly print elements
+  /// @brief Creates a new renderer object
+  /// @param color The color to use
+  /// @param sortingLayer The sorting layer of the renderer
   Renderer(SDL_Color color, short sortingLayer) : color(color), sortingLayer(sortingLayer) {}
-  /// @brief Renderer function for a button
+  /// @brief Creates a new renderer object
   /// @param baseImage The base image
   /// @param hoverImage The hovered image
   /// @param pressedImage The pressed image
   Renderer(SDL_Texture *baseImage = NULL, SDL_Texture *hoverImage = NULL,
            SDL_Texture *pressedImage = NULL)
       : baseImage(baseImage), hoverImage(hoverImage), pressedImage(pressedImage) {}
-  /// @brief The renderer function for the chess pieces
+  /// @brief Creates a new renderer object
   /// @param baseImage The base image
   /// @param hoverImage The hovered image
   /// @param pressedImage The pressed image
-  /// @param sortingLayer The sorting layer
+  /// @param sortingLayer The sorting layer of the renderer
   Renderer(SDL_Texture *baseImage, SDL_Texture *hoverImage, SDL_Texture *pressedImage,
            short sortingLayer)
       : baseImage(baseImage), hoverImage(hoverImage), pressedImage(pressedImage),
         sortingLayer(sortingLayer) {}
 
-  /// @brief Renders the requested image
+  /// @brief Renders the element with an image
   /// @param rect The rect to render to
   /// @param textureType The texture type to use
   virtual void Render(SDL_FRect rect, Texture textureType);
-  /// @brief The render function for a rectangle
+  /// @brief Renders the element with a color
   /// @param rect The rect to render to
   virtual void Render(SDL_FRect rect) { Render(rect, Texture::color); };
 };
