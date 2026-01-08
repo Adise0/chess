@@ -3,14 +3,14 @@
 namespace Chess::Rendering::Elements {
 
 Rectangle::Rectangle(SDL_FRect rect, Renderer renderer) : Element() {
+  // #region Rectangle
   this->rect = rect;
   this->renderer = renderer;
 
   if (renderer.baseImage) hasColor = false;
   else hasColor = true;
+  // #endregion
 }
-
-
 
 bool Rectangle::IsWithinRect(float x, float y) {
   // #region IsWithinRect
