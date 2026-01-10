@@ -7,6 +7,19 @@ namespace Chess::Game {
 using namespace Rendering;
 class Board {
 public:
+  /// @brief Gets the closest tile to a screen position
+  /// @param x The x position
+  /// @param y The y position
+  /// @return The closest tile position
+  static POSITION GetClosestTile(float x, float y);
+
+  /// @brief Transforms a board position to a screen position
+  /// @param boardPosition The board position to transform
+  /// @return The transformed screen position
+  static POSITION ToScreenPosition(POSITION boardPosition);
+
+
+public:
   /// @brief The size of the board in tiles
   static constexpr short boardSize = 8;
   /// @brief The size of a piece in pixels
@@ -14,7 +27,6 @@ public:
   /// @brief The size of a tile in pixels
   static constexpr short tileSize = 90;
 
-public:
   /// @brief The board array
   Piece *board[boardSize][boardSize]{
       // #region Initial array
@@ -113,12 +125,6 @@ public:
   /// @brief Gets the currennt turn
   /// @return Whether the current turnn is black or white
   TEAM GetTurn();
-
-
-  /// @brief Transforms a board position to a screen position
-  /// @param boardPosition The board position to transform
-  /// @return The transformed screen position
-  POSITION ToScreenPosition(POSITION boardPosition);
 
   /// @brief Creates the board
   void ConstructBoard();

@@ -15,6 +15,14 @@ Piece::Piece(POSITION startPosition, PieceType pieceType, TEAM team)
     : position(startPosition), pieceType(pieceType), team(team) {
   // #region Pice
   CreateElement();
+
+
+  element->OnDragEnd([this](float x, float y) {
+    POSITION tile = Board::GetClosestTile(x, y);
+    POSITION screenPos = Board::ToScreenPosition(tile);
+    this->element->SetPosition(screenPos.x, screenPos.y);
+  });
+
   // #endregion
 }
 

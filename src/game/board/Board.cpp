@@ -1,6 +1,7 @@
 #include "Board.h"
 #include "../../gameManager/GameManager.h"
 #include "../../windowManager/WindowManager.h"
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -51,6 +52,8 @@ void Board::ConstructBoard() {
     currentX += tileSize;
   }
 
+
+
   // #endregion
 }
 
@@ -77,6 +80,28 @@ POSITION Board::ToScreenPosition(POSITION boardPosition) {
           (short)(boardPosition.y * tileSize + offsetY)};
   // #endregion
 }
+
+POSITION Board::GetClosestTile(float x, float y) {
+  // #region GetClosestTile
+  float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
+  float offsetY = BOARD_PADDING;
+
+  float offsetedX = x - offsetX;
+  float offsetedY = y - offsetY;
+
+  float boardX = (offsetedX / tileSize);
+  float boardY = (offsetedY / tileSize);
+
+  int row = (int)std::lround(boardX);
+  int col = (int)std::lround(boardY);
+
+  row = std::clamp(row, 0, boardSize - 1);
+  col = std::clamp(col, 0, boardSize - 1);
+
+
+  return {(short)row, (short)col};
+  // #endregion
+};
 
 void Board::SetPiecePosition(POSITION boardPosition) {
   // #region SetPiecePosition
