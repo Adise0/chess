@@ -27,7 +27,7 @@ public:
 
   /// @brief Handles the button events
   /// @param event Reference to each event
-  void HandleEvent(SDL_Event &event) override;
+  bool HandleEvent(SDL_Event &event) override;
 
   /// @brief The overriden button render
   void Render() override;

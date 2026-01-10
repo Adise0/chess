@@ -61,6 +61,8 @@ void Board::CreateTile(SDL_FRect rect, Renderer renderer, Button *button, short 
   GameManager::inGame.AppendElement(createdTile);
 
   button->OnClick([createdTile, this]() {
+    // std::cout << "Squarre pressed" << std::endl;
+
     std::cout << "Square was pressed\n"
               << createdTile->boardCol << "\n"
               << createdTile->boardRow << "\n";

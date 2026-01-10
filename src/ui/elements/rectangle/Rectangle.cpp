@@ -46,9 +46,10 @@ void Rectangle::SetPosition(float x, float y) {
   // #endregion
 }
 
-void Rectangle::HandleEvent(SDL_Event &event) {
+bool Rectangle::HandleEvent(SDL_Event &event) {
   if (button) {
-    button->HandleEvent(event);
+    return button->HandleEvent(event);
   }
+  return false;
 }
 } // namespace Chess::Rendering::Elements

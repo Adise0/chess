@@ -12,7 +12,7 @@ void Element::Render() {
   // #endregion
 };
 
-void Element::HandleEvent(SDL_Event &event) {}
+bool Element::HandleEvent(SDL_Event &event) { return false; }
 
 Element::Element() {
   // #region Element

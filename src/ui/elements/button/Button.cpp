@@ -20,19 +20,26 @@ Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
   // #endregion
 }
 
-void Button::HandleEvent(SDL_Event &event) {
+bool Button::HandleEvent(SDL_Event &event) {
+
   // #region HandleEvent
   if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
-    if (IsWithinRect(event.button.x, event.button.y)) isPressed = true;
-
-  }
-
-  else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
-    if (isPressed) {
-      isPressed = false;
-      if (IsWithinRect(event.button.x, event.button.y)) OnClickEvent();
+    if (IsWithinRect(event.button.x, event.button.y)) {
+      isPressed = true;
     }
   }
+
+  if (event.type == SDL_EVENT_MOUSE_BUTTON_UP && event.button.button == SDL_BUTTON_LEFT) {
+    if (isPressed) {
+      isPressed = false;
+      if (IsWithinRect(event.button.x, event.button.y)) {
+        OnClickEvent();
+        return true;
+      }
+    }
+  }
+  return false;
+
   // #endregion
 }
 

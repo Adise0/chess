@@ -26,6 +26,10 @@ void MainMenu::Load() {
   playButton->OnClick([] { GameManager::StartGame(); });
 
   screenElements.push_back(playButton);
+
+  std::cout << "Presenting screen: " << typeid(*this).name() << "\n";
+  std::cout << "Main Menu Presented\n";
+  std::cout << playButton->boardCol << "\n" << playButton->boardRow << "\n";
   // #endregion
 }
 
@@ -34,4 +38,5 @@ std::vector<Element *> MainMenu::GetElementsToRender() {
   return screenElements;
   // #endregion
 }
+
 } // namespace Chess::Rendering::Screens

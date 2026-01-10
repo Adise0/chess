@@ -18,7 +18,7 @@ public:
   Rectangle(SDL_FRect rect, Renderer renderer);
 
   short boardRow = -1;
-  short boardCol = -1;
+  short boardCol = 55;
 
   /// @param button The button to use
   Rectangle(SDL_FRect rect, Renderer renderer, Button *button, short row, short col);
@@ -26,7 +26,7 @@ public:
 
   /// @brief The handeler for the rectangles
   /// @param event An event
-  void HandleEvent(SDL_Event &event) override;
+  bool HandleEvent(SDL_Event &event) override;
 
 public:
   /// @brief Sets the position of the rectangle

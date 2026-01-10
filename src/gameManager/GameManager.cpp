@@ -36,9 +36,14 @@ void GameManager::ProcessInput(SDL_Event &event) {
       for (Screen *screen : Screen::GetScreens()) {
         if (!screen->isPresented) continue;
         std::vector<Element *> sceenElements = screen->GetElementsToRender();
+        std::stable_sort(sceenElements.begin(), sceenElements.end(),
+                         [](const Element *a, const Element *b) {
+                           return a->renderer.sortingLayer > b->renderer.sortingLayer;
+                         });
 
         for (Element *element : sceenElements) {
-          element->HandleEvent(event);
+          // element->HandleEvent(event);
+          if (element->HandleEvent(event)) break;
         }
       }
       break;

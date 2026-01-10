@@ -39,6 +39,7 @@ std::vector<Screen *> &Screen::GetScreens() {
 void Screen::Present(bool present) {
   // #region Present
   if (!isPresented && present) {
+    std::cout << "Presenting screen: " << typeid(*this).name() << " to " << present << "\n";
     isPresented = true;
     OnPresent();
   }

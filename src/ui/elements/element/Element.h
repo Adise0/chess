@@ -23,7 +23,7 @@ public:
 
   /// @brief Handles the element events
   /// @param event The current event
-  virtual void HandleEvent(SDL_Event &event);
+  virtual bool HandleEvent(SDL_Event &event);
 
 
   Element();
