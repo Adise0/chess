@@ -21,6 +21,10 @@ public:
   Rectangle(SDL_FRect rect, Renderer renderer, Button *button);
   Button *button = nullptr;
 
+  /// @brief The handeler for the rectangles
+  /// @param event An event
+  void HandleEvent(SDL_Event &event) override;
+
 public:
   /// @brief Sets the position of the rectangle
   /// @param x The new x

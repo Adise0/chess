@@ -26,7 +26,14 @@ std::vector<Element *> InGame::GetElementsToRender() {
 
 void InGame::PieceMovement() {
 
-  for (Element *square : screenElements) {
+  for (Element *element : screenElements) {
+
+    Rectangle *square = dynamic_cast<Rectangle *>(element);
+    Piece *piece = dynamic_cast<Piece *>(element);
+
+    if (square->button->isPressed) {
+      // piece->position = square->;
+    }
   };
 }
 

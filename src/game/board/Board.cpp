@@ -59,6 +59,9 @@ void Board::CreateTile(SDL_FRect rect, Renderer renderer, Button *button) {
   // #region CreateTile
   Rectangle *createdTile = new Rectangle(rect, renderer, button);
   GameManager::inGame.AppendElement(createdTile);
+
+  button->OnClick([rect, this]() { std::cout << "A square was clicked"; });
+
   // #endregion
 }
 

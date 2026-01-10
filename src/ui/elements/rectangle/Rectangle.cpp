@@ -1,5 +1,6 @@
 #include "Rectangle.h"
 #include "../button/Button.h"
+#include "../element/Element.h"
 #include <windows.h>
 namespace Chess::Rendering::Elements {
 
@@ -39,5 +40,11 @@ void Rectangle::SetPosition(float x, float y) {
   rect.x = x;
   rect.y = y;
   // #endregion
+}
+
+void Rectangle::HandleEvent(SDL_Event &event) {
+  if (button) {
+    button->HandleEvent(event);
+  }
 }
 } // namespace Chess::Rendering::Elements
