@@ -16,19 +16,31 @@ private:
   /// @brief The OnDragStart listeners
   std::vector<std::function<void()>> onDragStartListeners;
   /// @brief The OnDragEnd listeners
-  std::vector<std::function<void()>> onDragEndListeners;
+  std::vector<std::function<void(float x, float y)>> onDragEndListeners;
+
+  /// @brief The drag start X position
+  int dragStartX;
+  /// @brief The drag start Y position
+  int dragStartY;
+
 
 public:
-  /// @brief Creates a clickabale button
-  /// @param rect The button rect
-  /// @param color button base color
+  /// @brief Whether the element is currently being pressed
+  bool isPressed;
+  /// @brief Whether the element is currently being dragged
+  bool isBeingDragged;
+
+public:
+  /// @brief Creates a draggable element
+  /// @param rect The draggable rect
+  /// @param color draggable base color
   Draggable(SDL_FRect rect, Renderer renderer);
 
-  /// @brief Handles the button events
+  /// @brief Handles the draggable events
   /// @param event Reference to each event
   void HandleEvent(SDL_Event &event) override;
 
-  /// @brief The overriden button render
+  /// @brief The overriden draggable render
   void Render() override;
 
   /// @brief Registers an onClick listener
@@ -41,12 +53,7 @@ public:
 
   /// @brief Registers an onDragEnd listener
   /// @param listener The listener to register
-  void OnDragEnd(std::function<void()> listener);
-
-  /// @brief Whether the element is currently being pressed
-  bool isPressed;
-  /// @brief Whether the element is currently being dragged
-  bool isBeingDragged;
+  void OnDragEnd(std::function<void(float x, float y)> listener);
 
 private:
   /// @brief Handles the on click event
@@ -54,6 +61,6 @@ private:
   /// @brief Handles the on drag start event
   void OnDragStartEvent();
   /// @brief Handles the on drag end event
-  void OnDragEndvent();
+  void OnDragEndEvent();
 };
 } // namespace Chess::Rendering::Elements
