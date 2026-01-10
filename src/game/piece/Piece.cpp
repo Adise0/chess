@@ -33,6 +33,8 @@ void Piece::CreateElement() {
     Piece::selectedPiece = this;
     std::cout << "Piece selected\n";
     std::cout << "Piece pointer: " << Piece::selectedPiece << "\n";
+    std::cout << Piece::selectedPiece->position.x << "\n"
+              << Piece::selectedPiece->position.y << "\n";
   }); // #endregion
 }
 
