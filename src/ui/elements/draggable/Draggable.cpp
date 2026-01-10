@@ -6,7 +6,8 @@
 
 namespace Chess::Rendering::Elements {
 
-Draggable::Draggable(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
+Draggable::Draggable(SDL_FRect rect, SDL_FRect rendererRect, Renderer renderer)
+    : rendererRect(rendererRect), Rectangle(rect, renderer) {
   // #region Draggable
   isPressed = false;
   isBeingDragged = false;
@@ -51,7 +52,19 @@ void Draggable::Render() {
   Texture textureType = Texture::base;
   if (isPressed) textureType = Texture::pressed;
 
-  renderer.Render(rect, textureType);
+  float x = rect.x + rendererRect.x;
+  float y = rect.y + rendererRect.y;
+  float w = rendererRect.w;
+  float h = rendererRect.h;
+
+  if (isBeingDragged) {
+    x -= 10;
+    y -= 10;
+    w += 20;
+    h += 20;
+  }
+
+  renderer.Render({x, y, w, h}, textureType);
   // #endregion
 }
 

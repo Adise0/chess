@@ -1,5 +1,5 @@
 #pragma once
-#include "../../ui/elements/button/Button.h"
+#include "../../ui/elements/Draggable/Draggable.h"
 #include "../types/Types.h"
 #include <vector>
 
@@ -16,8 +16,8 @@ public:
   PieceType pieceType;
   /// @brief The team of the piece
   TEAM team;
-  /// @brief The underlying button element
-  Button *element;
+  /// @brief The underlying Draggable element
+  Draggable *element;
 
 public:
   Piece(POSITION startPosition, PieceType pieceType, TEAM team);

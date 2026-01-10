@@ -72,8 +72,6 @@ POSITION Board::ToScreenPosition(POSITION boardPosition) {
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
   float offsetY = BOARD_PADDING;
 
-  offsetX += (tileSize - pieceSize) / 2;
-  offsetY += (tileSize - pieceSize) / 2;
 
   return {(short)(boardPosition.x * tileSize + offsetX),
           (short)(boardPosition.y * tileSize + offsetY)};

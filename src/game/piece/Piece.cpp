@@ -21,10 +21,13 @@ Piece::Piece(POSITION startPosition, PieceType pieceType, TEAM team)
 
 void Piece::CreateElement() {
   // #region CreateElement
-  SDL_FRect rect = {0, 0, Board::pieceSize, Board::pieceSize};
+  SDL_FRect rendererRect = {(Board::tileSize - Board::pieceSize) / 2,
+                            (Board::tileSize - Board::pieceSize) / 2, Board::pieceSize,
+                            Board::pieceSize};
+  SDL_FRect rect = {0, 0, Board::tileSize, Board::tileSize};
   SDL_Texture *pieceTexture = WindowManager::LoadSprite(GetPieceSprite());
-  Renderer pieceRenderer(pieceTexture, NULL, NULL, 1);
-  element = new Button(rect, pieceRenderer);
+  Renderer pieceRenderer(pieceTexture, NULL, pieceTexture, 1);
+  element = new Draggable(rect, rendererRect, pieceRenderer);
   GameManager::inGame.AppendElement(element);
 
   // #endregion

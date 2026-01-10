@@ -23,6 +23,8 @@ private:
   /// @brief The drag start Y position
   int dragStartY;
 
+  /// @brief The renderer rect
+  SDL_FRect rendererRect;
 
 public:
   /// @brief Whether the element is currently being pressed
@@ -33,8 +35,8 @@ public:
 public:
   /// @brief Creates a draggable element
   /// @param rect The draggable rect
-  /// @param color draggable base color
-  Draggable(SDL_FRect rect, Renderer renderer);
+  /// @param rendererRect The draggable rect for the renderer
+  Draggable(SDL_FRect rect, SDL_FRect rendererRect, Renderer renderer);
 
   /// @brief Handles the draggable events
   /// @param event Reference to each event
