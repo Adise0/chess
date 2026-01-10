@@ -27,54 +27,9 @@ void Piece::CreateElement() {
   element = new Button(rect, pieceRenderer);
   GameManager::inGame.AppendElement(element);
 
-  bool doubleJump = true; // Cant use it inside the switch cause lamda?
+  bool doubleJump = true;
 
-  element->OnClick([this, &doubleJump] { // How the heck is this a lambda
-    switch (pieceType) {
-    case PieceType::Pawn:
-      {
-        std::cout << "Pawn was clicked. Dunno how to move it" << std::endl;
-        // if (doubleJump == true) {
-        //   element->SetPosition(400.0f, 400.0f);
-        // }
-      }
-      break;
-
-    case PieceType::Knight:
-      {
-        std::cout << "Knight was clicked\n";
-      }
-      break;
-
-    case PieceType::Bishop:
-      {
-        std::cout << "Bishop was clicked\n";
-      }
-      break;
-
-    case PieceType::Rook:
-      {
-        std::cout << "Rook was clicked\n";
-      }
-      break;
-
-    case PieceType::Queen:
-      {
-        std::cout << "Queen was clicked\n";
-      }
-      break;
-
-    case PieceType::King:
-      {
-        std::cout << "King was clicked\n";
-      }
-      break;
-
-
-    default:
-      break;
-    }
-  }); // #endregion
+  element->OnClick([this] { selectedPiece = this; }); // #endregion
 }
 
 
@@ -108,5 +63,6 @@ std::string Piece::GetPieceSprite() {
   return ("assets/sprites/pieces/" + teamStr + name + ".png");
   // #endregion
 }
+
 
 } // namespace Chess::Game

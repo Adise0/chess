@@ -19,6 +19,9 @@ public:
   /// @brief Creates the in game screen
   InGame() : Screen() {};
 
+  /// @brief Handles the pieces movement
+  void PieceMovement();
+
   /// @brief Loads the screen
   void Load() override;
 

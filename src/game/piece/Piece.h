@@ -28,6 +28,9 @@ public:
   /// @return A vector of the avialbale movees
   std::vector<POSITION> GetLegalMoves();
 
+  /// @brief The pointer to the selected piece
+  inline static Piece *selectedPiece = nullptr;
+
 
 private:
   /// @brief Creates the visual element

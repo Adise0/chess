@@ -23,4 +23,12 @@ std::vector<Element *> InGame::GetElementsToRender() {
   return screenElements;
   // #endregion
 }
+
+void InGame::PieceMovement() {
+
+  for (Element *square : screenElements) {
+  };
+}
+
+
 } // namespace Chess::Rendering::Screens
