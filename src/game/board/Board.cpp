@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "../../gameManager/GameManager.h"
+#include "../../ui/elements/button/Button.h"
 #include "../../windowManager/WindowManager.h"
 #include <iostream>
 #include <string>
@@ -31,7 +32,7 @@ void Board::ConstructBoard() {
     currentY = initialY;
     for (size_t row = 0; row < boardSize; row++) {
       SDL_FRect tileRect = {currentX, currentY, tileSize, tileSize};
-
+      Button *button = new Button(tileRect, nullptr);
       Renderer *renderer;
       if (row % 2 == 0) {
         if (col % 2 == 0) renderer = &lightTileRenderer;
@@ -41,7 +42,7 @@ void Board::ConstructBoard() {
         else renderer = &lightTileRenderer;
       }
 
-      CreateTile(tileRect, *renderer);
+      CreateTile(tileRect, *renderer, button);
       SetPiecePosition({
           (short)row,
           (short)col,
@@ -54,9 +55,9 @@ void Board::ConstructBoard() {
   // #endregion
 }
 
-void Board::CreateTile(SDL_FRect rect, Renderer renderer) {
+void Board::CreateTile(SDL_FRect rect, Renderer renderer, Button *button) {
   // #region CreateTile
-  Rectangle *createdTile = new Rectangle(rect, renderer);
+  Rectangle *createdTile = new Rectangle(rect, renderer, button);
   GameManager::inGame.AppendElement(createdTile);
   // #endregion
 }

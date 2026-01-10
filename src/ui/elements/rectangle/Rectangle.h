@@ -6,6 +6,8 @@
 
 namespace Chess::Rendering::Elements {
 
+class Button;
+
 class Rectangle : public Element {
 
 
@@ -15,6 +17,11 @@ public:
   /// @param renderer The renderer to use
   Rectangle(SDL_FRect rect, Renderer renderer);
 
+  /// @param button The button to use
+  Rectangle(SDL_FRect rect, Renderer renderer, Button *button);
+  Button *button = nullptr;
+
+public:
   /// @brief Sets the position of the rectangle
   /// @param x The new x
   /// @param y The new y

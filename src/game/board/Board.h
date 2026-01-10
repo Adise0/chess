@@ -126,7 +126,7 @@ public:
   /// @brief Creates a square
   /// @param rect x, y, width, height
   /// @param renderer a renderer
-  void CreateTile(SDL_FRect rect, Renderer renderer);
+  void CreateTile(SDL_FRect rect, Renderer renderer, Button *button);
 
   /// @brief Sets the position of a piece in ints
   /// @param boardPosition The board position to "atach" to the piece

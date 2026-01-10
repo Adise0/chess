@@ -8,6 +8,7 @@ namespace Chess::Game {
 using namespace Rendering::Elements;
 
 
+
 class Piece {
 public:
   /// @brief The current piece position
