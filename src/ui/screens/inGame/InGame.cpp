@@ -24,18 +24,21 @@ std::vector<Element *> InGame::GetElementsToRender() {
   // #endregion
 }
 
-void InGame::PieceMovement() {
+// void InGame::PieceMovement() {
 
-  for (Element *element : screenElements) {
+//   for (Element *element : screenElements) {
 
-    Rectangle *square = dynamic_cast<Rectangle *>(element);
-    Piece *piece = dynamic_cast<Piece *>(element);
+//     Rectangle *square = dynamic_cast<Rectangle *>(element);
 
-    if (square->button->isPressed) {
-      // piece->position = square->;
-    }
-  };
-}
+//     if (square->button->isPressed && Piece::selectedPiece != nullptr) {
+//       Piece::selectedPiece->position.x = square->boardCol;
+//       Piece::selectedPiece->position.y = square->boardRow;
+//       POSITION newPosition = board->ToScreenPosition(Piece::selectedPiece->position);
+//       Piece::selectedPiece->element->SetPosition(static_cast<float>(newPosition.x),
+//                                                  static_cast<float>(newPosition.y));
+//     }
+//   };
+// }
 
 
 } // namespace Chess::Rendering::Screens

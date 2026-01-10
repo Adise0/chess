@@ -17,8 +17,11 @@ public:
   /// @param renderer The renderer to use
   Rectangle(SDL_FRect rect, Renderer renderer);
 
+  short boardRow = -1;
+  short boardCol = -1;
+
   /// @param button The button to use
-  Rectangle(SDL_FRect rect, Renderer renderer, Button *button);
+  Rectangle(SDL_FRect rect, Renderer renderer, Button *button, short row, short col);
   Button *button = nullptr;
 
   /// @brief The handeler for the rectangles

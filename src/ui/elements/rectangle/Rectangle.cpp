@@ -14,11 +14,15 @@ Rectangle::Rectangle(SDL_FRect rect, Renderer renderer) : Element() {
   // #endregion
 }
 
-Rectangle::Rectangle(SDL_FRect rect, Renderer renderer, Button *button) : Element() {
+Rectangle::Rectangle(SDL_FRect rect, Renderer renderer, Button *button, short row, short col)
+    : Element() {
   // #region Rectangle
   this->rect = rect;
   this->renderer = renderer;
   this->button = button;
+
+  this->boardRow = row;
+  this->boardCol = col;
 
   if (renderer.baseImage) hasColor = false;
   else hasColor = true;

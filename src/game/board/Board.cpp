@@ -42,7 +42,7 @@ void Board::ConstructBoard() {
         else renderer = &lightTileRenderer;
       }
 
-      CreateTile(tileRect, *renderer, button);
+      CreateTile(tileRect, *renderer, button, row, col);
       SetPiecePosition({
           (short)row,
           (short)col,
@@ -55,12 +55,35 @@ void Board::ConstructBoard() {
   // #endregion
 }
 
-void Board::CreateTile(SDL_FRect rect, Renderer renderer, Button *button) {
+void Board::CreateTile(SDL_FRect rect, Renderer renderer, Button *button, short row, short col) {
   // #region CreateTile
-  Rectangle *createdTile = new Rectangle(rect, renderer, button);
+  Rectangle *createdTile = new Rectangle(rect, renderer, button, row, col);
   GameManager::inGame.AppendElement(createdTile);
 
-  button->OnClick([rect, this]() { std::cout << "A square was clicked"; });
+  button->OnClick([createdTile, this]() {
+    std::cout << "Square was pressed\n"
+              << createdTile->boardCol << "\n"
+              << createdTile->boardRow << "\n";
+
+    std::cout << "Selected piece at this moment: "
+              << (Piece::selectedPiece
+                      ? "VALID pointer: " + std::to_string((uintptr_t)Piece::selectedPiece)
+                      : "NULL")
+              << "\n";
+
+    if (createdTile->boardRow == -1 && createdTile->boardCol == -1) return;
+    if (Piece::selectedPiece == nullptr) return;
+    std::cout << "Selected piece pointer: " << Piece::selectedPiece;
+    if (Piece::selectedPiece != nullptr) {
+      Piece::selectedPiece->position.x = createdTile->boardCol;
+      Piece::selectedPiece->position.y = createdTile->boardRow;
+
+      POSITION newPosition = this->ToScreenPosition(Piece::selectedPiece->position);
+      Piece::selectedPiece->element->SetPosition(static_cast<float>(newPosition.x),
+                                                 static_cast<float>(newPosition.y));
+      Piece::selectedPiece = nullptr;
+    };
+  });
 
   // #endregion
 }

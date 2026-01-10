@@ -29,7 +29,11 @@ void Piece::CreateElement() {
 
   bool doubleJump = true;
 
-  element->OnClick([this] { selectedPiece = this; }); // #endregion
+  element->OnClick([this] {
+    Piece::selectedPiece = this;
+    std::cout << "Piece selected\n";
+    std::cout << "Piece pointer: " << Piece::selectedPiece << "\n";
+  }); // #endregion
 }
 
 
