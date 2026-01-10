@@ -38,8 +38,10 @@ void Draggable::HandleEvent(SDL_Event &event) {
 
   if (event.type == SDL_EVENT_MOUSE_MOTION) {
     if (isPressed) {
-      if (!isBeingDragged) OnDragStartEvent();
-      isBeingDragged = true;
+      if (!isBeingDragged) {
+        OnDragStartEvent();
+        isBeingDragged = true;
+      }
       rect.x = event.motion.x - dragStartX;
       rect.y = event.motion.y - dragStartY;
     }
