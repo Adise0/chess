@@ -5,6 +5,8 @@
 #include <SDL3/SDL.h>
 #include <functional>
 
+#include "../../../types/vector2/Vector2.h"
+
 
 namespace Chess::Rendering::Elements {
 
@@ -16,7 +18,7 @@ private:
   /// @brief The OnDragStart listeners
   std::vector<std::function<void()>> onDragStartListeners;
   /// @brief The OnDragEnd listeners
-  std::vector<std::function<void(float x, float y)>> onDragEndListeners;
+  std::vector<std::function<void(Vector2 dropPosition)>> onDragEndListeners;
 
   /// @brief The drag start X position
   int dragStartX;
@@ -58,7 +60,7 @@ public:
 
   /// @brief Registers an onDragEnd listener
   /// @param listener The listener to register
-  void OnDragEnd(std::function<void(float x, float y)> listener);
+  void OnDragEnd(std::function<void(Vector2 dropPosition)> listener);
 
 private:
   /// @brief Handles the on click event

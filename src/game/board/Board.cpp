@@ -75,24 +75,23 @@ TEAM Board::GetTurn() {
   // #endregion
 }
 
-POSITION Board::ToScreenPosition(POSITION boardPosition) {
+Vector2 Board::ToScreenPosition(Vector2Int boardPosition) {
   // #region ToScreenPosition
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
   float offsetY = BOARD_PADDING;
 
 
-  return {(short)(boardPosition.x * tileSize + offsetX),
-          (short)(boardPosition.y * tileSize + offsetY)};
+  return {boardPosition.x * tileSize + offsetX, boardPosition.y * tileSize + offsetY};
   // #endregion
 }
 
-POSITION Board::GetClosestTile(float x, float y) {
+Vector2Int Board::GetClosestTile(Vector2 screenPosition) {
   // #region GetClosestTile
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
   float offsetY = BOARD_PADDING;
 
-  float offsetedX = x - offsetX;
-  float offsetedY = y - offsetY;
+  float offsetedX = screenPosition.x - offsetX;
+  float offsetedY = screenPosition.y - offsetY;
 
   float boardX = (offsetedX / tileSize);
   float boardY = (offsetedY / tileSize);
@@ -108,19 +107,19 @@ POSITION Board::GetClosestTile(float x, float y) {
   // #endregion
 };
 
-void Board::ConfigurePiece(POSITION boardPosition) {
+void Board::ConfigurePiece(Vector2Int boardPosition) {
   // #region ConfigurePiece
   Piece *piece = board[boardPosition.x][boardPosition.y];
   if (!piece) return;
-  POSITION screenPosition = ToScreenPosition(boardPosition);
+  Vector2Int screenPosition = ToScreenPosition(boardPosition);
 
   piece->element->OnClick([this, piece] { this->CalculateLegalMoves(piece); });
   piece->element->OnDragStart([this, piece] { this->CalculateLegalMoves(piece); });
 
-  piece->element->OnDragEnd([this, piece](float x, float y) {
-    POSITION tile = Board::GetClosestTile(x, y);
-    POSITION originalSceenPos = Board::ToScreenPosition(piece->position);
-    POSITION newScreenPos = Board::ToScreenPosition(tile);
+  piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
+    Vector2Int tile = Board::GetClosestTile(dropPosition);
+    Vector2Int originalSceenPos = Board::ToScreenPosition(piece->position);
+    Vector2Int newScreenPos = Board::ToScreenPosition(tile);
 
     if (selectedPiece != piece) {
       std::cout << "Piece missmatch\n";
@@ -129,8 +128,9 @@ void Board::ConfigurePiece(POSITION boardPosition) {
     }
 
 
-    auto found = std::find_if(currentLegalMoves.begin(), currentLegalMoves.end(),
-                              [tile](POSITION pos) { return pos.x == tile.x && pos.y == tile.y; });
+    auto found =
+        std::find_if(currentLegalMoves.begin(), currentLegalMoves.end(),
+                     [tile](Vector2Int pos) { return pos.x == tile.x && pos.y == tile.y; });
     if (found == currentLegalMoves.end()) {
       piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
       std::cout << "Illegal move to (" << tile.x << ", " << tile.y << ")\n";
@@ -177,8 +177,8 @@ void Board::CalculateLegalMoves(Piece *piece) {
   }
   currentLegalMoveShowers.clear();
   for (size_t i = 0; i < currentLegalMoves.size(); i++) {
-    POSITION move = currentLegalMoves[i];
-    POSITION screenPos = ToScreenPosition(move);
+    Vector2Int move = currentLegalMoves[i];
+    Vector2Int screenPos = ToScreenPosition(move);
     SDL_FRect rect = {screenPos.x + (tileSize / 4), screenPos.y + (tileSize / 4), tileSize / 2,
                       tileSize / 2};
     Renderer renderer({0, 255, 0, 100}, 50);
@@ -191,9 +191,9 @@ void Board::CalculateLegalMoves(Piece *piece) {
   // #endregion
 }
 
-std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
+std::vector<Vector2Int> Board::GetLegalMoves(Piece *piece) {
   // #region GetLegalMoves
-  std::vector<POSITION> moves;
+  std::vector<Vector2Int> moves;
 
   switch (piece->pieceType) {
   case PieceType::Pawn:
@@ -213,9 +213,9 @@ std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
   // #endregion
 }
 
-std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
+std::vector<Vector2Int> Board::GetPawnLegalMoves(Piece *piece) {
   // #region GetPawnLegalMoves
-  std::vector<POSITION> moves;
+  std::vector<Vector2Int> moves;
 
   short advanceTile = (piece->team == 0) ? 1 : -1;
   short startRow = (piece->team == 0) ? 1 : 6;
@@ -248,9 +248,9 @@ std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
   // #endregion
 }
 
-std::vector<POSITION> Board::GetRookLegalMoves(Piece *piece) {
+std::vector<Vector2Int> Board::GetRookLegalMoves(Piece *piece) {
   // #region GetRookLegalMoves
-  std::vector<POSITION> moves;
+  std::vector<Vector2Int> moves;
   for (short y = piece->position.y - 1; y >= 0; y--)
     if (!CheckMove({piece->position.x, y}, moves)) break;
   for (short y = piece->position.y + 1; y < boardSize; y++)
@@ -264,9 +264,9 @@ std::vector<POSITION> Board::GetRookLegalMoves(Piece *piece) {
   // #endregion
 }
 
-std::vector<POSITION> Board::GetKnightLegalMoves(Piece *piece) {
+std::vector<Vector2Int> Board::GetKnightLegalMoves(Piece *piece) {
   // #region GetKnightLegalMoves
-  std::vector<POSITION> moves;
+  std::vector<Vector2Int> moves;
 
   short x = piece->position.x + 1;
   short y = piece->position.y - 2;
@@ -299,12 +299,12 @@ std::vector<POSITION> Board::GetKnightLegalMoves(Piece *piece) {
   // #endregion
 }
 
-std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
+std::vector<Vector2Int> Board::GetQueenLegalMoves(Piece *piece) {
   // #region GetQueenLegalMoves
-  std::vector<POSITION> moves;
+  std::vector<Vector2Int> moves;
 
   for (short y = piece->position.y - 1; y >= 0; y--) {
-    POSITION move = {piece->position.x, y};
+    Vector2Int move = {piece->position.x, y};
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -315,7 +315,7 @@ std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
 
 
   for (short y = piece->position.y + 1; y < boardSize; y++) {
-    POSITION move = {piece->position.x, y};
+    Vector2Int move = {piece->position.x, y};
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -325,7 +325,7 @@ std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
   }
 
   for (short x = piece->position.x - 1; x >= 0; x--) {
-    POSITION move = {x, piece->position.y};
+    Vector2Int move = {x, piece->position.y};
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -334,7 +334,7 @@ std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
     }
   }
   for (short x = piece->position.x + 1; x < boardSize; x++) {
-    POSITION move = {x, piece->position.y};
+    Vector2Int move = {x, piece->position.y};
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -346,20 +346,20 @@ std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
 
 
   for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
     if (!CheckMove(move, moves)) break;
   }
   for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
     if (!CheckMove(move, moves)) break;
   }
 
   for (short offset = -1; piece->position.x + offset >= 0; offset--) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
     if (!CheckMove(move, moves)) break;
   }
   for (short offset = -1; piece->position.x + offset >= 0; offset--) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
     if (!CheckMove(move, moves)) break;
   }
 
@@ -368,32 +368,32 @@ std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
   // #endregion
 }
 
-std::vector<POSITION> Board::GetBishopLegalMoves(Piece *piece) {
-  std::vector<POSITION> moves;
+std::vector<Vector2Int> Board::GetBishopLegalMoves(Piece *piece) {
+  std::vector<Vector2Int> moves;
 
 
   for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
     if (!CheckMove(move, moves)) break;
   }
   for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
     if (!CheckMove(move, moves)) break;
   }
 
   for (short offset = -1; piece->position.x + offset >= 0; offset--) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
     if (!CheckMove(move, moves)) break;
   }
   for (short offset = -1; piece->position.x + offset >= 0; offset--) {
-    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
     if (!CheckMove(move, moves)) break;
   }
 
   return moves;
 }
 
-bool Board::CheckMove(POSITION move, std::vector<POSITION> &moves) {
+bool Board::CheckMove(Vector2Int move, std::vector<Vector2Int> &moves) {
   // #region CheckMove
   if (board[move.x][move.y]) return false;
   moves.push_back(move);

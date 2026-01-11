@@ -12,12 +12,12 @@ public:
   /// @param x The x position
   /// @param y The y position
   /// @return The closest tile position
-  static POSITION GetClosestTile(float x, float y);
+  static Vector2Int GetClosestTile(Vector2 screenPosition);
 
   /// @brief Transforms a board position to a screen position
   /// @param boardPosition The board position to transform
   /// @return The transformed screen position
-  static POSITION ToScreenPosition(POSITION boardPosition);
+  static Vector2 ToScreenPosition(Vector2Int boardPosition);
 
 
 public:
@@ -119,7 +119,7 @@ private:
   /// @brief The current turn
   TEAM currentTurn;
 
-  std::vector<POSITION> currentLegalMoves;
+  std::vector<Vector2Int> currentLegalMoves;
   std::vector<Element *> currentLegalMoveShowers;
   Piece *selectedPiece;
 
@@ -141,12 +141,12 @@ public:
 
   /// @brief Configures a piece
   /// @param boardPosition The board position to "atach" to the piece
-  void ConfigurePiece(POSITION boardPosition);
+  void ConfigurePiece(Vector2Int boardPosition);
 
   /// @brief Gets the legal moves of a piece
   /// @param piece The piece to get moves for
   /// @return A vector of legal moves
-  std::vector<POSITION> GetLegalMoves(Piece *piece);
+  std::vector<Vector2Int> GetLegalMoves(Piece *piece);
 
 private:
   /// @brief Caluclates and shows a piece's currrent legal moves
@@ -156,30 +156,30 @@ private:
   /// @brief Gets the pawn legal moves
   /// @param piece The pawn piece
   /// @return The legal moves
-  std::vector<POSITION> GetPawnLegalMoves(Piece *piece);
+  std::vector<Vector2Int> GetPawnLegalMoves(Piece *piece);
 
   /// @brief Gets the legal moves for a rook
   /// @param piece The rook piece
   /// @return The legal moves
-  std::vector<POSITION> GetRookLegalMoves(Piece *piece);
+  std::vector<Vector2Int> GetRookLegalMoves(Piece *piece);
 
   /// @brief Gets the knight legal moves
   /// @param piece The kinght piece
   /// @return The legal moves
-  std::vector<POSITION> GetKnightLegalMoves(Piece *piece);
+  std::vector<Vector2Int> GetKnightLegalMoves(Piece *piece);
 
   /// @brief Gets the queen legal moves
   /// @param piece The queen piece
   /// @return The legal moves
-  std::vector<POSITION> GetQueenLegalMoves(Piece *piece);
+  std::vector<Vector2Int> GetQueenLegalMoves(Piece *piece);
 
 
-  std::vector<POSITION> GetBishopLegalMoves(Piece *piece);
+  std::vector<Vector2Int> GetBishopLegalMoves(Piece *piece);
 
   /// @brief Checks if a move is valid and adds it to the moves vector
   /// @param move The move to check
   /// @param moves The legal moves vector
   /// @return Whether the move is legal
-  bool CheckMove(POSITION move, std::vector<POSITION> &moves);
+  bool CheckMove(Vector2Int move, std::vector<Vector2Int> &moves);
 };
 } // namespace Chess::Game

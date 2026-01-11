@@ -10,7 +10,7 @@
 namespace Chess::Game {
 using namespace Rendering;
 
-Piece::Piece(POSITION startPosition, PieceType pieceType, TEAM team)
+Piece::Piece(Vector2Int startPosition, PieceType pieceType, TEAM team)
     : position(startPosition), pieceType(pieceType), team(team) {
   // #region Pice
   CreateElement();

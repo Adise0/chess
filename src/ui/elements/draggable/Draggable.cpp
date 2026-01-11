@@ -82,7 +82,7 @@ void Draggable::OnDragStart(std::function<void()> listener) {
 
   // #endregion
 }
-void Draggable::OnDragEnd(std::function<void(float x, float y)> listener) {
+void Draggable::OnDragEnd(std::function<void(Vector2 dropPosition)> listener) {
   // #region OnDragEnd
   onDragEndListeners.push_back(listener);
   // #endregion
@@ -109,8 +109,8 @@ void Draggable::OnDragStartEvent() {
 void Draggable::OnDragEndEvent() {
   // #region OnDragEndEvent
   renderer.sortingLayer = sortingLayerBackup;
-  for (const std::function<void(float x, float y)> &listener : onDragEndListeners) {
-    listener(rect.x, rect.y);
+  for (const std::function<void(Vector2 dropPosition)> &listener : onDragEndListeners) {
+    listener({rect.x, rect.y});
   }
   // #endregion
 }
