@@ -117,7 +117,7 @@ public:
 
 private:
   /// @brief The current turn
-  TEAM currrentTurn;
+  TEAM currentTurn;
 
   std::vector<POSITION> currentLegalMoves;
   std::vector<Element *> currentLegalMoveShowers;

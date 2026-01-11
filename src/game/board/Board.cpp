@@ -14,6 +14,10 @@ namespace Chess::Game {
 Board::Board() {
   // #region Board
   ConstructBoard();
+  currentTurn = 1;
+  selectedPiece = nullptr;
+  currentLegalMoves.clear();
+  currentLegalMoveShowers.clear();
   // #endregion
 }
 
@@ -67,7 +71,7 @@ void Board::CreateTile(SDL_FRect rect, Renderer renderer) {
 
 TEAM Board::GetTurn() {
   // #region GetTurn
-  return currrentTurn;
+  return currentTurn;
   // #endregion
 }
 
@@ -118,7 +122,11 @@ void Board::ConfigurePiece(POSITION boardPosition) {
     POSITION originalSceenPos = Board::ToScreenPosition(piece->position);
     POSITION newScreenPos = Board::ToScreenPosition(tile);
 
-    if (selectedPiece != piece) return;
+    if (selectedPiece != piece) {
+      std::cout << "Piece missmatch\n";
+      piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
+      return;
+    }
 
 
     auto found = std::find_if(currentLegalMoves.begin(), currentLegalMoves.end(),
@@ -141,6 +149,9 @@ void Board::ConfigurePiece(POSITION boardPosition) {
       delete currentLegalMoveShowers[i];
     }
     currentLegalMoveShowers.clear();
+
+    currentTurn = (currentTurn == 0) ? 1 : 0;
+    // Advance turn
   });
 
 
@@ -151,9 +162,13 @@ void Board::ConfigurePiece(POSITION boardPosition) {
 
 void Board::CalculateLegalMoves(Piece *piece) {
   // #region CalculateLegalMoves
-  std::vector<POSITION> legalMoves = GetLegalMoves(piece);
-  currentLegalMoves = legalMoves;
+
   selectedPiece = piece;
+  if (piece->team != currentTurn) {
+    currentLegalMoves.clear();
+    return;
+  }
+  currentLegalMoves = GetLegalMoves(piece);
 
   // TEMP
   for (size_t i = 0; i < currentLegalMoveShowers.size(); i++) {
@@ -185,10 +200,8 @@ std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
     return GetPawnLegalMoves(piece);
   case PieceType::Knight:
     return GetKnightLegalMoves(piece);
-
   case PieceType::Rook:
     return GetRookLegalMoves(piece);
-
   case PieceType::Queen:
     return GetQueenLegalMoves(piece);
 
@@ -281,14 +294,45 @@ std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
   // #region GetQueenLegalMoves
   std::vector<POSITION> moves;
 
-  for (short y = piece->position.y - 1; y >= 0; y--)
-    if (!CheckMove({piece->position.x, y}, moves)) break;
-  for (short y = piece->position.y + 1; y < boardSize; y++)
-    if (!CheckMove({piece->position.x, y}, moves)) break;
-  for (short x = piece->position.x - 1; x >= 0; x--)
-    if (!CheckMove({x, piece->position.y}, moves)) break;
-  for (short x = piece->position.x + 1; x < boardSize; x++)
-    if (!CheckMove({x, piece->position.y}, moves)) break;
+  for (short y = piece->position.y - 1; y >= 0; y--) {
+    POSITION move = {piece->position.x, y};
+    if (!CheckMove(move, moves)) {
+      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+        moves.push_back(move);
+      }
+      break;
+    }
+  }
+
+
+  for (short y = piece->position.y + 1; y < boardSize; y++) {
+    POSITION move = {piece->position.x, y};
+    if (!CheckMove(move, moves)) {
+      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+        moves.push_back(move);
+      }
+      break;
+    }
+  }
+
+  for (short x = piece->position.x - 1; x >= 0; x--) {
+    POSITION move = {x, piece->position.y};
+    if (!CheckMove(move, moves)) {
+      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+        moves.push_back(move);
+      }
+      break;
+    }
+  }
+  for (short x = piece->position.x + 1; x < boardSize; x++) {
+    POSITION move = {x, piece->position.y};
+    if (!CheckMove(move, moves)) {
+      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+        moves.push_back(move);
+      }
+      break;
+    }
+  }
 
 
 
