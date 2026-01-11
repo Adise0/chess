@@ -120,6 +120,7 @@ private:
   TEAM currrentTurn;
 
   std::vector<POSITION> currentLegalMoves;
+  std::vector<Element *> currentLegalMoveShowers;
   Piece *selectedPiece;
 
 public:
@@ -156,5 +157,10 @@ private:
   /// @param piece The pawn piece
   /// @return The legal moves
   std::vector<POSITION> GetPawnLegalMoves(Piece *piece);
+
+  /// @brief Gets the legal moves for a rook
+  /// @param piece The rook piece
+  /// @return The legal moves
+  std::vector<POSITION> GetRookLegalMoves(Piece *piece);
 };
 } // namespace Chess::Game

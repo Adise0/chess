@@ -66,4 +66,11 @@ void Screen::AppendElement(Element *element) {
   // #endregion
 }
 
+void Screen::RemoveElement(Element *element) {
+  // #region RemoveElement
+  auto it = std::find(screenElements.begin(), screenElements.end(), element);
+  if (it != screenElements.end()) screenElements.erase(it);
+  // #endregion
+}
+
 }; // namespace Chess::Rendering::Screens

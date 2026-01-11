@@ -134,6 +134,13 @@ void Board::ConfigurePiece(POSITION boardPosition) {
     board[piece->position.x][piece->position.y] = nullptr;
     piece->position = tile;
     std::cout << "Legal move to (" << tile.x << ", " << tile.y << ")\n";
+
+    // TEMP
+    for (size_t i = 0; i < currentLegalMoveShowers.size(); i++) {
+      GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
+      delete currentLegalMoveShowers[i];
+    }
+    currentLegalMoveShowers.clear();
   });
 
 
@@ -147,6 +154,25 @@ void Board::CalculateLegalMoves(Piece *piece) {
   std::vector<POSITION> legalMoves = GetLegalMoves(piece);
   currentLegalMoves = legalMoves;
   selectedPiece = piece;
+
+  // TEMP
+  for (size_t i = 0; i < currentLegalMoveShowers.size(); i++) {
+    GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
+    delete currentLegalMoveShowers[i];
+  }
+  currentLegalMoveShowers.clear();
+  for (size_t i = 0; i < currentLegalMoves.size(); i++) {
+    POSITION move = currentLegalMoves[i];
+    POSITION screenPos = ToScreenPosition(move);
+    SDL_FRect rect = {screenPos.x + (tileSize / 4), screenPos.y + (tileSize / 4), tileSize / 2,
+                      tileSize / 2};
+    Renderer renderer({0, 255, 0, 100}, 50);
+    Rectangle *moveShower = new Rectangle(rect, renderer);
+    GameManager::inGame.AppendElement(moveShower);
+    currentLegalMoveShowers.push_back(moveShower);
+  }
+
+
   // #endregion
 }
 
@@ -158,15 +184,18 @@ std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
   case PieceType::Pawn:
     return GetPawnLegalMoves(piece);
     break;
+  case PieceType::Rook:
+    return GetRookLegalMoves(piece);
+    break;
 
   default:
     throw std::runtime_error("Unknown piece type: " + std::to_string(piece->pieceType));
   }
-
   // #endregion
 }
 
 std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
+  // #region GetPawnLegalMoves
   std::vector<POSITION> moves;
 
   short advanceTile = (piece->team == 0) ? 1 : -1;
@@ -190,6 +219,41 @@ std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
   // TODO: Implament captures
 
   return moves;
+  // #endregion
+}
+
+std::vector<POSITION> Board::GetRookLegalMoves(Piece *piece) {
+  // #region GetRookLegalMoves
+  std::vector<POSITION> moves;
+
+
+
+  for (short y = piece->position.y - 1; y >= 0; y--) {
+    POSITION pos = {piece->position.x, y};
+    if (board[pos.x][pos.y]) break;
+    moves.push_back(pos);
+  }
+  for (short y = piece->position.y + 1; y < boardSize; y++) {
+    POSITION pos = {piece->position.x, y};
+    if (board[pos.x][pos.y]) break;
+    moves.push_back(pos);
+  }
+
+  for (short x = piece->position.x - 1; x >= 0; x--) {
+    POSITION pos = {x, piece->position.y};
+    if (board[pos.x][pos.y]) break;
+    moves.push_back(pos);
+  }
+  for (short x = piece->position.x + 1; x < boardSize; x++) {
+    POSITION pos = {x, piece->position.y};
+    if (board[pos.x][pos.y]) break;
+    moves.push_back(pos);
+  }
+
+
+  // TODO: Implament captures
+  return moves;
+  // #endregion
 }
 
 } // namespace Chess::Game
