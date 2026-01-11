@@ -189,6 +189,9 @@ std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
   case PieceType::Rook:
     return GetRookLegalMoves(piece);
 
+  case PieceType::Queen:
+    return GetQueenLegalMoves(piece);
+
   default:
     throw std::runtime_error("Unknown piece type: " + std::to_string(piece->pieceType));
   }
@@ -223,42 +226,24 @@ std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
   // #endregion
 }
 
-
 std::vector<POSITION> Board::GetRookLegalMoves(Piece *piece) {
   // #region GetRookLegalMoves
   std::vector<POSITION> moves;
-
-
-
-  for (short y = piece->position.y - 1; y >= 0; y--) {
-    POSITION pos = {piece->position.x, y};
-    if (board[pos.x][pos.y]) break;
-    moves.push_back(pos);
-  }
-  for (short y = piece->position.y + 1; y < boardSize; y++) {
-    POSITION pos = {piece->position.x, y};
-    if (board[pos.x][pos.y]) break;
-    moves.push_back(pos);
-  }
-
-  for (short x = piece->position.x - 1; x >= 0; x--) {
-    POSITION pos = {x, piece->position.y};
-    if (board[pos.x][pos.y]) break;
-    moves.push_back(pos);
-  }
-  for (short x = piece->position.x + 1; x < boardSize; x++) {
-    POSITION pos = {x, piece->position.y};
-    if (board[pos.x][pos.y]) break;
-    moves.push_back(pos);
-  }
-
-
+  for (short y = piece->position.y - 1; y >= 0; y--)
+    if (!CheckMove({piece->position.x, y}, moves)) break;
+  for (short y = piece->position.y + 1; y < boardSize; y++)
+    if (!CheckMove({piece->position.x, y}, moves)) break;
+  for (short x = piece->position.x - 1; x >= 0; x--)
+    if (!CheckMove({x, piece->position.y}, moves)) break;
+  for (short x = piece->position.x + 1; x < boardSize; x++)
+    if (!CheckMove({x, piece->position.y}, moves)) break;
   // TODO: Implament captures
   return moves;
   // #endregion
 }
 
 std::vector<POSITION> Board::GetKnightLegalMoves(Piece *piece) {
+  // #region GetKnightLegalMoves
   std::vector<POSITION> moves;
 
   short x = piece->position.x + 1;
@@ -289,6 +274,53 @@ std::vector<POSITION> Board::GetKnightLegalMoves(Piece *piece) {
   if (!board[x][y]) moves.push_back({x, y});
 
   return moves;
+  // #endregion
+}
+
+std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
+  // #region GetQueenLegalMoves
+  std::vector<POSITION> moves;
+
+  for (short y = piece->position.y - 1; y >= 0; y--)
+    if (!CheckMove({piece->position.x, y}, moves)) break;
+  for (short y = piece->position.y + 1; y < boardSize; y++)
+    if (!CheckMove({piece->position.x, y}, moves)) break;
+  for (short x = piece->position.x - 1; x >= 0; x--)
+    if (!CheckMove({x, piece->position.y}, moves)) break;
+  for (short x = piece->position.x + 1; x < boardSize; x++)
+    if (!CheckMove({x, piece->position.y}, moves)) break;
+
+
+
+  for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+  for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+
+  for (short offset = -1; piece->position.x + offset >= 0; offset--) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+  for (short offset = -1; piece->position.x + offset >= 0; offset--) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+
+  // TODO: Implament captures
+  return moves;
+  // #endregion
+}
+
+bool Board::CheckMove(POSITION move, std::vector<POSITION> &moves) {
+  // #region CheckMove
+  if (board[move.x][move.y]) return false;
+  moves.push_back(move);
+  return true;
+  // #endregion
 }
 
 } // namespace Chess::Game

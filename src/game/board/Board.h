@@ -167,5 +167,16 @@ private:
   /// @param piece The kinght piece
   /// @return The legal moves
   std::vector<POSITION> GetKnightLegalMoves(Piece *piece);
+
+  /// @brief Gets the queen legal moves
+  /// @param piece The queen piece
+  /// @return The legal moves
+  std::vector<POSITION> GetQueenLegalMoves(Piece *piece);
+
+  /// @brief Checks if a move is valid andd adds it to the moves vector
+  /// @param move The move to check
+  /// @param moves The legal moves vector
+  /// @return Whether the move is legal
+  bool CheckMove(POSITION move, std::vector<POSITION> &moves);
 };
 } // namespace Chess::Game
