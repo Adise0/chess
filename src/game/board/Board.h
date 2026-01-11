@@ -152,9 +152,14 @@ private:
   /// @param piece The piece to calculate moves for
   void CalculateLegalMoves(Piece *piece);
 
-  /// @brief Gets the legal moves for a pawn
+  /// @brief Gets the pawn legal moves
   /// @param piece The pawn piece
   /// @return The legal moves
   std::vector<POSITION> GetPawnLegalMoves(Piece *piece);
+
+  /// @brief Gets the knight legal moves
+  /// @param piece The kinght piece
+  /// @return The legal moves
+  std::vector<POSITION> GetKnightLegalMoves(Piece *piece);
 };
 } // namespace Chess::Game
