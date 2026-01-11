@@ -2,7 +2,6 @@
 #include "../../gameManager/GameManager.h"
 #include "../../ui/renderer/Renderer.h"
 #include "../../windowManager/WindowManager.h"
-#include "../board/Board.h"
 #include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
@@ -15,16 +14,8 @@ Piece::Piece(POSITION startPosition, PieceType pieceType, TEAM team)
     : position(startPosition), pieceType(pieceType), team(team) {
   // #region Pice
   CreateElement();
-
-  element->OnDragEnd([this](float x, float y) {
-    POSITION tile = Board::GetClosestTile(x, y);
-    POSITION screenPos = Board::ToScreenPosition(tile);
-    this->element->SetPosition(screenPos.x, screenPos.y);
-  });
-
   // #endregion
 }
-
 
 void Piece::CreateElement() {
   // #region CreateElement
@@ -40,7 +31,6 @@ void Piece::CreateElement() {
 
   // #endregion
 }
-
 
 std::string Piece::GetPieceSprite() {
   // #region GetPieceSprite
@@ -72,4 +62,5 @@ std::string Piece::GetPieceSprite() {
   return ("assets/sprites/pieces/" + teamStr + name + ".png");
   // #endregion
 }
+
 } // namespace Chess::Game

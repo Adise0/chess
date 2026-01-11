@@ -26,6 +26,9 @@ private:
   /// @brief The renderer rect
   SDL_FRect rendererRect;
 
+  /// @brief The sorting layer backup
+  short sortingLayerBackup;
+
 public:
   /// @brief Whether the element is currently being pressed
   bool isPressed;

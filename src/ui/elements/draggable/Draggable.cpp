@@ -11,6 +11,7 @@ Draggable::Draggable(SDL_FRect rect, SDL_FRect rendererRect, Renderer renderer)
   // #region Draggable
   isPressed = false;
   isBeingDragged = false;
+  sortingLayerBackup = renderer.sortingLayer;
   // #endregion
 }
 
@@ -78,6 +79,7 @@ void Draggable::OnClick(std::function<void()> listener) {
 void Draggable::OnDragStart(std::function<void()> listener) {
   // #region OnDragStart
   onDragStartListeners.push_back(listener);
+
   // #endregion
 }
 void Draggable::OnDragEnd(std::function<void(float x, float y)> listener) {
@@ -96,6 +98,8 @@ void Draggable::OnClickEvent() {
 
 void Draggable::OnDragStartEvent() {
   // #region OnDragStartEvent
+  renderer.sortingLayer = 100;
+
   for (const std::function<void()> &listener : onDragStartListeners) {
     listener();
   }
@@ -104,6 +108,7 @@ void Draggable::OnDragStartEvent() {
 
 void Draggable::OnDragEndEvent() {
   // #region OnDragEndEvent
+  renderer.sortingLayer = sortingLayerBackup;
   for (const std::function<void(float x, float y)> &listener : onDragEndListeners) {
     listener(rect.x, rect.y);
   }

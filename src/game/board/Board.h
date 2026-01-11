@@ -1,6 +1,7 @@
 #pragma once
 #include "../../ui/elements/rectangle/Rectangle.h"
 #include "../piece/Piece.h"
+#include "../types/Types.h"
 #include <vector>
 
 namespace Chess::Game {
@@ -118,6 +119,9 @@ private:
   /// @brief The current turn
   TEAM currrentTurn;
 
+  std::vector<POSITION> currentLegalMoves;
+  Piece *selectedPiece;
+
 public:
   /// @brief Constructor
   Board();
@@ -134,8 +138,23 @@ public:
   /// @param renderer a renderer
   void CreateTile(SDL_FRect rect, Renderer renderer);
 
-  /// @brief Sets the position of a piece in ints
+  /// @brief Configures a piece
   /// @param boardPosition The board position to "atach" to the piece
-  void SetPiecePosition(POSITION boardPosition);
+  void ConfigurePiece(POSITION boardPosition);
+
+  /// @brief Gets the legal moves of a piece
+  /// @param piece The piece to get moves for
+  /// @return A vector of legal moves
+  std::vector<POSITION> GetLegalMoves(Piece *piece);
+
+private:
+  /// @brief Caluclates and shows a piece's currrent legal moves
+  /// @param piece The piece to calculate moves for
+  void CalculateLegalMoves(Piece *piece);
+
+  /// @brief Gets the legal moves for a pawn
+  /// @param piece The pawn piece
+  /// @return The legal moves
+  std::vector<POSITION> GetPawnLegalMoves(Piece *piece);
 };
 } // namespace Chess::Game

@@ -22,11 +22,6 @@ public:
 public:
   Piece(POSITION startPosition, PieceType pieceType, TEAM team);
 
-  /// @brief Gets the legal moves of this piece
-  /// @param board The board
-  /// @return A vector of the avialbale movees
-  std::vector<POSITION> GetLegalMoves();
-
 
 private:
   /// @brief Creates the visual element

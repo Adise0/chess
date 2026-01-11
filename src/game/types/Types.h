@@ -1,4 +1,4 @@
-
+#pragma once
 
 namespace Chess::Game {
 /// @brief Defines a position

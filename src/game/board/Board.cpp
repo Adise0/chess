@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 
+
 namespace Chess::Game {
 
 #define BOARD_PADDING 20
@@ -43,7 +44,7 @@ void Board::ConstructBoard() {
       }
 
       CreateTile(tileRect, *renderer);
-      SetPiecePosition({
+      ConfigurePiece({
           (short)row,
           (short)col,
       });
@@ -103,13 +104,92 @@ POSITION Board::GetClosestTile(float x, float y) {
   // #endregion
 };
 
-void Board::SetPiecePosition(POSITION boardPosition) {
-  // #region SetPiecePosition
+void Board::ConfigurePiece(POSITION boardPosition) {
+  // #region ConfigurePiece
   Piece *piece = board[boardPosition.x][boardPosition.y];
   if (!piece) return;
   POSITION screenPosition = ToScreenPosition(boardPosition);
 
+  piece->element->OnClick([this, piece] { this->CalculateLegalMoves(piece); });
+  piece->element->OnDragStart([this, piece] { this->CalculateLegalMoves(piece); });
+
+  piece->element->OnDragEnd([this, piece](float x, float y) {
+    POSITION tile = Board::GetClosestTile(x, y);
+    POSITION originalSceenPos = Board::ToScreenPosition(piece->position);
+    POSITION newScreenPos = Board::ToScreenPosition(tile);
+
+    if (selectedPiece != piece) return;
+
+
+    auto found = std::find_if(currentLegalMoves.begin(), currentLegalMoves.end(),
+                              [tile](POSITION pos) { return pos.x == tile.x && pos.y == tile.y; });
+    if (found == currentLegalMoves.end()) {
+      piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
+      std::cout << "Illegal move to (" << tile.x << ", " << tile.y << ")\n";
+      return;
+    }
+
+    piece->element->SetPosition(newScreenPos.x, newScreenPos.y);
+    board[tile.x][tile.y] = piece;
+    board[piece->position.x][piece->position.y] = nullptr;
+    piece->position = tile;
+    std::cout << "Legal move to (" << tile.x << ", " << tile.y << ")\n";
+  });
+
+
+
   piece->element->SetPosition(screenPosition.x, screenPosition.y);
   // #endregion
 }
+
+void Board::CalculateLegalMoves(Piece *piece) {
+  // #region CalculateLegalMoves
+  std::vector<POSITION> legalMoves = GetLegalMoves(piece);
+  currentLegalMoves = legalMoves;
+  selectedPiece = piece;
+  // #endregion
+}
+
+std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
+  // #region GetLegalMoves
+  std::vector<POSITION> moves;
+
+  switch (piece->pieceType) {
+  case PieceType::Pawn:
+    return GetPawnLegalMoves(piece);
+    break;
+
+  default:
+    throw std::runtime_error("Unknown piece type: " + std::to_string(piece->pieceType));
+  }
+
+  // #endregion
+}
+
+std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
+  std::vector<POSITION> moves;
+
+  short advanceTile = (piece->team == 0) ? 1 : -1;
+  short startRow = (piece->team == 0) ? 1 : 6;
+
+
+  if (piece->team == 0) {
+    if (piece->position.y + 1 >= boardSize) return moves;
+  } else {
+    if (piece->position.y - 1 < 0) return moves;
+  }
+
+  if (piece->position.y == startRow && !board[piece->position.x][startRow + advanceTile] &&
+      !board[piece->position.x][startRow + advanceTile * 2])
+    moves.push_back({piece->position.x, (short)(startRow + advanceTile * 2)});
+
+  if (!board[piece->position.x][piece->position.y + advanceTile])
+    moves.push_back({piece->position.x, (short)(piece->position.y + advanceTile)});
+
+  // TODO: Implement en-passant when turns are implemented
+  // TODO: Implament captures
+
+  return moves;
+}
+
 } // namespace Chess::Game
