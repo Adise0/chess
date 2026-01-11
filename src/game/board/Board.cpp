@@ -200,6 +200,8 @@ std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
     return GetPawnLegalMoves(piece);
   case PieceType::Knight:
     return GetKnightLegalMoves(piece);
+  case PieceType::Bishop:
+    return GetBishopLegalMoves(piece);
   case PieceType::Rook:
     return GetRookLegalMoves(piece);
   case PieceType::Queen:
@@ -359,6 +361,31 @@ std::vector<POSITION> Board::GetQueenLegalMoves(Piece *piece) {
   // #endregion
 }
 
+std::vector<POSITION> Board::GetBishopLegalMoves(Piece *piece) {
+  std::vector<POSITION> moves;
+
+
+  for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+  for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+
+  for (short offset = -1; piece->position.x + offset >= 0; offset--) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+  for (short offset = -1; piece->position.x + offset >= 0; offset--) {
+    POSITION move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
+    if (!CheckMove(move, moves)) break;
+  }
+
+  return moves;
+}
+
 bool Board::CheckMove(POSITION move, std::vector<POSITION> &moves) {
   // #region CheckMove
   if (board[move.x][move.y]) return false;
@@ -366,5 +393,6 @@ bool Board::CheckMove(POSITION move, std::vector<POSITION> &moves) {
   return true;
   // #endregion
 }
+
 
 } // namespace Chess::Game

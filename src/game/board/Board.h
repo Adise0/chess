@@ -173,7 +173,10 @@ private:
   /// @return The legal moves
   std::vector<POSITION> GetQueenLegalMoves(Piece *piece);
 
-  /// @brief Checks if a move is valid andd adds it to the moves vector
+
+  std::vector<POSITION> GetBishopLegalMoves(Piece *piece);
+
+  /// @brief Checks if a move is valid and adds it to the moves vector
   /// @param move The move to check
   /// @param moves The legal moves vector
   /// @return Whether the move is legal
