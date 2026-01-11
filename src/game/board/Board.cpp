@@ -183,10 +183,11 @@ std::vector<POSITION> Board::GetLegalMoves(Piece *piece) {
   switch (piece->pieceType) {
   case PieceType::Pawn:
     return GetPawnLegalMoves(piece);
-    break;
+  case PieceType::Knight:
+    return GetKnightLegalMoves(piece);
+
   case PieceType::Rook:
     return GetRookLegalMoves(piece);
-    break;
 
   default:
     throw std::runtime_error("Unknown piece type: " + std::to_string(piece->pieceType));
@@ -222,6 +223,7 @@ std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
   // #endregion
 }
 
+
 std::vector<POSITION> Board::GetRookLegalMoves(Piece *piece) {
   // #region GetRookLegalMoves
   std::vector<POSITION> moves;
@@ -254,6 +256,39 @@ std::vector<POSITION> Board::GetRookLegalMoves(Piece *piece) {
   // TODO: Implament captures
   return moves;
   // #endregion
+}
+
+std::vector<POSITION> Board::GetKnightLegalMoves(Piece *piece) {
+  std::vector<POSITION> moves;
+
+  short x = piece->position.x + 1;
+  short y = piece->position.y - 2;
+
+  if (!board[x][y]) moves.push_back({x, y});
+
+  x -= 2;
+  if (!board[x][y]) moves.push_back({x, y});
+
+  y += 4;
+  if (!board[x][y]) moves.push_back({x, y});
+
+  x += 2;
+  if (!board[x][y]) moves.push_back({x, y});
+
+  x += 1;
+  y -= 1;
+  if (!board[x][y]) moves.push_back({x, y});
+
+  x -= 4;
+  if (!board[x][y]) moves.push_back({x, y});
+
+  y -= 2;
+  if (!board[x][y]) moves.push_back({x, y});
+
+  x += 4;
+  if (!board[x][y]) moves.push_back({x, y});
+
+  return moves;
 }
 
 } // namespace Chess::Game
