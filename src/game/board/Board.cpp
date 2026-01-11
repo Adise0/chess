@@ -234,6 +234,13 @@ std::vector<POSITION> Board::GetPawnLegalMoves(Piece *piece) {
   if (!board[piece->position.x][piece->position.y + advanceTile])
     moves.push_back({piece->position.x, (short)(piece->position.y + advanceTile)});
 
+  if (piece->team == 1 && board[piece->position.x - 1][piece->position.y - 1] &&
+      board[piece->position.x - 1][piece->position.y - 1]->team == 0) // White pawn left kill
+    moves.push_back(
+        {(short)(piece->position.x - 1), (short)(piece->position.y - 1 + advanceTile + 1)});
+
+  // piece->team == 0 && board[piece->position.x - 1][piece->position.y - 1]
+
   // TODO: Implement en-passant when turns are implemented
   // TODO: Implament captures
 
