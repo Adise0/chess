@@ -25,7 +25,10 @@ public:
   /// @param event The current event
   virtual void HandleEvent(SDL_Event &event);
 
+  /// @brief Runs every frame
+  virtual void Update(float deltaTime);
 
+  /// @brief Creates a new element
   Element();
 };
 } // namespace Chess::Rendering::Elements

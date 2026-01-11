@@ -13,6 +13,7 @@ void Element::Render() {
 };
 
 void Element::HandleEvent(SDL_Event &event) {}
+void Element::Update(float deltaTime) {}
 
 Element::Element() {
   // #region Element
