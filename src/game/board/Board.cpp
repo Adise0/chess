@@ -142,6 +142,7 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
       return;
     }
 
+    Piece *target = board[targetTile.x][targetTile.y];
     board[targetTile.x][targetTile.y] = piece;
     board[piece->position.x][piece->position.y] = nullptr;
     piece->position = targetTile;
@@ -220,6 +221,7 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
 
       return;
     } else {
+      if (target != nullptr) delete target;
       piece->element->SetPosition(newScreenPos.x, newScreenPos.y);
     }
 

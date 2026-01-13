@@ -63,4 +63,9 @@ std::string Piece::GetPieceSprite() {
   // #endregion
 }
 
+Piece::~Piece() {
+  GameManager::inGame.RemoveElement(element);
+  delete element;
+}
+
 } // namespace Chess::Game
