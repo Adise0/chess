@@ -280,32 +280,18 @@ std::vector<Vector2Int> Board::GetKnightLegalMoves(Piece *piece) {
   // #region GetKnightLegalMoves
   std::vector<Vector2Int> moves;
 
-  short x = piece->position.x + 1;
-  short y = piece->position.y - 2;
+  Vector2Int offsets[8]{
+      {-1, -2}, {1, -2}, {-1, 2}, {1, 2}, {-2, -1}, {-2, 1}, {2, -1}, {2, 1},
 
-  if (!board[x][y]) moves.push_back({x, y});
+  };
 
-  x -= 2;
-  if (!board[x][y]) moves.push_back({x, y});
+  for (Vector2Int offset : offsets) {
+    Vector2Int move = piece->position + offset;
+    if (move.x < 0 || move.x >= boardSize || move.y < 0 || move.y >= boardSize) continue;
+    if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team == piece->team) continue;
+    moves.push_back(move);
+  }
 
-  y += 4;
-  if (!board[x][y]) moves.push_back({x, y});
-
-  x += 2;
-  if (!board[x][y]) moves.push_back({x, y});
-
-  x += 1;
-  y -= 1;
-  if (!board[x][y]) moves.push_back({x, y});
-
-  x -= 4;
-  if (!board[x][y]) moves.push_back({x, y});
-
-  y -= 2;
-  if (!board[x][y]) moves.push_back({x, y});
-
-  x += 4;
-  if (!board[x][y]) moves.push_back({x, y});
 
   return moves;
   // #endregion
