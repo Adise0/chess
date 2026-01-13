@@ -181,16 +181,22 @@ private:
 
 
   /// @brief Gets the legal moves for a line
+  /// @param startPosition The starting position of the line
+  /// @param direction The direction of the line
   /// @param piece The piece to check the line for
   /// @param limit The limit of moves to check OR -1 for no limit
   /// @return The legal moves
-  std::vector<Vector2Int> GetLineLegalMoves(Piece *piece, short limit = -1);
+  std::vector<Vector2Int> GetLineLegalMoves(Vector2 startPosition, Vector2 direction, Piece *piece,
+                                            short limit = -1);
 
   /// @brief Gets the legal moves for a diagonal
+  /// @param startPosition The starting position of the diagonal
+  /// @param direction The direction of the diagonal
   /// @param piece The piece to check the diagonal for
   /// @param limit The limit of moves to check OR -1 for no limit
   /// @return The legal moves
-  std::vector<Vector2Int> GetDiagonalLegalMoves(Piece *piece, short limit = -1);
+  std::vector<Vector2Int> GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                Piece *piece, short limit = -1);
 
   /// @brief Checks if a move is valid and adds it to the moves vector
   /// @param move The move to check
