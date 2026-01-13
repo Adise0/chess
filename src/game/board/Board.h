@@ -2,8 +2,8 @@
 #include "../../ui/elements/rectangle/Rectangle.h"
 #include "../piece/Piece.h"
 #include "../types/Types.h"
+#include <optional>
 #include <vector>
-
 namespace Chess::Game {
 using namespace Rendering;
 class Board {
@@ -123,6 +123,9 @@ private:
   std::vector<Element *> currentLegalMoveShowers;
   Piece *selectedPiece;
 
+  Piece *team0King = nullptr;
+  Piece *team1King = nullptr;
+
 public:
   /// @brief Constructor
   Board();
@@ -193,6 +196,10 @@ private:
   /// @return The legal moves
   std::vector<Vector2Int> GetLineLegalMoves(Vector2 startPosition, Vector2 direction, Piece *piece,
                                             short limit = -1);
+  std::vector<Vector2Int> GetLineLegalMoves(Vector2 startPosition, Vector2 direction, Piece *piece,
+                                            std::optional<Piece *> &firstEnemy);
+  std::vector<Vector2Int> GetLineLegalMoves(Vector2 startPosition, Vector2 direction, Piece *piece,
+                                            short limit, std::optional<Piece *> &firstEnemy);
 
   /// @brief Gets the legal moves for a diagonal
   /// @param startPosition The starting position of the diagonal
@@ -202,7 +209,11 @@ private:
   /// @return The legal moves
   std::vector<Vector2Int> GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
                                                 Piece *piece, short limit = -1);
-
+  std::vector<Vector2Int> GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                Piece *piece, std::optional<Piece *> &firstEnemy);
+  std::vector<Vector2Int> GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                Piece *piece, short limit,
+                                                std::optional<Piece *> &firstEnemy);
   /// @brief Checks if a move is valid and adds it to the moves vector
   /// @param move The move to check
   /// @param moves The legal moves vector
