@@ -172,10 +172,10 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
         cancelMove = true;
         break;
       }
+
       if (firstEnemy.value()->pieceType == PieceType::King &&
           firstEnemy.value()->team != king->team &&
           Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
-
         cancelMove = true;
         break;
       }
@@ -194,26 +194,26 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
         }
 
         short bigNono = currentTurn == 0 ? -1 : 1;
-        if ((firstEnemy.value()->pieceType == PieceType::Pawn ||
-             firstEnemy.value()->pieceType == PieceType::King) &&
-            firstEnemy.value()->team != king->team &&
+        if (firstEnemy.value()->team != king->team &&
             Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
 
           if (firstEnemy.value()->pieceType == PieceType::King) {
             cancelMove = true;
             break;
           }
-          if ((king->position.y - firstEnemy.value()->position.y) == bigNono) {
+
+          if (firstEnemy.value()->pieceType == PieceType::Pawn &&
+              (king->position.y - firstEnemy.value()->position.y) == bigNono) {
             cancelMove = true;
             break;
+          } else {
+            continue;
           }
         }
       }
     }
 
     if (cancelMove) {
-
-
       board[originalTile.x][originalTile.y] = piece;
       board[piece->position.x][piece->position.y] = nullptr;
       piece->position = originalTile;
@@ -221,7 +221,7 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
 
       return;
     } else {
-      if (target != nullptr) delete target;
+      if (target) delete target;
       piece->element->SetPosition(newScreenPos.x, newScreenPos.y);
     }
 

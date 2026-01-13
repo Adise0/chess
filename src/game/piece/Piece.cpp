@@ -64,6 +64,7 @@ std::string Piece::GetPieceSprite() {
 }
 
 Piece::~Piece() {
+  std::cout << "Deleteing piece" << std::endl;
   GameManager::inGame.RemoveElement(element);
   delete element;
 }
