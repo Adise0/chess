@@ -163,6 +163,12 @@ private:
   /// @return The legal moves
   std::vector<Vector2Int> GetRookLegalMoves(Piece *piece);
 
+
+  /// @brief Gets the legal moves for a bishop
+  /// @param piece The bishop piece
+  /// @return The legal moves
+  std::vector<Vector2Int> GetBishopLegalMoves(Piece *piece);
+
   /// @brief Gets the knight legal moves
   /// @param piece The kinght piece
   /// @return The legal moves
@@ -174,7 +180,17 @@ private:
   std::vector<Vector2Int> GetQueenLegalMoves(Piece *piece);
 
 
-  std::vector<Vector2Int> GetBishopLegalMoves(Piece *piece);
+  /// @brief Gets the legal moves for a line
+  /// @param piece The piece to check the line for
+  /// @param limit The limit of moves to check OR -1 for no limit
+  /// @return The legal moves
+  std::vector<Vector2Int> GetLineLegalMoves(Piece *piece, short limit = -1);
+
+  /// @brief Gets the legal moves for a diagonal
+  /// @param piece The piece to check the diagonal for
+  /// @param limit The limit of moves to check OR -1 for no limit
+  /// @return The legal moves
+  std::vector<Vector2Int> GetDiagonalLegalMoves(Piece *piece, short limit = -1);
 
   /// @brief Checks if a move is valid and adds it to the moves vector
   /// @param move The move to check

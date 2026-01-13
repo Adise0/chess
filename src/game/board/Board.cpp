@@ -276,6 +276,40 @@ std::vector<Vector2Int> Board::GetRookLegalMoves(Piece *piece) {
   // #endregion
 }
 
+std::vector<Vector2Int> Board::GetBishopLegalMoves(Piece *piece) {
+  // #region GetBishopLegalMoves
+  std::vector<Vector2Int> moves;
+
+
+  Vector2Int directions[4] = {
+      {1, 1},
+      {-1, 1},
+      {1, -1},
+      {-1, -1},
+  };
+
+  for (Vector2Int direction : directions) {
+    short limitX = direction.x == 1 ? (boardSize - piece->position.x) : piece->position.x + 1;
+    short limitY = direction.y == 1 ? (boardSize - piece->position.y) : piece->position.y + 1;
+
+    short limit = std::min(limitX, limitY);
+
+    std::cout << "Limit for dir: " << direction.x << direction.y << " is: " << limit << "\n";
+    for (short positions = 1; positions < limit; positions++) {
+      Vector2Int move = piece->position + (direction * positions);
+      if (!CheckMove(move, moves)) {
+        if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+          moves.push_back(move);
+        }
+        break;
+      }
+    }
+  }
+
+  return moves;
+  // #endregion
+}
+
 std::vector<Vector2Int> Board::GetKnightLegalMoves(Piece *piece) {
   // #region GetKnightLegalMoves
   std::vector<Vector2Int> moves;
@@ -380,7 +414,44 @@ std::vector<Vector2Int> Board::GetQueenLegalMoves(Piece *piece) {
   // #endregion
 }
 
-std::vector<Vector2Int> Board::GetBishopLegalMoves(Piece *piece) {
+std::vector<Vector2Int> Board::GetLineLegalMoves(Piece *piece, short limit = -1) {
+  // #region GetLineLegalMoves
+  std::vector<Vector2Int> moves;
+  Vector2Int directions[4] = {
+      {1, 0},
+      {-1, 0},
+      {0, 1},
+      {0, -1},
+  };
+
+
+  for (Vector2Int direction : directions) {
+    short realLimit;
+
+    if (direction.x != 0) {
+      realLimit = (direction.x == 1) ? (boardSize - piece->position.x) : piece->position.x + 1;
+    } else {
+      realLimit = (direction.y == 1) ? (boardSize - piece->position.y) : piece->position.y + 1;
+    }
+    if (limit != -1) realLimit = std::min(realLimit, limit);
+
+    for (short positions = 1; positions < realLimit; positions++) {
+      Vector2Int move = piece->position + (direction * positions);
+      if (!CheckMove(move, moves)) {
+        if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+          moves.push_back(move);
+        }
+        break;
+      }
+    }
+  }
+
+  return moves;
+  // #endregion
+}
+
+std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Piece *piece, short limit = -1) {
+  // #region GetDiagonalLegalMoves
   std::vector<Vector2Int> moves;
 
 
@@ -395,10 +466,11 @@ std::vector<Vector2Int> Board::GetBishopLegalMoves(Piece *piece) {
     short limitX = direction.x == 1 ? (boardSize - piece->position.x) : piece->position.x + 1;
     short limitY = direction.y == 1 ? (boardSize - piece->position.y) : piece->position.y + 1;
 
-    short limit = std::min(limitX, limitY);
+    short realLimit = std::min(limitX, limitY);
+    if (limit != -1) realLimit = std::min(realLimit, limit);
 
-    std::cout << "Limit for dir: " << direction.x << direction.y << " is: " << limit << "\n";
-    for (short positions = 1; positions < limit; positions++) {
+
+    for (short positions = 1; positions < realLimit; positions++) {
       Vector2Int move = piece->position + (direction * positions);
       if (!CheckMove(move, moves)) {
         if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
@@ -410,7 +482,10 @@ std::vector<Vector2Int> Board::GetBishopLegalMoves(Piece *piece) {
   }
 
   return moves;
+  // #endregion
 }
+
+
 
 bool Board::CheckMove(Vector2Int move, std::vector<Vector2Int> &moves) {
   // #region CheckMove
