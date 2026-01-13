@@ -22,6 +22,7 @@ public:
 
 public:
   Piece(Vector2Int startPosition, PieceType pieceType, TEAM team);
+  Piece();
 
 
 private:

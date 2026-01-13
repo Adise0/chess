@@ -113,13 +113,19 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
   if (!piece) return;
   Vector2Int screenPosition = ToScreenPosition(boardPosition);
 
+  if (piece->pieceType == PieceType::King) {
+    if (piece->team == 0) team0King = piece;
+    else team1King = piece;
+  }
+
   piece->element->OnClick([this, piece] { this->CalculateLegalMoves(piece); });
   piece->element->OnDragStart([this, piece] { this->CalculateLegalMoves(piece); });
 
   piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
-    Vector2Int tile = Board::GetClosestTile(dropPosition);
+    Vector2Int targetTile = Board::GetClosestTile(dropPosition);
+    Vector2Int originalTile = piece->position;
     Vector2Int originalSceenPos = Board::ToScreenPosition(piece->position);
-    Vector2Int newScreenPos = Board::ToScreenPosition(tile);
+    Vector2Int newScreenPos = Board::ToScreenPosition(targetTile);
 
     if (selectedPiece != piece) {
       std::cout << "Piece missmatch\n";
@@ -128,20 +134,70 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
     }
 
 
-    auto found =
-        std::find_if(currentLegalMoves.begin(), currentLegalMoves.end(),
-                     [tile](Vector2Int pos) { return pos.x == tile.x && pos.y == tile.y; });
+    auto found = std::find_if(
+        currentLegalMoves.begin(), currentLegalMoves.end(),
+        [targetTile](Vector2Int pos) { return pos.x == targetTile.x && pos.y == targetTile.y; });
     if (found == currentLegalMoves.end()) {
       piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
-      std::cout << "Illegal move to (" << tile.x << ", " << tile.y << ")\n";
       return;
     }
 
-    piece->element->SetPosition(newScreenPos.x, newScreenPos.y);
-    board[tile.x][tile.y] = piece;
+    board[targetTile.x][targetTile.y] = piece;
     board[piece->position.x][piece->position.y] = nullptr;
-    piece->position = tile;
-    std::cout << "Legal move to (" << tile.x << ", " << tile.y << ")\n";
+    piece->position = targetTile;
+
+    Vector2Int lines[4] = {
+        {1, 0},
+        {-1, 0},
+        {0, 1},
+        {0, -1},
+    };
+    Vector2Int diagonals[4] = {
+        {1, 1},
+        {-1, 1},
+        {1, -1},
+        {-1, -1},
+    };
+    std::optional<Piece *> firstEnemy = std::nullopt;
+    Piece *king = currentTurn == 0 ? team0King : team1King;
+    bool cancelMove = false;
+    for (Vector2Int direction : lines) {
+      firstEnemy = std::nullopt;
+      GetLineLegalMoves(king->position, direction, king, -1, firstEnemy);
+
+      if (!firstEnemy.has_value()) continue;
+      if (firstEnemy.value()->pieceType == PieceType::Rook ||
+          firstEnemy.value()->pieceType == PieceType::Queen) {
+        cancelMove = true;
+        break;
+      }
+    }
+
+    if (!cancelMove) {
+      for (Vector2Int direction : diagonals) {
+        firstEnemy = std::nullopt;
+        GetDiagonalLegalMoves(king->position, direction, king, -1, firstEnemy);
+        if (!firstEnemy.has_value()) continue;
+        if (firstEnemy.value()->pieceType == PieceType::Bishop ||
+            firstEnemy.value()->pieceType == PieceType::Queen) {
+          cancelMove = true;
+          break;
+        }
+      }
+    }
+
+    if (cancelMove) {
+
+
+      board[originalTile.x][originalTile.y] = piece;
+      board[piece->position.x][piece->position.y] = nullptr;
+      piece->position = originalTile;
+      piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
+
+      return;
+    } else {
+      piece->element->SetPosition(newScreenPos.x, newScreenPos.y);
+    }
 
     // TEMP
     for (size_t i = 0; i < currentLegalMoveShowers.size(); i++) {
@@ -169,6 +225,8 @@ void Board::CalculateLegalMoves(Piece *piece) {
     return;
   }
   currentLegalMoves = GetLegalMoves(piece);
+
+
 
   // TEMP
   for (size_t i = 0; i < currentLegalMoveShowers.size(); i++) {
@@ -206,6 +264,8 @@ std::vector<Vector2Int> Board::GetLegalMoves(Piece *piece) {
     return GetRookLegalMoves(piece);
   case PieceType::Queen:
     return GetQueenLegalMoves(piece);
+  case PieceType::King:
+    return GetKingLegalMoves(piece);
 
   default:
     throw std::runtime_error("Unknown piece type: " + std::to_string(piece->pieceType));
@@ -216,23 +276,33 @@ std::vector<Vector2Int> Board::GetLegalMoves(Piece *piece) {
 std::vector<Vector2Int> Board::GetPawnLegalMoves(Piece *piece) {
   // #region GetPawnLegalMoves
   std::vector<Vector2Int> moves;
-
   Vector2 direction = (piece->team == 0) ? Vector2(0, 1) : Vector2(0, -1);
   Vector2 startTile =
       (piece->team == 0) ? Vector2(piece->position.x, 1) : Vector2(piece->position.x, 6);
 
   short limit = piece->position.y == startTile.y ? 2 : 1;
-  for (short positions = 1; positions <= limit; positions++) {
-    Vector2Int move = piece->position + (direction * positions);
-    if (!CheckMove(move, moves)) break;
+
+  std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, limit);
+  for (Vector2Int move : lineMoves) {
+    if (board[move.x][move.y] == nullptr) {
+      moves.push_back(move);
+    }
   }
 
-  Vector2Int captues[2]{Vector2Int(1, 0) + direction, Vector2Int(-1, 0) + direction};
-  for (Vector2Int captureOffset : captues) {
-    Vector2Int capturePos = piece->position + captureOffset;
-    if (board[capturePos.x][capturePos.y] != nullptr &&
-        board[capturePos.x][capturePos.y]->team != piece->team) {
-      moves.push_back(capturePos);
+
+  Vector2Int captures[2]{
+      Vector2Int(1, direction.y),
+      Vector2Int(-1, direction.y),
+  };
+
+  for (Vector2Int direction : captures) {
+    std::vector<Vector2Int> captureMoves =
+        GetDiagonalLegalMoves(piece->position, direction, piece, 1);
+
+    for (Vector2Int move : captureMoves) {
+      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+        moves.push_back(move);
+      }
     }
   }
   // TODO: Implament en passant
@@ -253,23 +323,28 @@ std::vector<Vector2Int> Board::GetRookLegalMoves(Piece *piece) {
 
 
   for (Vector2Int direction : directions) {
-    short limit;
+    std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+  }
 
-    if (direction.x != 0) {
-      limit = (direction.x == 1) ? (boardSize - piece->position.x) : piece->position.x + 1;
-    } else {
-      limit = (direction.y == 1) ? (boardSize - piece->position.y) : piece->position.y + 1;
-    }
+  return moves;
+  // #endregion
+}
 
-    for (short positions = 1; positions < limit; positions++) {
-      Vector2Int move = piece->position + (direction * positions);
-      if (!CheckMove(move, moves)) {
-        if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
-          moves.push_back(move);
-        }
-        break;
-      }
-    }
+std::vector<Vector2Int> Board::GetBishopLegalMoves(Piece *piece) {
+  // #region GetBishopLegalMoves
+  std::vector<Vector2Int> moves;
+
+  Vector2Int directions[4] = {
+      {1, 1},
+      {-1, 1},
+      {1, -1},
+      {-1, -1},
+  };
+
+  for (Vector2Int direction : directions) {
+    std::vector<Vector2Int> lineMoves = GetDiagonalLegalMoves(piece->position, direction, piece);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
   }
 
   return moves;
@@ -300,103 +375,145 @@ std::vector<Vector2Int> Board::GetKnightLegalMoves(Piece *piece) {
 std::vector<Vector2Int> Board::GetQueenLegalMoves(Piece *piece) {
   // #region GetQueenLegalMoves
   std::vector<Vector2Int> moves;
-
-  for (short y = piece->position.y - 1; y >= 0; y--) {
-    Vector2Int move = {piece->position.x, y};
-    if (!CheckMove(move, moves)) {
-      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
-        moves.push_back(move);
-      }
-      break;
-    }
+  Vector2Int lines[4] = {
+      {1, 0},
+      {-1, 0},
+      {0, 1},
+      {0, -1},
+  };
+  Vector2Int diagonals[4] = {
+      {1, 1},
+      {-1, 1},
+      {1, -1},
+      {-1, -1},
+  };
+  for (Vector2Int direction : lines) {
+    std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
   }
 
-
-  for (short y = piece->position.y + 1; y < boardSize; y++) {
-    Vector2Int move = {piece->position.x, y};
-    if (!CheckMove(move, moves)) {
-      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
-        moves.push_back(move);
-      }
-      break;
-    }
+  for (Vector2Int direction : diagonals) {
+    std::vector<Vector2Int> lineMoves = GetDiagonalLegalMoves(piece->position, direction, piece);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
   }
 
-  for (short x = piece->position.x - 1; x >= 0; x--) {
-    Vector2Int move = {x, piece->position.y};
-    if (!CheckMove(move, moves)) {
-      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
-        moves.push_back(move);
-      }
-      break;
-    }
-  }
-  for (short x = piece->position.x + 1; x < boardSize; x++) {
-    Vector2Int move = {x, piece->position.y};
-    if (!CheckMove(move, moves)) {
-      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
-        moves.push_back(move);
-      }
-      break;
-    }
-  }
-
-
-
-  for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
-    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
-    if (!CheckMove(move, moves)) break;
-  }
-  for (short offset = 1; offset < (boardSize - piece->position.x); offset++) {
-    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
-    if (!CheckMove(move, moves)) break;
-  }
-
-  for (short offset = -1; piece->position.x + offset >= 0; offset--) {
-    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y - offset)};
-    if (!CheckMove(move, moves)) break;
-  }
-  for (short offset = -1; piece->position.x + offset >= 0; offset--) {
-    Vector2Int move = {(short)(piece->position.x + offset), (short)(piece->position.y + offset)};
-    if (!CheckMove(move, moves)) break;
-  }
-
-  // TODO: Implament captures
   return moves;
   // #endregion
 }
 
-std::vector<Vector2Int> Board::GetBishopLegalMoves(Piece *piece) {
+std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
+  // #region GetQueenLegalMoves
   std::vector<Vector2Int> moves;
-
-
-  Vector2Int directions[4] = {
+  Vector2Int lines[4] = {
+      {1, 0},
+      {-1, 0},
+      {0, 1},
+      {0, -1},
+  };
+  Vector2Int diagonals[4] = {
       {1, 1},
       {-1, 1},
       {1, -1},
       {-1, -1},
   };
 
-  for (Vector2Int direction : directions) {
-    short limitX = direction.x == 1 ? (boardSize - piece->position.x) : piece->position.x + 1;
-    short limitY = direction.y == 1 ? (boardSize - piece->position.y) : piece->position.y + 1;
+  for (Vector2Int direction : lines) {
+    std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, 1);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+  }
 
-    short limit = std::min(limitX, limitY);
-
-    std::cout << "Limit for dir: " << direction.x << direction.y << " is: " << limit << "\n";
-    for (short positions = 1; positions < limit; positions++) {
-      Vector2Int move = piece->position + (direction * positions);
-      if (!CheckMove(move, moves)) {
-        if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
-          moves.push_back(move);
-        }
-        break;
-      }
-    }
+  for (Vector2Int direction : diagonals) {
+    std::vector<Vector2Int> lineMoves = GetDiagonalLegalMoves(piece->position, direction, piece, 1);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
   }
 
   return moves;
+  // #endregion
 }
+
+std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                 Piece *piece, short limit) {
+  std::optional<Piece *> _;
+  return GetLineLegalMoves(startPosition, direction, piece, limit, _);
+}
+std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                 Piece *piece, std::optional<Piece *> &firstEnemy) {
+  return GetLineLegalMoves(startPosition, direction, piece, -1, firstEnemy);
+}
+
+std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                 Piece *piece, short limit,
+                                                 std::optional<Piece *> &firstEnemy) {
+  // #region GetLineLegalMoves
+  std::vector<Vector2Int> moves;
+
+  short realLimit;
+
+  if (direction.x != 0) {
+    realLimit = (direction.x == 1) ? (boardSize - piece->position.x) - 1 : piece->position.x;
+  } else {
+    realLimit = (direction.y == 1) ? (boardSize - piece->position.y) - 1 : piece->position.y;
+  }
+  if (limit != -1) realLimit = std::min(realLimit, limit);
+
+  for (short positions = 1; positions <= realLimit; positions++) {
+    Vector2Int move = piece->position + (direction * positions);
+    if (!CheckMove(move, moves)) {
+      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+        moves.push_back(move);
+        firstEnemy = board[move.x][move.y];
+      }
+      break;
+    }
+  }
+
+
+  return moves;
+  // #endregion
+}
+
+std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                     Piece *piece, short limit) {
+  std::optional<Piece *> _;
+  return GetDiagonalLegalMoves(startPosition, direction, piece, limit, _);
+}
+
+
+std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                     Piece *piece,
+                                                     std::optional<Piece *> &firstEnemy) {
+  return GetDiagonalLegalMoves(startPosition, direction, piece, -1, firstEnemy);
+}
+
+std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
+                                                     Piece *piece, short limit,
+                                                     std::optional<Piece *> &firstEnemy) {
+  // #region GetDiagonalLegalMoves
+  std::vector<Vector2Int> moves;
+
+  short limitX = direction.x == 1 ? (boardSize - piece->position.x) - 1 : piece->position.x;
+  short limitY = direction.y == 1 ? (boardSize - piece->position.y) - 1 : piece->position.y;
+
+  short realLimit = std::min(limitX, limitY);
+  if (limit != -1) realLimit = std::min(realLimit, limit);
+
+
+  for (short positions = 1; positions <= realLimit; positions++) {
+    Vector2Int move = piece->position + (direction * positions);
+    if (!CheckMove(move, moves)) {
+      if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
+        moves.push_back(move);
+        firstEnemy = board[move.x][move.y];
+      }
+      break;
+    }
+  }
+
+
+  return moves;
+  // #endregion
+}
+
 
 bool Board::CheckMove(Vector2Int move, std::vector<Vector2Int> &moves) {
   // #region CheckMove
