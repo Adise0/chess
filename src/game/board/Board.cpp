@@ -489,15 +489,19 @@ std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 
 
 std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
                                                      Piece *piece, short limit) {
+  // #region GetDiagonalLegalMoves
   std::optional<Piece *> _;
   return GetDiagonalLegalMoves(startPosition, direction, piece, limit, _);
+  // #endregion
 }
 
 
 std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
                                                      Piece *piece,
                                                      std::optional<Piece *> &firstEnemy) {
+  // #region GetDiagonalLegalMoves
   return GetDiagonalLegalMoves(startPosition, direction, piece, -1, firstEnemy);
+  // #endregion
 }
 
 std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vector2 direction,
