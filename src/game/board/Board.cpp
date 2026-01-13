@@ -171,6 +171,13 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
         cancelMove = true;
         break;
       }
+      if (firstEnemy.value()->pieceType == PieceType::King &&
+          firstEnemy.value()->team != king->team &&
+          Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
+
+        cancelMove = true;
+        break;
+      }
     }
 
     if (!cancelMove) {
@@ -186,13 +193,19 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
         }
 
         short bigNono = currentTurn == 0 ? -1 : 1;
-        if (firstEnemy.value()->pieceType == PieceType::Pawn &&
+        if ((firstEnemy.value()->pieceType == PieceType::Pawn ||
+             firstEnemy.value()->pieceType == PieceType::King) &&
             firstEnemy.value()->team != king->team &&
-            Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f &&
-            (king->position.y - firstEnemy.value()->position.y) == bigNono) {
+            Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
 
-          cancelMove = true;
-          break;
+          if (firstEnemy.value()->pieceType == PieceType::King) {
+            cancelMove = true;
+            break;
+          }
+          if ((king->position.y - firstEnemy.value()->position.y) == bigNono) {
+            cancelMove = true;
+            break;
+          }
         }
       }
     }
