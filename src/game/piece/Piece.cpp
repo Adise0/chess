@@ -2,7 +2,6 @@
 #include "../../gameManager/GameManager.h"
 #include "../../ui/renderer/Renderer.h"
 #include "../../windowManager/WindowManager.h"
-#include "../board/Board.h"
 #include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
@@ -11,25 +10,27 @@
 namespace Chess::Game {
 using namespace Rendering;
 
-Piece::Piece(POSITION startPosition, PieceType pieceType, TEAM team)
+Piece::Piece(Vector2Int startPosition, PieceType pieceType, TEAM team)
     : position(startPosition), pieceType(pieceType), team(team) {
   // #region Pice
   CreateElement();
   // #endregion
 }
 
-
 void Piece::CreateElement() {
   // #region CreateElement
-  SDL_FRect rect = {0, 0, Board::pieceSize, Board::pieceSize};
+  SDL_FRect rendererRect = {(Board::tileSize - Board::pieceSize) / 2,
+                            (Board::tileSize - Board::pieceSize) / 2, Board::pieceSize,
+                            Board::pieceSize};
+
+  SDL_FRect rect = {0, 0, Board::tileSize, Board::tileSize};
   SDL_Texture *pieceTexture = WindowManager::LoadSprite(GetPieceSprite());
-  Renderer pieceRenderer(pieceTexture, NULL, NULL, 1);
-  element = new Button(rect, pieceRenderer);
+  Renderer pieceRenderer(pieceTexture, NULL, pieceTexture, 1);
+  element = new Draggable(rect, rendererRect, pieceRenderer);
   GameManager::inGame.AppendElement(element);
 
   // #endregion
 }
-
 
 std::string Piece::GetPieceSprite() {
   // #region GetPieceSprite
@@ -61,4 +62,11 @@ std::string Piece::GetPieceSprite() {
   return ("assets/sprites/pieces/" + teamStr + name + ".png");
   // #endregion
 }
+
+Piece::~Piece() {
+  std::cout << "Deleteing piece" << std::endl;
+  GameManager::inGame.RemoveElement(element);
+  delete element;
+}
+
 } // namespace Chess::Game

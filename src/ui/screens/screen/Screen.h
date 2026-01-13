@@ -45,6 +45,10 @@ public:
   /// @param element The element to append
   void AppendElement(Element *element);
 
+  /// @brief Deletes an element to this screen
+  /// @param element The element to delete
+  void RemoveElement(Element *element);
+
 protected:
   /// @brief The elements of this screen
   std::vector<Element *> screenElements;

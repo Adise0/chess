@@ -4,7 +4,6 @@
 #include "../rectangle/Rectangle.h"
 #include <SDL3/SDL.h>
 #include <functional>
-#define SDL_BUTTON_LEFT 1
 
 namespace Chess::Rendering::Elements {
 

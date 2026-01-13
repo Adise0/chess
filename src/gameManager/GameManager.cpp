@@ -49,6 +49,14 @@ void GameManager::ProcessInput(SDL_Event &event) {
 
 void GameManager::Update(float deltaTime) {
   // #region Update
+  for (Screen *screen : Screen::GetScreens()) {
+    if (!screen->isPresented) continue;
+    std::vector<Element *> elements = screen->GetElementsToRender();
+
+    for (Element *element : elements) {
+      element->Update(deltaTime);
+    }
+  }
   // #endregion
 }
 
@@ -62,8 +70,8 @@ void GameManager::Render() {
 
     SortElements(elements);
 
-    for (Element *e : elements) {
-      e->Render();
+    for (Element *element : elements) {
+      element->Render();
     }
   }
 
