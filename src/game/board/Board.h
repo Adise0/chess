@@ -179,6 +179,11 @@ private:
   /// @return The legal moves
   std::vector<Vector2Int> GetQueenLegalMoves(Piece *piece);
 
+  /// @brief Gets the king legal moves
+  /// @param piece The king piece
+  /// @return The legal moves
+  std::vector<Vector2Int> GetKingLegalMoves(Piece *piece);
+
 
   /// @brief Gets the legal moves for a line
   /// @param startPosition The starting position of the line

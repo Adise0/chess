@@ -355,6 +355,35 @@ std::vector<Vector2Int> Board::GetQueenLegalMoves(Piece *piece) {
   // #endregion
 }
 
+std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
+  // #region GetQueenLegalMoves
+  std::vector<Vector2Int> moves;
+  Vector2Int lines[4] = {
+      {1, 0},
+      {-1, 0},
+      {0, 1},
+      {0, -1},
+  };
+  Vector2Int diagonals[4] = {
+      {1, 1},
+      {-1, 1},
+      {1, -1},
+      {-1, -1},
+  };
+  for (Vector2Int direction : lines) {
+    std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, 1);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+  }
+
+  for (Vector2Int direction : diagonals) {
+    std::vector<Vector2Int> lineMoves = GetDiagonalLegalMoves(piece->position, direction, piece, 1);
+    moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+  }
+
+  return moves;
+  // #endregion
+}
+
 std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 direction,
                                                  Piece *piece, short limit) {
   // #region GetLineLegalMoves
