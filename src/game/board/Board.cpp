@@ -107,6 +107,83 @@ Vector2Int Board::GetClosestTile(Vector2 screenPosition) {
   // #endregion
 };
 
+bool Board::EnsureLegal(Vector2Int targetTile, Vector2Int originalTile, Piece *piece) {
+
+
+  board[targetTile.x][targetTile.y] = piece;
+  board[piece->position.x][piece->position.y] = nullptr;
+  piece->position = targetTile;
+
+  Vector2Int lines[4] = {
+      {1, 0},
+      {-1, 0},
+      {0, 1},
+      {0, -1},
+  };
+  Vector2Int diagonals[4] = {
+      {1, 1},
+      {-1, 1},
+      {1, -1},
+      {-1, -1},
+  };
+  std::optional<Piece *> firstEnemy = std::nullopt;
+  Piece *king = currentTurn == 0 ? team0King : team1King;
+  bool cancelMove = false;
+  for (Vector2Int direction : lines) {
+    firstEnemy = std::nullopt;
+    GetLineLegalMoves(king->position, direction, king, -1, firstEnemy);
+
+    if (!firstEnemy.has_value()) continue;
+    if (firstEnemy.value()->pieceType == PieceType::Rook ||
+        firstEnemy.value()->pieceType == PieceType::Queen) {
+      cancelMove = true;
+      break;
+    }
+
+    if (firstEnemy.value()->pieceType == PieceType::King &&
+        firstEnemy.value()->team != king->team &&
+        Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
+      cancelMove = true;
+      break;
+    }
+  }
+
+  if (!cancelMove) {
+    for (Vector2Int direction : diagonals) {
+      firstEnemy = std::nullopt;
+      GetDiagonalLegalMoves(king->position, direction, king, -1, firstEnemy);
+      if (!firstEnemy.has_value()) continue;
+      if (firstEnemy.value()->pieceType == PieceType::Bishop ||
+          firstEnemy.value()->pieceType == PieceType::Queen) {
+
+        cancelMove = true;
+        break;
+      }
+
+      short bigNono = currentTurn == 0 ? -1 : 1;
+      if (firstEnemy.value()->team != king->team &&
+          Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
+
+        if (firstEnemy.value()->pieceType == PieceType::King) {
+          cancelMove = true;
+          break;
+        }
+
+        if (firstEnemy.value()->pieceType == PieceType::Pawn &&
+            (king->position.y - firstEnemy.value()->position.y) == bigNono) {
+          cancelMove = true;
+          break;
+        } else {
+          continue;
+        }
+      }
+    }
+  }
+
+
+  return cancelMove;
+};
+
 void Board::ConfigurePiece(Vector2Int boardPosition) {
   // #region ConfigurePiece
   Piece *piece = board[boardPosition.x][boardPosition.y];
@@ -143,75 +220,8 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
     }
 
     Piece *target = board[targetTile.x][targetTile.y];
-    board[targetTile.x][targetTile.y] = piece;
-    board[piece->position.x][piece->position.y] = nullptr;
-    piece->position = targetTile;
+    bool cancelMove = EnsureLegal(targetTile, originalTile, piece);
 
-    Vector2Int lines[4] = {
-        {1, 0},
-        {-1, 0},
-        {0, 1},
-        {0, -1},
-    };
-    Vector2Int diagonals[4] = {
-        {1, 1},
-        {-1, 1},
-        {1, -1},
-        {-1, -1},
-    };
-    std::optional<Piece *> firstEnemy = std::nullopt;
-    Piece *king = currentTurn == 0 ? team0King : team1King;
-    bool cancelMove = false;
-    for (Vector2Int direction : lines) {
-      firstEnemy = std::nullopt;
-      GetLineLegalMoves(king->position, direction, king, -1, firstEnemy);
-
-      if (!firstEnemy.has_value()) continue;
-      if (firstEnemy.value()->pieceType == PieceType::Rook ||
-          firstEnemy.value()->pieceType == PieceType::Queen) {
-        cancelMove = true;
-        break;
-      }
-
-      if (firstEnemy.value()->pieceType == PieceType::King &&
-          firstEnemy.value()->team != king->team &&
-          Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
-        cancelMove = true;
-        break;
-      }
-    }
-
-    if (!cancelMove) {
-      for (Vector2Int direction : diagonals) {
-        firstEnemy = std::nullopt;
-        GetDiagonalLegalMoves(king->position, direction, king, -1, firstEnemy);
-        if (!firstEnemy.has_value()) continue;
-        if (firstEnemy.value()->pieceType == PieceType::Bishop ||
-            firstEnemy.value()->pieceType == PieceType::Queen) {
-
-          cancelMove = true;
-          break;
-        }
-
-        short bigNono = currentTurn == 0 ? -1 : 1;
-        if (firstEnemy.value()->team != king->team &&
-            Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
-
-          if (firstEnemy.value()->pieceType == PieceType::King) {
-            cancelMove = true;
-            break;
-          }
-
-          if (firstEnemy.value()->pieceType == PieceType::Pawn &&
-              (king->position.y - firstEnemy.value()->position.y) == bigNono) {
-            cancelMove = true;
-            break;
-          } else {
-            continue;
-          }
-        }
-      }
-    }
 
     if (cancelMove) {
       board[originalTile.x][originalTile.y] = piece;
@@ -223,6 +233,25 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
     } else {
       if (target) delete target;
       piece->element->SetPosition(newScreenPos.x, newScreenPos.y);
+
+      Vector2 offsets[8]{
+          {-1, -1}, {1, -1}, {-1, 1}, {1, -1}, {0, -1}, {0, 1}, {-1, 0}, {1, 0},
+      };
+
+
+      bool anyLegal = false;
+      for (Vector2 offset : offsets) {
+        for (size_t i = 0; i < 2; i++) {
+          Piece *king = currentTurn == 0 ? team0King : team1King;
+          if (!EnsureLegal(king->position, king->position + offset, king)) {
+            anyLegal = true;
+          }
+        }
+      }
+      if (!anyLegal) {
+        GameManager::inGame.Present(false);
+        GameManager::mainMenu.Present(true);
+      }
     }
 
     // TEMP
@@ -233,7 +262,6 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
     currentLegalMoveShowers.clear();
 
     currentTurn = (currentTurn == 0) ? 1 : 0;
-    // Advance turn
   });
 
 

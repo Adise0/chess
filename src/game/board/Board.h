@@ -219,5 +219,7 @@ private:
   /// @param moves The legal moves vector
   /// @return Whether the move is legal
   bool CheckMove(Vector2Int move, std::vector<Vector2Int> &moves);
+
+  bool EnsureLegal(Vector2Int targetTile, Vector2Int originalTile, Piece *piece);
 };
 } // namespace Chess::Game
