@@ -19,6 +19,12 @@ struct Vector2 {
   Vector2 operator*(const Vector2 &other) const { return {x * other.x, y * other.y}; }
   Vector2 operator*(float scalar) const { return {x * scalar, y * scalar}; }
   Vector2 operator/(float scalar) const { return {x / scalar, y / scalar}; }
+
+  static float Distance(const Vector2 &a, const Vector2 &b) {
+    float x = std::pow(b.x - a.x, 2);
+    float y = std::pow(b.y - a.y, 2);
+    return std::sqrt(x + y);
+  }
 };
 
 struct Vector2Int {

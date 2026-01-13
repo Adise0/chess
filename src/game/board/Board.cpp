@@ -180,6 +180,17 @@ void Board::ConfigurePiece(Vector2Int boardPosition) {
         if (!firstEnemy.has_value()) continue;
         if (firstEnemy.value()->pieceType == PieceType::Bishop ||
             firstEnemy.value()->pieceType == PieceType::Queen) {
+
+          cancelMove = true;
+          break;
+        }
+
+        short bigNono = currentTurn == 0 ? -1 : 1;
+        if (firstEnemy.value()->pieceType == PieceType::Pawn &&
+            firstEnemy.value()->team != king->team &&
+            Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f &&
+            (king->position.y - firstEnemy.value()->position.y) == bigNono) {
+
           cancelMove = true;
           break;
         }
@@ -433,12 +444,16 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
 
 std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 direction,
                                                  Piece *piece, short limit) {
+  // #region GetLineLegalMoves
   std::optional<Piece *> _;
   return GetLineLegalMoves(startPosition, direction, piece, limit, _);
+  // #endregion
 }
 std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 direction,
                                                  Piece *piece, std::optional<Piece *> &firstEnemy) {
+  // #region GetLineLegalMoves
   return GetLineLegalMoves(startPosition, direction, piece, -1, firstEnemy);
+  // #endregion
 }
 
 std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 direction,
