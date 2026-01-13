@@ -206,6 +206,8 @@ std::vector<Vector2Int> Board::GetLegalMoves(Piece *piece) {
     return GetRookLegalMoves(piece);
   case PieceType::Queen:
     return GetQueenLegalMoves(piece);
+  case PieceType::King:
+    return GetKingLegalMoves(piece);
 
   default:
     throw std::runtime_error("Unknown piece type: " + std::to_string(piece->pieceType));
@@ -370,6 +372,7 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
       {1, -1},
       {-1, -1},
   };
+
   for (Vector2Int direction : lines) {
     std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, 1);
     moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
@@ -439,7 +442,6 @@ std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vect
   return moves;
   // #endregion
 }
-
 
 
 bool Board::CheckMove(Vector2Int move, std::vector<Vector2Int> &moves) {
