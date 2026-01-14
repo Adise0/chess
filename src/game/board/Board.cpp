@@ -181,13 +181,13 @@ void Board::ConfigurePiece(Piece *piece) {
   piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
     Vector2 tile = GetClosestTile(dropPosition);
     RequestMove(piece, tile);
-    if (piece->pieceType == PieceType::Rook && (piece->position.x != 0 && piece->position.y != 0) ||
-        piece->pieceType == PieceType::Rook && (piece->position.x != 7 && piece->position.y != 0) ||
-        piece->pieceType == PieceType::Rook && (piece->position.x != 0 && piece->position.y != 7) ||
-        piece->pieceType == PieceType::Rook && (piece->position.x != 7 && piece->position.y != 0)) {
-      piece->hasMoved = true;
-      std::cout << "Rook has moved";
-    }
+    // if (piece->pieceType == PieceType::Rook) {
+    //   piece->hasMoved = true;
+    //   std::cout << "Rook has moved";
+    // }
+
+    // Bruh
+
     // if (piece->pieceType == PieceType::King) {
     //   piece->hasMoved = true;
     //   std::cout << "King has moved \n";
@@ -397,10 +397,10 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
   }
 
   if (piece->pieceType == PieceType::Rook || piece->pieceType == PieceType::King) {
-    if (!piece->hasMoved) piece->hasMoved = true;
+    if (piece->hasMoved == false) piece->hasMoved = true;
     std::cout
         << piece->pieceType
-        << " has moved"; // But if hasMoved is default false, wont !piece.hasmoved check if its true?
+        << " has moved\n"; // But if hasMoved is default false, wont !piece.hasmoved check if its true?
   }
 
   HideLegalMoves();
@@ -592,14 +592,27 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
   }
 
   for (Vector2Int castle : castles) {
+    short cColumn = castle.y;
     if (board[castle.x][castle.y] != nullptr) continue;
 
-    if (board[3][0]->hasMoved == true || board[0][0]->hasMoved == true ||
+    if (board[4][0]->hasMoved == true ||
+        board[0][0]->hasMoved ==
+            true || // ******************************************************************************
         board[7][0]->hasMoved == true)
       continue;
-    if (board[3][7]->hasMoved == true || board[0][7]->hasMoved == true ||
+    if (board[4][7]->hasMoved == true || board[0][7]->hasMoved == true ||
         board[7][7]->hasMoved == true)
       continue;
+
+    if (castle.x == 2) {
+      if (board[1][cColumn] != nullptr || board[2][cColumn] != nullptr ||
+          board[3][cColumn] != nullptr)
+        continue;
+      if (board[0][cColumn]->hasMoved == true) continue;
+    } else if (castle.x == 6) {
+      if (board[5][cColumn] != nullptr || board[6][cColumn] != nullptr) continue;
+      if (board[7][cColumn]->hasMoved == true) continue;
+    }
     moves.push_back(castle);
   }
 
