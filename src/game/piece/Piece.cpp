@@ -63,15 +63,6 @@ std::string Piece::GetPieceSprite() {
   // #endregion
 }
 
-Piece::~Piece() {
-  std::cout << "Deleteing piece" << std::endl;
-  MessageBoxA(nullptr,
-              (std::string() + "Deleteing piece (" + std::to_string(position.x) + "," +
-               std::to_string(position.y) + ")")
-                  .c_str(),
-              "Runtime error", MB_OK | MB_ICONERROR);
-  GameManager::inGame.RemoveElement(element);
-  // delete element;
-}
+Piece::~Piece() { GameManager::inGame.RemoveElement(element); }
 
 } // namespace Chess::Game
