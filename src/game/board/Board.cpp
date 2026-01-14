@@ -245,7 +245,8 @@ void Board::StartTurn() {
 
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
-      if (!board[i][j]) continue;
+      if (!board[i][j] || board[i][j]->team != currentTurn) continue;
+
       board[i][j]->legalMoves.clear();
       std::vector<Vector2Int> pseudoLegalMoves = GetLegalMoves(board[i][j]);
       if (pseudoLegalMoves.size() == 0) continue;
@@ -626,6 +627,8 @@ std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 
 
   for (short positions = 1; positions <= realLimit; positions++) {
     Vector2Int move = piece->position + (direction * positions);
+    move.x = std::clamp(move.x, 0, boardSize - 1);
+    move.y = std::clamp(move.y, 0, boardSize - 1);
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -672,6 +675,9 @@ std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vect
 
   for (short positions = 1; positions <= realLimit; positions++) {
     Vector2Int move = piece->position + (direction * positions);
+    // move.x = std::clamp(move.x, 0, boardSize - 1);
+    // move.y = std::clamp(move.y, 0, boardSize - 1);
+    std::cout << move.x << ", " << move.y << std::endl;
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -689,7 +695,6 @@ std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vect
 
 bool Board::CheckMove(Vector2Int move, std::vector<Vector2Int> &moves) {
   // #region CheckMove
-  if (move.x >= boardSize || move.x < 0 || move.y >= boardSize || move.y < 0) return false;
   if (board[move.x][move.y]) return false;
   moves.push_back(move);
   return true;
