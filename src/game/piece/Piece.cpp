@@ -13,6 +13,7 @@ using namespace Rendering;
 Piece::Piece(Vector2Int startPosition, PieceType pieceType, TEAM team)
     : position(startPosition), pieceType(pieceType), team(team) {
   // #region Pice
+  hasMoved = false;
   CreateElement();
   // #endregion
 }

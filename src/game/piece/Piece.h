@@ -23,6 +23,8 @@ public:
   /// @brief This piece's legal moves
   std::vector<Vector2Int> legalMoves;
 
+  bool hasMoved;
+
 public:
   Piece(Vector2Int startPosition, PieceType pieceType, TEAM team);
   Piece();

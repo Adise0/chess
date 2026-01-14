@@ -242,7 +242,6 @@ void Board::HideLegalMoves() {
 
 void Board::StartTurn() {
   // #region StartTurn
-  std::cout << "Reached here" << std::endl;
   short nOfLegalMoves = 1;
 
   for (short i = 0; i < boardSize; i++) {
@@ -251,7 +250,7 @@ void Board::StartTurn() {
 
       board[i][j]->legalMoves.clear();
       std::vector<Vector2Int> pseudoLegalMoves = GetLegalMoves(board[i][j]);
-      // if (pseudoLegalMoves.size() == 0) continue;
+      if (pseudoLegalMoves.size() == 0) continue;
 
       for (Vector2Int pseudoLegalMove : pseudoLegalMoves) {
         bool isLegal = IsMoveLegal(board[i][j], pseudoLegalMove);
@@ -264,7 +263,6 @@ void Board::StartTurn() {
       }
     }
   }
-  std::cout << "Reached here 2" << std::endl;
 
   if (nOfLegalMoves == 0) {
 
@@ -398,8 +396,6 @@ bool Board::IsKingInCheck(TEAM team) {
 bool Board::RequestMove(Piece *piece, Vector2Int target) {
   // #region RequestMove
 
-
-
   if (piece->legalMoves.size() == 0) return false;
   if (piece->team != currentTurn) return false;
 
@@ -407,19 +403,44 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
   if (it == piece->legalMoves.end()) return false;
 
   Piece *capturedPiece = board[target.x][target.y];
-  board[target.x][target.y] = piece;
-  board[piece->position.x][piece->position.y] = nullptr;
-  piece->position = target;
+  if (!capturedPiece || capturedPiece->team != piece->team) {
+    board[target.x][target.y] = piece;
+    board[piece->position.x][piece->position.y] = nullptr;
+    piece->position = target;
+    piece->hasMoved = true;
+  }
 
 
   if (capturedPiece) {
+    bool preventDelete = false;
+    if (piece->pieceType == PieceType::King && capturedPiece->team == piece->team) {
+      preventDelete = true;
+      short y = piece->position.y;
+      short rookX = capturedPiece->position.x == 0 ? 3 : 5;
+      short kingX = capturedPiece->position.x == 0 ? 2 : 6;
+
+      board[capturedPiece->position.x][y] = nullptr;
+      board[rookX][y] = capturedPiece;
+      capturedPiece->position = Vector2(rookX, y);
+      Vector2 rookScreenPos = ToScreenPosition(capturedPiece->position);
+      capturedPiece->element->SetPosition(rookScreenPos.x, rookScreenPos.y);
+      capturedPiece->hasMoved = true;
+
+      board[piece->position.x][y] = nullptr;
+      board[kingX][y] = piece;
+      piece->position = Vector2(kingX, y);
+      Vector2 kingScreenPos = ToScreenPosition(piece->position);
+      piece->element->SetPosition(kingScreenPos.x, kingScreenPos.y);
+      piece->hasMoved = true;
+    }
+
     if (capturedPiece->pieceType == PieceType::King) {
       kings[capturedPiece->team] = nullptr;
     }
     if (lastMovedPiece == capturedPiece) {
       lastMovedPiece = nullptr;
     }
-    delete capturedPiece;
+    if (!preventDelete) delete capturedPiece;
     capturedPiece = nullptr;
   }
 
@@ -607,6 +628,18 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
   for (Vector2Int direction : lines) {
     std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, 1);
     moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+    if (direction.y == 1 || piece->hasMoved) continue;
+    short limit = (direction.x == 1) ? (boardSize - piece->position.x) - 1 : piece->position.x;
+    for (short positions = 1; positions <= limit; positions++) {
+      Vector2Int move = piece->position + (direction * positions);
+      move.x = std::clamp(move.x, 0, boardSize - 1);
+      move.y = std::clamp(move.y, 0, boardSize - 1);
+
+      if (!board[move.x][move.y]) continue;
+      if (board[move.x][move.y]->team != piece->team) break;
+      if (board[move.x][move.y]->pieceType != PieceType::Rook) break;
+      if (!board[move.x][move.y]->hasMoved) moves.push_back(move);
+    }
   }
 
   for (Vector2Int direction : diagonals) {
