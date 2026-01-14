@@ -377,6 +377,18 @@ bool Board::IsKingInCheck(TEAM team) {
     }
   }
 
+  std::vector<Vector2Int> knightAtackSquares = GetKnightLegalMoves(king);
+
+  for (Vector2Int squares : knightAtackSquares) {
+    Piece *atacking = board[squares.x][squares.y];
+    if (atacking != nullptr && atacking->pieceType == PieceType::Knight &&
+        atacking->team != king->team) {
+
+      return true;
+    }
+  }
+
+
   return false;
 
   // #endregion
