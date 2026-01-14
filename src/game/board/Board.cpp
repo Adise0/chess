@@ -20,6 +20,7 @@ Board::Board() {
 
   currentTurn = 1;
   selectedPiece = nullptr;
+  isKingInCheck = false;
 
   currentLegalMoveShowers.clear();
 
@@ -242,7 +243,7 @@ void Board::HideLegalMoves() {
 
 void Board::StartTurn() {
   // #region StartTurn
-  short nOfLegalMoves = 1;
+  short nOfLegalMoves = 0;
 
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
@@ -267,19 +268,20 @@ void Board::StartTurn() {
   if (nOfLegalMoves == 0) {
 
     // exit(0);
-    std::cout << "Check-mate" << std::endl;
-    GameManager::mainMenu.Present(true);
-    GameManager::inGame.Present(false);
-    GameManager::inGame.Load();
+    if (isKingInCheck) std::cout << "Check-mate \n";
+    else std::cout << "Stale-mate \n";
+    // GameManager::mainMenu.Present(true);
+    // GameManager::inGame.Present(false);
+    // GameManager::inGame.Load();
 
-    for (short i = 0; i < boardSize; i++) {
-      for (short j = 0; j < boardSize; j++) {
-        if (board[i][j]) {
-          delete board[i][j];
-          board[i][j] = nullptr;
-        }
-      }
-    }
+    // for (short i = 0; i < boardSize; i++) {
+    //   for (short j = 0; j < boardSize; j++) {
+    //     if (board[i][j]) {
+    //       delete board[i][j];
+    //       board[i][j] = nullptr;
+    //     }
+    //   }
+    // }
   }
 
   // #endregion
@@ -447,6 +449,8 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
   try {
     HideLegalMoves();
     currentTurn = currentTurn == 0 ? 1 : 0;
+    isKingInCheck = IsKingInCheck(currentTurn);
+
     StartTurn();
 
   } catch (...) {

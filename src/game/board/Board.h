@@ -36,6 +36,7 @@ public:
 
 
   Piece *lastMovedPiece;
+  bool isKingInCheck;
 
 private:
   /// @brief The current turn
