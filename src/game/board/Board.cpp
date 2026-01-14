@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#define NOMINMAX
+#include <windows.h>
 
 
 namespace Chess::Game {
@@ -12,6 +14,8 @@ namespace Chess::Game {
 
 Board::Board() {
   // #region Board
+
+
   PopulateBoard();
 
   currentTurn = 1;
@@ -107,11 +111,12 @@ void Board::PopulateBoard() {
                                             new Piece({7, 7}, PieceType::Rook, 1),
                                         }};
 
+
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
-      if (board[i][j]) delete board[i][j];
+      if (board[i][j]) board[i][j] = nullptr;
       board[i][j] = newBoard[i][j];
-      ConfigurePiece(board[i][j]);
+      if (board[i][j]) ConfigurePiece(board[i][j]);
     }
   }
   // #endregion
@@ -167,30 +172,47 @@ void Board::ConfigurePiece(Piece *piece) {
   piece->element->SetPosition(screenPosition.x, screenPosition.y);
 
   piece->element->OnClick([this, piece] {
-    if (piece->team != currentTurn) return;
+    if (!piece || piece->team != currentTurn) return;
     selectedPiece = piece;
     ShowLegalMoves(piece);
   });
   piece->element->OnDragStart([this, piece] {
-    if (piece->team != currentTurn) return;
+    if (!piece || piece->team != currentTurn) return;
     selectedPiece = piece;
     ShowLegalMoves(piece);
   });
   piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
-    Vector2 tile = GetClosestTile(dropPosition);
-    RequestMove(piece, tile);
-    Vector2 screenPos = ToScreenPosition(piece->position);
-    piece->element->SetPosition(screenPos.x, screenPos.y);
+    try {
+      if (!piece) throw std::runtime_error("Piece missmatch");
+      selectedPiece = nullptr;
+      Vector2 tile = GetClosestTile(dropPosition);
+      bool moved = RequestMove(piece, tile);
+      Vector2 screenPos = ToScreenPosition(piece->position);
+      piece->element->SetPosition(screenPos.x, screenPos.y);
+      if (moved) lastMovedPiece = piece;
+    } catch (const std::exception &e) {
+      MessageBoxA(nullptr, e.what(), "Runtime error", MB_OK | MB_ICONERROR);
+    } catch (...) {
+      MessageBoxA(nullptr, "Unknown exception in onDrag end", "Runtime error",
+                  MB_OK | MB_ICONERROR);
+    }
   });
   // #endregion
 }
 
 void Board::ShowLegalMoves(Piece *piece) {
   // #region ShowLegalMoves
+  if (!piece) throw std::runtime_error("Can't show legal moves for piece that does not exist xdd");
 
 
-  HideLegalMoves();
+  try {
+    HideLegalMoves();
 
+  } catch (...) {
+    std::cerr << "Error hiting legal moves" << std::endl;
+  }
+
+  if (!piece) return;
 
   for (short i = 0; i < piece->legalMoves.size(); i++) {
     Vector2Int move = piece->legalMoves[i];
@@ -219,7 +241,7 @@ void Board::HideLegalMoves() {
 void Board::StartTurn() {
   // #region StartTurn
   std::cout << "Reached here" << std::endl;
-  short nOfLegalMoves = 0;
+  short nOfLegalMoves = 1;
 
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
@@ -236,9 +258,8 @@ void Board::StartTurn() {
       }
     }
   }
+  std::cout << "Reached here 2" << std::endl;
 
-  std::cout << "Team " << (currentTurn == 0 ? "Black" : "White")
-            << " nOfLegalMoves: " << nOfLegalMoves << std::endl;
   if (nOfLegalMoves == 0) {
 
     // exit(0);
@@ -248,7 +269,10 @@ void Board::StartTurn() {
 
     for (short i = 0; i < boardSize; i++) {
       for (short j = 0; j < boardSize; j++) {
-        delete board[i][j];
+        if (board[i][j]) {
+          delete board[i][j];
+          board[i][j] = nullptr;
+        }
       }
     }
   }
@@ -258,13 +282,14 @@ void Board::StartTurn() {
 
 bool Board::IsMoveLegal(Piece *piece, Vector2Int target) {
   // #region IsMoveLegal
-  Piece *tempBoard[boardSize][boardSize];
+  Piece *originalBoardState[boardSize][boardSize]{nullptr};
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
-      tempBoard[i][j] = board[i][j];
+      if (board[i][j]) originalBoardState[i][j] = board[i][j];
     }
   }
   Vector2Int originalPiecePosition = piece->position;
+
 
   board[target.x][target.y] = piece;
   board[originalPiecePosition.x][originalPiecePosition.y] = nullptr;
@@ -274,7 +299,7 @@ bool Board::IsMoveLegal(Piece *piece, Vector2Int target) {
 
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
-      board[i][j] = tempBoard[i][j];
+      board[i][j] = originalBoardState[i][j];
     }
   }
 
@@ -368,9 +393,19 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
     if (capturedPiece->pieceType == PieceType::King) {
       kings[capturedPiece->team] = nullptr;
     }
+    if (lastMovedPiece == capturedPiece) {
+      lastMovedPiece = nullptr;
+    }
     delete capturedPiece;
+    capturedPiece = nullptr;
   }
-  HideLegalMoves();
+
+  try {
+    HideLegalMoves();
+
+  } catch (...) {
+    std::cerr << "Error hiting legal moves" << std::endl;
+  }
   currentTurn = currentTurn == 0 ? 1 : 0;
   StartTurn();
   return true;
@@ -654,9 +689,11 @@ std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vect
 
 bool Board::CheckMove(Vector2Int move, std::vector<Vector2Int> &moves) {
   // #region CheckMove
+  if (move.x >= boardSize || move.x < 0 || move.y >= boardSize || move.y < 0) return false;
   if (board[move.x][move.y]) return false;
   moves.push_back(move);
   return true;
+  // return true;
   // #endregion
 }
 

@@ -31,8 +31,11 @@ public:
   static constexpr short topPadding = 20;
 
   /// @brief The board array
-  Piece *board[boardSize][boardSize]{nullptr};
+  Piece *board[boardSize][boardSize]{};
   Piece *selectedPiece;
+
+
+  Piece *lastMovedPiece;
 
 private:
   /// @brief The current turn

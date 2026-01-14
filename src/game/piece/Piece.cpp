@@ -5,7 +5,7 @@
 #include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
-
+#include <windows.h>
 
 namespace Chess::Game {
 using namespace Rendering;
@@ -65,6 +65,11 @@ std::string Piece::GetPieceSprite() {
 
 Piece::~Piece() {
   std::cout << "Deleteing piece" << std::endl;
+  MessageBoxA(nullptr,
+              (std::string() + "Deleteing piece (" + std::to_string(position.x) + "," +
+               std::to_string(position.y) + ")")
+                  .c_str(),
+              "Runtime error", MB_OK | MB_ICONERROR);
   GameManager::inGame.RemoveElement(element);
   delete element;
 }

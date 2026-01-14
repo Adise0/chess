@@ -54,6 +54,8 @@ void Screen::Load() {
   // #endregion
 }
 
+void Screen::Update() {}
+
 std::vector<Element *> Screen::GetElementsToRender() {
   // #region GetElementsToRender
   throw std::runtime_error("Get elements not implemented");

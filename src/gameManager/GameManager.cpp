@@ -49,13 +49,17 @@ void GameManager::ProcessInput(SDL_Event &event) {
 
 void GameManager::Update(float deltaTime) {
   // #region Update
-  for (Screen *screen : Screen::GetScreens()) {
-    if (!screen->isPresented) continue;
-    std::vector<Element *> elements = screen->GetElementsToRender();
-
-    for (Element *element : elements) {
-      element->Update(deltaTime);
+  try {
+    for (Screen *screen : Screen::GetScreens()) {
+      if (!screen->isPresented) continue;
+      std::vector<Element *> elements = screen->GetElementsToRender();
+      screen->Update();
+      for (Element *element : elements) {
+        element->Update(deltaTime);
+      }
     }
+  } catch (...) {
+    std::cout << "BRUH" << std::endl;
   }
   // #endregion
 }
@@ -111,9 +115,16 @@ void GameManager::Run() {
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
 
+    try {
+      Update(deltaTime);
+      Render();
 
-    Update(deltaTime);
-    Render();
+    } catch (const std::exception &e) {
+      MessageBoxA(nullptr, e.what(), "Runtime error", MB_OK | MB_ICONERROR);
+    } catch (...) {
+      MessageBoxA(nullptr, "Unknnown exception in runn loop", "Runtime error",
+                  MB_OK | MB_ICONERROR);
+    }
   }
   // #endregion
 }

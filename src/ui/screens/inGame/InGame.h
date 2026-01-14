@@ -15,12 +15,16 @@ private:
   /// @brief The board
   Board *board;
 
+  Button *tiles[Board::boardSize][Board::boardSize];
+
 public:
   /// @brief Creates the in game screen
   InGame() : Screen() {};
 
   /// @brief Loads the screen
   void Load() override;
+
+  void Update() override;
 
   /// @brief Getter for the elements to render
   /// @return The vector of elements to render this frame

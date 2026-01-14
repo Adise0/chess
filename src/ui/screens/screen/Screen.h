@@ -37,6 +37,9 @@ public:
   /// @brief Loads the screen
   virtual void Load();
 
+  /// @brief Called each frame
+  virtual void Update();
+
   /// @brief Getter for the elements to render
   /// @return The vector of elements to render this frame
   virtual std::vector<Element *> GetElementsToRender();
