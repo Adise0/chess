@@ -268,8 +268,12 @@ void Board::StartTurn() {
   if (nOfLegalMoves == 0) {
 
     // exit(0);
-    if (isKingInCheck) std::cout << "Check-mate \n";
-    else std::cout << "Stale-mate \n";
+    SDL_Texture *endSprite = isKingInCheck
+                                 ? WindowManager::LoadSprite("assets/sprites/CHECK-MATE.png")
+                                 : WindowManager::LoadSprite("assets/sprites/STALE-MATE.png");
+
+    GameManager::byebyeMenu.background->renderer.baseImage = endSprite;
+    GameManager::byebyeMenu.Present(true);
     // GameManager::mainMenu.Present(true);
     // GameManager::inGame.Present(false);
     // GameManager::inGame.Load();

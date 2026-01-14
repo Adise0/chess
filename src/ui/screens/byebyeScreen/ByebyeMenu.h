@@ -9,12 +9,10 @@ using namespace Elements;
 
 class ByebyeMenu : public Screen {
 
-private:
+public:
   /// @brief The background image
   Rectangle *background;
 
-  /// @brief The play button
-  Button *playButton;
 
 public:
   /// @brief Creates the main menu screen
