@@ -20,6 +20,9 @@ public:
   /// @brief The underlying Draggable element
   Draggable *element;
 
+  /// @brief check if rooks or kings have moved
+  bool hasMoved = true;
+
   /// @brief This piece's legal moves
   std::vector<Vector2Int> legalMoves;
 

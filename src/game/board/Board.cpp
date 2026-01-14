@@ -26,86 +26,88 @@ Board::Board() {
 
 void Board::PopulateBoard() {
   // #region PopulateBoard
-  Piece *newBoard[boardSize][boardSize]{{
-                                            new Piece({0, 0}, PieceType::Rook, 0),
-                                            new Piece({0, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({0, 6}, PieceType::Pawn, 1),
-                                            new Piece({0, 7}, PieceType::Rook, 1),
-                                        },
-                                        {
-                                            new Piece({1, 0}, PieceType::Knight, 0),
-                                            new Piece({1, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({1, 6}, PieceType::Pawn, 1),
-                                            new Piece({1, 7}, PieceType::Knight, 1),
-                                        },
-                                        {
-                                            new Piece({2, 0}, PieceType::Bishop, 0),
-                                            new Piece({2, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({2, 6}, PieceType::Pawn, 1),
-                                            new Piece({2, 7}, PieceType::Bishop, 1),
-                                        },
-                                        {
-                                            new Piece({3, 0}, PieceType::Queen, 0),
-                                            new Piece({3, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({3, 6}, PieceType::Pawn, 1),
-                                            new Piece({3, 7}, PieceType::Queen, 1),
-                                        },
-                                        {
-                                            new Piece({4, 0}, PieceType::King, 0),
-                                            new Piece({4, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({4, 6}, PieceType::Pawn, 1),
-                                            new Piece({4, 7}, PieceType::King, 1),
-                                        },
-                                        {
-                                            new Piece({5, 0}, PieceType::Bishop, 0),
-                                            new Piece({5, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({5, 6}, PieceType::Pawn, 1),
-                                            new Piece({5, 7}, PieceType::Bishop, 1),
-                                        },
-                                        {
-                                            new Piece({6, 0}, PieceType::Knight, 0),
-                                            new Piece({6, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({6, 6}, PieceType::Pawn, 1),
-                                            new Piece({6, 7}, PieceType::Knight, 1),
-                                        },
-                                        {
-                                            new Piece({7, 0}, PieceType::Rook, 0),
-                                            new Piece({7, 1}, PieceType::Pawn, 0),
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            nullptr,
-                                            new Piece({7, 6}, PieceType::Pawn, 1),
-                                            new Piece({7, 7}, PieceType::Rook, 1),
-                                        }};
+  Piece *newBoard[boardSize][boardSize]{
+      {
+          new Piece({0, 0}, PieceType::Rook, 0),
+          new Piece({0, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({0, 6}, PieceType::Pawn, 1),
+          new Piece({0, 7}, PieceType::Rook, 1),
+      },
+      {
+          new Piece({1, 0}, PieceType::Knight, 0),
+          new Piece({1, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({1, 6}, PieceType::Pawn, 1),
+          new Piece({1, 7}, PieceType::Knight, 1),
+      },
+      {
+          new Piece({2, 0}, PieceType::Bishop, 0),
+          new Piece({2, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({2, 6}, PieceType::Pawn, 1),
+          new Piece({2, 7}, PieceType::Bishop, 1),
+      },
+      {
+          new Piece({3, 0}, PieceType::Queen,
+                    0), // Com que la reina esta al 3? Aqui haurai d'estar el rey
+          new Piece({3, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({3, 6}, PieceType::Pawn, 1),
+          new Piece({3, 7}, PieceType::Queen, 1),
+      },
+      {
+          new Piece({4, 0}, PieceType::King, 0), // Aqui la reina
+          new Piece({4, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({4, 6}, PieceType::Pawn, 1),
+          new Piece({4, 7}, PieceType::King, 1),
+      },
+      {
+          new Piece({5, 0}, PieceType::Bishop, 0),
+          new Piece({5, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({5, 6}, PieceType::Pawn, 1),
+          new Piece({5, 7}, PieceType::Bishop, 1),
+      },
+      {
+          new Piece({6, 0}, PieceType::Knight, 0),
+          new Piece({6, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({6, 6}, PieceType::Pawn, 1),
+          new Piece({6, 7}, PieceType::Knight, 1),
+      },
+      {
+          new Piece({7, 0}, PieceType::Rook, 0),
+          new Piece({7, 1}, PieceType::Pawn, 0),
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          new Piece({7, 6}, PieceType::Pawn, 1),
+          new Piece({7, 7}, PieceType::Rook, 1),
+      }};
 
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
@@ -179,6 +181,17 @@ void Board::ConfigurePiece(Piece *piece) {
   piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
     Vector2 tile = GetClosestTile(dropPosition);
     RequestMove(piece, tile);
+    if (piece->pieceType == PieceType::Rook && (piece->position.x != 0 && piece->position.y != 0) ||
+        piece->pieceType == PieceType::Rook && (piece->position.x != 7 && piece->position.y != 0) ||
+        piece->pieceType == PieceType::Rook && (piece->position.x != 0 && piece->position.y != 7) ||
+        piece->pieceType == PieceType::Rook && (piece->position.x != 7 && piece->position.y != 0)) {
+      piece->hasMoved = true;
+      std::cout << "Rook has moved";
+    }
+    // if (piece->pieceType == PieceType::King) {
+    //   piece->hasMoved = true;
+    //   std::cout << "King has moved \n";
+    // }
     Vector2 screenPos = ToScreenPosition(piece->position);
     piece->element->SetPosition(screenPos.x, screenPos.y);
   });
@@ -382,6 +395,14 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
     }
     delete capturedPiece;
   }
+
+  if (piece->pieceType == PieceType::Rook || piece->pieceType == PieceType::King) {
+    if (!piece->hasMoved) piece->hasMoved = true;
+    std::cout
+        << piece->pieceType
+        << " has moved"; // But if hasMoved is default false, wont !piece.hasmoved check if its true?
+  }
+
   HideLegalMoves();
   currentTurn = currentTurn == 0 ? 1 : 0;
   StartTurn();
@@ -558,6 +579,8 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
       {-1, -1},
   };
 
+  Vector2Int castles[4] = {{2, 0}, {6, 0}, {2, 7}, {6, 7}};
+
   for (Vector2Int direction : lines) {
     std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, 1);
     moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
@@ -566,6 +589,18 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
   for (Vector2Int direction : diagonals) {
     std::vector<Vector2Int> lineMoves = GetDiagonalLegalMoves(piece->position, direction, piece, 1);
     moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+  }
+
+  for (Vector2Int castle : castles) {
+    if (board[castle.x][castle.y] != nullptr) continue;
+
+    if (board[3][0]->hasMoved == true || board[0][0]->hasMoved == true ||
+        board[7][0]->hasMoved == true)
+      continue;
+    if (board[3][7]->hasMoved == true || board[0][7]->hasMoved == true ||
+        board[7][7]->hasMoved == true)
+      continue;
+    moves.push_back(castle);
   }
 
   return moves;
