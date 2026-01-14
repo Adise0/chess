@@ -173,12 +173,12 @@ void Board::ConfigurePiece(Piece *piece) {
 
   piece->element->OnClick([this, piece] {
     if (!piece || piece->team != currentTurn) return;
-    // selectedPiece = piece;
+    selectedPiece = piece;
     ShowLegalMoves(piece);
   });
   piece->element->OnDragStart([this, piece] {
     if (!piece || piece->team != currentTurn) return;
-    // selectedPiece = piece;
+    selectedPiece = piece;
     ShowLegalMoves(piece);
   });
   piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
