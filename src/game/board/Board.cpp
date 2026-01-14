@@ -167,10 +167,12 @@ void Board::ConfigurePiece(Piece *piece) {
   piece->element->SetPosition(screenPosition.x, screenPosition.y);
 
   piece->element->OnClick([this, piece] {
+    if (piece->team != currentTurn) return;
     selectedPiece = piece;
     ShowLegalMoves(piece);
   });
   piece->element->OnDragStart([this, piece] {
+    if (piece->team != currentTurn) return;
     selectedPiece = piece;
     ShowLegalMoves(piece);
   });
@@ -186,8 +188,6 @@ void Board::ConfigurePiece(Piece *piece) {
 void Board::ShowLegalMoves(Piece *piece) {
   // #region ShowLegalMoves
 
-  std::cout << "Piece selected at: (" << piece->position.x << "," << piece->position.y
-            << ") nOfLegalMoves:" << piece->legalMoves.size() << std::endl;
 
   HideLegalMoves();
 
@@ -218,6 +218,7 @@ void Board::HideLegalMoves() {
 
 void Board::StartTurn() {
   // #region StartTurn
+  std::cout << "Reached here" << std::endl;
   short nOfLegalMoves = 0;
 
   for (short i = 0; i < boardSize; i++) {
@@ -231,14 +232,19 @@ void Board::StartTurn() {
         bool isLegal = IsMoveLegal(board[i][j], pseudoLegalMove);
         if (!isLegal) continue;
         board[i][j]->legalMoves.push_back(pseudoLegalMove);
-        nOfLegalMoves++;
+        if (board[i][j]->team == currentTurn) nOfLegalMoves++;
       }
     }
   }
 
+  std::cout << "Team " << (currentTurn == 0 ? "Black" : "White")
+            << " nOfLegalMoves: " << nOfLegalMoves << std::endl;
   if (nOfLegalMoves == 0) {
-    std::cout << "Team " << (currentTurn == 0 ? "White" : "Black") << " Wins by checkmate"
-              << std::endl;
+
+    // exit(0);
+    GameManager::mainMenu.Present(true);
+    GameManager::inGame.Present(false);
+    GameManager::inGame.Load();
   }
 
   // #endregion
@@ -267,8 +273,7 @@ bool Board::IsMoveLegal(Piece *piece, Vector2Int target) {
   }
 
   piece->position = originalPiecePosition;
-
-  return isKingInCheck;
+  return !isKingInCheck;
 
   // #endregion
 }
@@ -276,6 +281,7 @@ bool Board::IsMoveLegal(Piece *piece, Vector2Int target) {
 bool Board::IsKingInCheck(TEAM team) {
   // #region IsKingInCheck
   Piece *king = kings[team];
+  if (!king) return false;
 
   Vector2Int lines[4] = {
       {1, 0},
@@ -298,13 +304,13 @@ bool Board::IsKingInCheck(TEAM team) {
     if (!firstEnemy.has_value()) continue;
     if (firstEnemy.value()->pieceType == PieceType::Rook ||
         firstEnemy.value()->pieceType == PieceType::Queen) {
-      return false;
+      return true;
     }
 
     if (firstEnemy.value()->pieceType == PieceType::King &&
         firstEnemy.value()->team != king->team &&
         Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
-      return false;
+      return true;
     }
   }
 
@@ -314,7 +320,7 @@ bool Board::IsKingInCheck(TEAM team) {
     if (!firstEnemy.has_value()) continue;
     if (firstEnemy.value()->pieceType == PieceType::Bishop ||
         firstEnemy.value()->pieceType == PieceType::Queen) {
-      return false;
+      return true;
     }
 
     short pawnThreatDirection = currentTurn == 0 ? -1 : 1;
@@ -322,17 +328,17 @@ bool Board::IsKingInCheck(TEAM team) {
         Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
 
       if (firstEnemy.value()->pieceType == PieceType::King) {
-        return false;
+        return true;
       }
 
       if (firstEnemy.value()->pieceType == PieceType::Pawn &&
           (king->position.y - firstEnemy.value()->position.y) == pawnThreatDirection) {
-        return false;
+        return true;
       }
     }
   }
 
-  return true;
+  return false;
 
   // #endregion
 }
@@ -340,11 +346,9 @@ bool Board::IsKingInCheck(TEAM team) {
 
 bool Board::RequestMove(Piece *piece, Vector2Int target) {
   // #region RequestMove
-  std::cout << "Piece selected at: (" << piece->position.x << "," << piece->position.y
-            << ") wants to go to: (" << target.x << "," << target.y << ")" << std::endl;
-
 
   if (piece->legalMoves.size() == 0) return false;
+  if (piece->team != currentTurn) return false;
 
   auto it = std::find(piece->legalMoves.begin(), piece->legalMoves.end(), target);
   if (it == piece->legalMoves.end()) return false;
@@ -354,7 +358,12 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
   board[piece->position.x][piece->position.y] = nullptr;
   piece->position = target;
 
-  if (capturedPiece) delete capturedPiece;
+  if (capturedPiece) {
+    if (capturedPiece->pieceType == PieceType::King) {
+      kings[capturedPiece->team] = nullptr;
+    }
+    delete capturedPiece;
+  }
   HideLegalMoves();
   currentTurn = currentTurn == 0 ? 1 : 0;
   StartTurn();
@@ -362,16 +371,6 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
   // #endregion
 }
 
-
-// void Board::CalculateLegalMoves(Piece *piece) {
-//   // #region CalculateLegalMoves
-
-//   selectedPiece = piece;
-
-//   currentLegalMoves = GetLegalMoves(piece);
-
-//   // #endregion
-// }
 
 std::vector<Vector2Int> Board::GetLegalMoves(Piece *piece) {
   // #region GetLegalMoves
