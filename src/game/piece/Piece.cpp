@@ -71,7 +71,7 @@ Piece::~Piece() {
                   .c_str(),
               "Runtime error", MB_OK | MB_ICONERROR);
   GameManager::inGame.RemoveElement(element);
-  delete element;
+  // delete element;
 }
 
 } // namespace Chess::Game

@@ -9,6 +9,8 @@ Rectangle::Rectangle(SDL_FRect rect, Renderer renderer) : Element() {
 
   if (renderer.baseImage) hasColor = false;
   else hasColor = true;
+
+  softDeleted = false;
   // #endregion
 }
 

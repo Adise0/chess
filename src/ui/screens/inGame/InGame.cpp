@@ -20,28 +20,28 @@ void InGame::Load() {
 }
 
 void InGame::Update() {
-  if (!board || !board->lastMovedPiece) return;
+  // if (!board || !board->lastMovedPiece) return;
 
-  SDL_Color dark = {181, 136, 99, 255};
-  SDL_Color light = {240, 217, 181, 255};
-  SDL_Color yellow = {250, 235, 146, 255};
+  // SDL_Color dark = {181, 136, 99, 255};
+  // SDL_Color light = {240, 217, 181, 255};
+  // SDL_Color yellow = {250, 235, 146, 255};
 
-  for (short i = 0; i < Board::boardSize; i++) {
-    for (short j = 0; j < Board::boardSize; j++) {
+  // for (short i = 0; i < Board::boardSize; i++) {
+  //   for (short j = 0; j < Board::boardSize; j++) {
 
-      if (i == board->lastMovedPiece->position.x && j == board->lastMovedPiece->position.y) {
-        tiles[i][j]->baseColor = yellow;
-      } else {
-        if (i % 2 == 0) {
-          if (j % 2 == 0) tiles[i][j]->baseColor = light;
-          else tiles[i][j]->baseColor = dark;
-        } else {
-          if (j % 2 == 0) tiles[i][j]->baseColor = dark;
-          else tiles[i][j]->baseColor = light;
-        }
-      }
-    }
-  }
+  //     if (i == board->lastMovedPiece->position.x && j == board->lastMovedPiece->position.y) {
+  //       tiles[i][j]->baseColor = yellow;
+  //     } else {
+  //       if (i % 2 == 0) {
+  //         if (j % 2 == 0) tiles[i][j]->baseColor = light;
+  //         else tiles[i][j]->baseColor = dark;
+  //       } else {
+  //         if (j % 2 == 0) tiles[i][j]->baseColor = dark;
+  //         else tiles[i][j]->baseColor = light;
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 
@@ -90,15 +90,16 @@ void InGame::ConstructBoard() {
 void InGame::CreateTile(short x, short y, SDL_FRect rect, Renderer renderer) {
   // #region CreateTile
   Button *createdTile = new Button(rect, renderer);
-  createdTile->OnClick([this, x, y] {
-    if (!board || !board->selectedPiece) return;
+  // createdTile->OnClick([this, x, y] {
+  //   if (!board || !board->selectedPiece) return;
 
-    board->RequestMove(board->selectedPiece, Vector2Int(x, y));
-    Vector2 screenPos = Board::ToScreenPosition(board->selectedPiece->position);
-    board->selectedPiece->element->SetPosition(screenPos.x, screenPos.y);
+  //   bool moved = board->RequestMove(board->selectedPiece, Vector2Int(x, y));
+  //   Vector2 screenPos = Board::ToScreenPosition(board->selectedPiece->position);
+  //   board->selectedPiece->element->SetPosition(screenPos.x, screenPos.y);
+  //   if (moved) board->lastMovedPiece = board->selectedPiece;
 
-    board->selectedPiece = nullptr;
-  });
+  //   // board->selectedPiece = nullptr;
+  // });
   tiles[x][y] = createdTile;
   AppendElement(createdTile);
   // #endregion

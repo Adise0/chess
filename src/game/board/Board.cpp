@@ -173,23 +173,25 @@ void Board::ConfigurePiece(Piece *piece) {
 
   piece->element->OnClick([this, piece] {
     if (!piece || piece->team != currentTurn) return;
-    selectedPiece = piece;
+    // selectedPiece = piece;
     ShowLegalMoves(piece);
   });
   piece->element->OnDragStart([this, piece] {
     if (!piece || piece->team != currentTurn) return;
-    selectedPiece = piece;
+    // selectedPiece = piece;
     ShowLegalMoves(piece);
   });
   piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
     try {
       if (!piece) throw std::runtime_error("Piece missmatch");
-      selectedPiece = nullptr;
+
+
       Vector2 tile = GetClosestTile(dropPosition);
       bool moved = RequestMove(piece, tile);
       Vector2 screenPos = ToScreenPosition(piece->position);
       piece->element->SetPosition(screenPos.x, screenPos.y);
       if (moved) lastMovedPiece = piece;
+
     } catch (const std::exception &e) {
       MessageBoxA(nullptr, e.what(), "Runtime error", MB_OK | MB_ICONERROR);
     } catch (...) {
@@ -232,7 +234,7 @@ void Board::HideLegalMoves() {
   // #region HideLegalMoves
   for (short i = 0; i < currentLegalMoveShowers.size(); i++) {
     GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
-    delete currentLegalMoveShowers[i];
+    // delete currentLegalMoveShowers[i];
   }
   currentLegalMoveShowers.clear();
   // #endregion
@@ -249,11 +251,14 @@ void Board::StartTurn() {
 
       board[i][j]->legalMoves.clear();
       std::vector<Vector2Int> pseudoLegalMoves = GetLegalMoves(board[i][j]);
-      if (pseudoLegalMoves.size() == 0) continue;
+      // if (pseudoLegalMoves.size() == 0) continue;
 
       for (Vector2Int pseudoLegalMove : pseudoLegalMoves) {
         bool isLegal = IsMoveLegal(board[i][j], pseudoLegalMove);
         if (!isLegal) continue;
+        if (!board[i][j]) {
+          MessageBoxA(nullptr, "Spot should NOT be empty", "Runtime error", MB_OK | MB_ICONERROR);
+        }
         board[i][j]->legalMoves.push_back(pseudoLegalMove);
         if (board[i][j]->team == currentTurn) nOfLegalMoves++;
       }
@@ -264,6 +269,7 @@ void Board::StartTurn() {
   if (nOfLegalMoves == 0) {
 
     // exit(0);
+    std::cout << "Check-mate" << std::endl;
     GameManager::mainMenu.Present(true);
     GameManager::inGame.Present(false);
     GameManager::inGame.Load();
@@ -283,6 +289,7 @@ void Board::StartTurn() {
 
 bool Board::IsMoveLegal(Piece *piece, Vector2Int target) {
   // #region IsMoveLegal
+
   Piece *originalBoardState[boardSize][boardSize]{nullptr};
   for (short i = 0; i < boardSize; i++) {
     for (short j = 0; j < boardSize; j++) {
@@ -379,6 +386,8 @@ bool Board::IsKingInCheck(TEAM team) {
 bool Board::RequestMove(Piece *piece, Vector2Int target) {
   // #region RequestMove
 
+
+
   if (piece->legalMoves.size() == 0) return false;
   if (piece->team != currentTurn) return false;
 
@@ -389,6 +398,7 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
   board[target.x][target.y] = piece;
   board[piece->position.x][piece->position.y] = nullptr;
   piece->position = target;
+
 
   if (capturedPiece) {
     if (capturedPiece->pieceType == PieceType::King) {
@@ -403,12 +413,12 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
 
   try {
     HideLegalMoves();
+    currentTurn = currentTurn == 0 ? 1 : 0;
+    StartTurn();
 
   } catch (...) {
     std::cerr << "Error hiting legal moves" << std::endl;
   }
-  currentTurn = currentTurn == 0 ? 1 : 0;
-  StartTurn();
   return true;
   // #endregion
 }
@@ -675,9 +685,9 @@ std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vect
 
   for (short positions = 1; positions <= realLimit; positions++) {
     Vector2Int move = piece->position + (direction * positions);
-    // move.x = std::clamp(move.x, 0, boardSize - 1);
-    // move.y = std::clamp(move.y, 0, boardSize - 1);
-    std::cout << move.x << ", " << move.y << std::endl;
+    move.x = std::clamp(move.x, 0, boardSize - 1);
+    move.y = std::clamp(move.y, 0, boardSize - 1);
+
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);

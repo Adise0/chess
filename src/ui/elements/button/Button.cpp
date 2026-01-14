@@ -17,6 +17,7 @@ Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
     pressedColor = GetPressedColor();
   }
   isPressed = false;
+  softDeleted = false;
   // #endregion
 }
 

@@ -13,6 +13,9 @@ public:
   /// @brief The element renderer
   Renderer renderer;
 
+
+  bool softDeleted;
+
 protected:
   /// @brief Whether the element is color-based
   bool hasColor;

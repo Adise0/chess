@@ -70,8 +70,12 @@ void Screen::AppendElement(Element *element) {
 
 void Screen::RemoveElement(Element *element) {
   // #region RemoveElement
-  auto it = std::find(screenElements.begin(), screenElements.end(), element);
-  if (it != screenElements.end()) screenElements.erase(it);
+
+  element->softDeleted = true;
+  // auto it = std::find(screenElements.begin(), screenElements.end(), element);
+  // if (it != screenElements.end()) screenElements.erase(it);
+  // MessageBoxA(nullptr, "Deleteing element", "Runtime error", MB_OK | MB_ICONERROR);
+  std::cout << "Deleting element ";
   // #endregion
 }
 

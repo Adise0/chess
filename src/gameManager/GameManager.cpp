@@ -34,10 +34,12 @@ void GameManager::ProcessInput(SDL_Event &event) {
 
     default:
       for (Screen *screen : Screen::GetScreens()) {
-        if (!screen->isPresented) continue;
+        if (!screen || !screen->isPresented) continue;
         std::vector<Element *> sceenElements = screen->GetElementsToRender();
 
         for (Element *element : sceenElements) {
+          if (!element || element->softDeleted) continue;
+
           element->HandleEvent(event);
         }
       }
@@ -55,9 +57,16 @@ void GameManager::Update(float deltaTime) {
       std::vector<Element *> elements = screen->GetElementsToRender();
       screen->Update();
       for (Element *element : elements) {
+        if (!element || element->softDeleted) continue;
         element->Update(deltaTime);
       }
+
+      for (Element *element : elements) {
+        // if (element->softDeleted) delete element;
+      }
     }
+
+
   } catch (...) {
     std::cout << "BRUH" << std::endl;
   }
@@ -67,19 +76,23 @@ void GameManager::Update(float deltaTime) {
 void GameManager::Render() {
   // #region Render
   SDL_RenderClear(WindowManager::renderer);
+  try {
+    for (Screen *screen : Screen::GetScreens()) {
+      if (!screen->isPresented) continue;
+      std::vector<Element *> elements = screen->GetElementsToRender();
 
-  for (Screen *screen : Screen::GetScreens()) {
-    if (!screen->isPresented) continue;
-    std::vector<Element *> elements = screen->GetElementsToRender();
+      SortElements(elements);
 
-    SortElements(elements);
-
-    for (Element *element : elements) {
-      element->Render();
+      for (Element *element : elements) {
+        if (!element || element->softDeleted) continue;
+        element->Render();
+      }
     }
-  }
 
-  SDL_RenderPresent(WindowManager::renderer);
+    SDL_RenderPresent(WindowManager::renderer);
+  } catch (...) {
+    std::cout << "BRUH" << std::endl;
+  }
   // #endregion
 }
 
