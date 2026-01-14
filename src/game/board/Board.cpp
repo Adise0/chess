@@ -484,6 +484,13 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
       {-1, -1},
   };
 
+  Vector2Int castles[4]{
+      {2, 7},
+      {6, 7},
+      {2, 0},
+      {6, 0},
+  };
+
   for (Vector2Int direction : lines) {
     std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, 1);
     moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
@@ -492,6 +499,10 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
   for (Vector2Int direction : diagonals) {
     std::vector<Vector2Int> lineMoves = GetDiagonalLegalMoves(piece->position, direction, piece, 1);
     moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+  }
+
+  for (Vector2Int castle : castles) {
+    moves.push_back(castle);
   }
 
   return moves;
