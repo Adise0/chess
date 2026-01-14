@@ -20,10 +20,10 @@ public:
   static InGame inGame;
 
   // /// @brief The byebye menu
-  // static ByebyeMenu byebyeMenu;
+  static ByebyeMenu byebyeMenu;
 
   // /// @brief Yes
-  // static SupersayanPawn supersayanPawn;
+  static SupersayanPawn supersayanPawn;
 
 private:
   /// @brief Process user input

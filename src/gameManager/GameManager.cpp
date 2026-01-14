@@ -22,8 +22,8 @@ using namespace Rendering::Screens;
 bool GameManager::isRunning = false;
 MainMenu GameManager::mainMenu = MainMenu();
 InGame GameManager::inGame = InGame();
-// ByebyeMenu GameManager::byebyeMenu = ByebyeMenu();
-// SupersayanPawn GameManager::supersayanPawn = SupersayanPawn();
+ByebyeMenu GameManager::byebyeMenu = ByebyeMenu();
+SupersayanPawn GameManager::supersayanPawn = SupersayanPawn();
 
 void GameManager::ProcessInput(SDL_Event &event) {
   // #region ProcessInput
