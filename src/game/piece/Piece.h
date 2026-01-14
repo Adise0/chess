@@ -21,7 +21,7 @@ public:
   Draggable *element;
 
   /// @brief check if rooks or kings have moved
-  bool hasMoved = true;
+  bool hasMoved = false;
 
   /// @brief This piece's legal moves
   std::vector<Vector2Int> legalMoves;
