@@ -17,6 +17,7 @@ Button::Button(SDL_FRect rect, Renderer renderer) : Rectangle(rect, renderer) {
     pressedColor = GetPressedColor();
   }
   isPressed = false;
+  softDeleted = false;
   // #endregion
 }
 
@@ -57,6 +58,8 @@ void Button::OnClick(std::function<void()> listener) {
   onClickListeners.push_back(listener);
   // #endregion
 }
+
+void Button::RemoveListeners() { onClickListeners.clear(); }
 
 void Button::OnClickEvent() {
   // #region OnClickEvent

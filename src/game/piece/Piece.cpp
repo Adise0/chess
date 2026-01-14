@@ -5,7 +5,7 @@
 #include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
-
+#include <windows.h>
 
 namespace Chess::Game {
 using namespace Rendering;
@@ -13,6 +13,7 @@ using namespace Rendering;
 Piece::Piece(Vector2Int startPosition, PieceType pieceType, TEAM team)
     : position(startPosition), pieceType(pieceType), team(team) {
   // #region Pice
+  hasMoved = false;
   CreateElement();
   // #endregion
 }
@@ -63,10 +64,6 @@ std::string Piece::GetPieceSprite() {
   // #endregion
 }
 
-Piece::~Piece() {
-  std::cout << "Deleteing piece" << std::endl;
-  GameManager::inGame.RemoveElement(element);
-  delete element;
-}
+Piece::~Piece() { GameManager::inGame.RemoveElement(element); }
 
 } // namespace Chess::Game

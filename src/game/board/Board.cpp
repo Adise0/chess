@@ -4,70 +4,125 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#define NOMINMAX
+#include <windows.h>
 
 
 namespace Chess::Game {
 
-#define BOARD_PADDING 20
 
 
 Board::Board() {
   // #region Board
-  ConstructBoard();
+
+
+  PopulateBoard();
+
   currentTurn = 1;
   selectedPiece = nullptr;
-  currentLegalMoves.clear();
+  isKingInCheck = false;
+
   currentLegalMoveShowers.clear();
+
+  StartTurn();
   // #endregion
 }
 
-void Board::ConstructBoard() {
-  // #region ConstructBoard
 
-  int initialX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
-  int initialY = BOARD_PADDING;
-  int currentX = initialX;
-  int currentY = initialY;
+void Board::PopulateBoard() {
+  // #region PopulateBoard
+  Piece *newBoard[boardSize][boardSize]{{
+                                            new Piece({0, 0}, PieceType::Rook, 0),
+                                            new Piece({0, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({0, 6}, PieceType::Pawn, 1),
+                                            new Piece({0, 7}, PieceType::Rook, 1),
+                                        },
+                                        {
+                                            new Piece({1, 0}, PieceType::Knight, 0),
+                                            new Piece({1, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({1, 6}, PieceType::Pawn, 1),
+                                            new Piece({1, 7}, PieceType::Knight, 1),
+                                        },
+                                        {
+                                            new Piece({2, 0}, PieceType::Bishop, 0),
+                                            new Piece({2, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({2, 6}, PieceType::Pawn, 1),
+                                            new Piece({2, 7}, PieceType::Bishop, 1),
+                                        },
+                                        {
+                                            new Piece({3, 0}, PieceType::Queen, 0),
+                                            new Piece({3, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({3, 6}, PieceType::Pawn, 1),
+                                            new Piece({3, 7}, PieceType::Queen, 1),
+                                        },
+                                        {
+                                            new Piece({4, 0}, PieceType::King, 0),
+                                            new Piece({4, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({4, 6}, PieceType::Pawn, 1),
+                                            new Piece({4, 7}, PieceType::King, 1),
+                                        },
+                                        {
+                                            new Piece({5, 0}, PieceType::Bishop, 0),
+                                            new Piece({5, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({5, 6}, PieceType::Pawn, 1),
+                                            new Piece({5, 7}, PieceType::Bishop, 1),
+                                        },
+                                        {
+                                            new Piece({6, 0}, PieceType::Knight, 0),
+                                            new Piece({6, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({6, 6}, PieceType::Pawn, 1),
+                                            new Piece({6, 7}, PieceType::Knight, 1),
+                                        },
+                                        {
+                                            new Piece({7, 0}, PieceType::Rook, 0),
+                                            new Piece({7, 1}, PieceType::Pawn, 0),
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr,
+                                            new Piece({7, 6}, PieceType::Pawn, 1),
+                                            new Piece({7, 7}, PieceType::Rook, 1),
+                                        }};
 
-  Renderer lightTileRenderer({240, 217, 181, 255}, -1);
-  Renderer darkTileRenderer({181, 136, 99, 255}, -1);
 
-
-  for (size_t col = 0; col < boardSize; col++) {
-    currentY = initialY;
-    for (size_t row = 0; row < boardSize; row++) {
-      SDL_FRect tileRect = {currentX, currentY, tileSize, tileSize};
-
-      Renderer *renderer;
-      if (row % 2 == 0) {
-        if (col % 2 == 0) renderer = &lightTileRenderer;
-        else renderer = &darkTileRenderer;
-      } else {
-        if (col % 2 == 0) renderer = &darkTileRenderer;
-        else renderer = &lightTileRenderer;
-      }
-
-      CreateTile(tileRect, *renderer);
-      ConfigurePiece({
-          (short)row,
-          (short)col,
-      });
-      currentY += tileSize;
+  for (short i = 0; i < boardSize; i++) {
+    for (short j = 0; j < boardSize; j++) {
+      if (board[i][j]) board[i][j] = nullptr;
+      board[i][j] = newBoard[i][j];
+      if (board[i][j]) ConfigurePiece(board[i][j]);
     }
-    currentX += tileSize;
   }
-
-
-
   // #endregion
 }
 
-void Board::CreateTile(SDL_FRect rect, Renderer renderer) {
-  // #region CreateTile
-  Rectangle *createdTile = new Rectangle(rect, renderer);
-  GameManager::inGame.AppendElement(createdTile);
-  // #endregion
-}
 
 TEAM Board::GetTurn() {
   // #region GetTurn
@@ -78,7 +133,7 @@ TEAM Board::GetTurn() {
 Vector2 Board::ToScreenPosition(Vector2Int boardPosition) {
   // #region ToScreenPosition
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
-  float offsetY = BOARD_PADDING;
+  float offsetY = topPadding;
 
 
   return {boardPosition.x * tileSize + offsetX, boardPosition.y * tileSize + offsetY};
@@ -88,7 +143,7 @@ Vector2 Board::ToScreenPosition(Vector2Int boardPosition) {
 Vector2Int Board::GetClosestTile(Vector2 screenPosition) {
   // #region GetClosestTile
   float offsetX = (WindowManager::resolutionX / 2) - (boardSize / 2 * tileSize);
-  float offsetY = BOARD_PADDING;
+  float offsetY = topPadding;
 
   float offsetedX = screenPosition.x - offsetX;
   float offsetedY = screenPosition.y - offsetY;
@@ -107,12 +162,156 @@ Vector2Int Board::GetClosestTile(Vector2 screenPosition) {
   // #endregion
 };
 
-bool Board::EnsureLegal(Vector2Int targetTile, Vector2Int originalTile, Piece *piece) {
+
+void Board::ConfigurePiece(Piece *piece) {
+  // #region ConfigurePiece
+  if (!piece) return;
+  Vector2Int piecePosition = piece->position;
+  Vector2Int screenPosition = ToScreenPosition(piecePosition);
+
+  if (piece->pieceType == PieceType::King) kings[piece->team] = piece;
+  piece->element->SetPosition(screenPosition.x, screenPosition.y);
+
+  piece->element->OnClick([this, piece] {
+    if (!piece || piece->team != currentTurn) return;
+    selectedPiece = piece;
+    ShowLegalMoves(piece);
+  });
+  piece->element->OnDragStart([this, piece] {
+    if (!piece || piece->team != currentTurn) return;
+    selectedPiece = piece;
+    ShowLegalMoves(piece);
+  });
+  piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
+    try {
+      if (!piece) throw std::runtime_error("Piece missmatch");
 
 
-  board[targetTile.x][targetTile.y] = piece;
-  board[piece->position.x][piece->position.y] = nullptr;
-  piece->position = targetTile;
+      Vector2 tile = GetClosestTile(dropPosition);
+      bool moved = RequestMove(piece, tile);
+      Vector2 screenPos = ToScreenPosition(piece->position);
+      piece->element->SetPosition(screenPos.x, screenPos.y);
+      if (moved) lastMovedPiece = piece;
+
+    } catch (const std::exception &e) {
+      MessageBoxA(nullptr, e.what(), "Runtime error", MB_OK | MB_ICONERROR);
+    } catch (...) {
+      MessageBoxA(nullptr, "Unknown exception in onDrag end", "Runtime error",
+                  MB_OK | MB_ICONERROR);
+    }
+  });
+  // #endregion
+}
+
+void Board::ShowLegalMoves(Piece *piece) {
+  // #region ShowLegalMoves
+  if (!piece) throw std::runtime_error("Can't show legal moves for piece that does not exist xdd");
+
+
+  try {
+    HideLegalMoves();
+
+  } catch (...) {
+    std::cerr << "Error hiting legal moves" << std::endl;
+  }
+
+  if (!piece) return;
+
+  for (short i = 0; i < piece->legalMoves.size(); i++) {
+    Vector2Int move = piece->legalMoves[i];
+    Vector2Int screenPos = ToScreenPosition(move);
+    SDL_FRect rect = {screenPos.x + (tileSize / 4), screenPos.y + (tileSize / 4), tileSize / 2,
+                      tileSize / 2};
+    Renderer renderer({0, 255, 0, 100}, 50);
+    Rectangle *moveShower = new Rectangle(rect, renderer);
+    GameManager::inGame.AppendElement(moveShower);
+    currentLegalMoveShowers.push_back(moveShower);
+  }
+
+  // #endregion
+}
+
+void Board::HideLegalMoves() {
+  // #region HideLegalMoves
+  for (short i = 0; i < currentLegalMoveShowers.size(); i++) {
+    GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
+    // delete currentLegalMoveShowers[i];
+  }
+  currentLegalMoveShowers.clear();
+  // #endregion
+}
+
+void Board::StartTurn() {
+  // #region StartTurn
+  short nOfLegalMoves = 0;
+
+  for (short i = 0; i < boardSize; i++) {
+    for (short j = 0; j < boardSize; j++) {
+      if (!board[i][j] || board[i][j]->team != currentTurn) continue;
+
+      board[i][j]->legalMoves.clear();
+      std::vector<Vector2Int> pseudoLegalMoves = GetLegalMoves(board[i][j]);
+      if (pseudoLegalMoves.size() == 0) continue;
+
+      for (Vector2Int pseudoLegalMove : pseudoLegalMoves) {
+        bool isLegal = IsMoveLegal(board[i][j], pseudoLegalMove);
+        if (!isLegal) continue;
+        if (!board[i][j]) {
+          MessageBoxA(nullptr, "Spot should NOT be empty", "Runtime error", MB_OK | MB_ICONERROR);
+        }
+        board[i][j]->legalMoves.push_back(pseudoLegalMove);
+        if (board[i][j]->team == currentTurn) nOfLegalMoves++;
+      }
+    }
+  }
+
+  if (nOfLegalMoves == 0) {
+
+    SDL_Texture *endSprite = isKingInCheck
+                                 ? WindowManager::LoadSprite("assets/sprites/CHECK-MATE.png")
+                                 : WindowManager::LoadSprite("assets/sprites/STALE-MATE.png");
+
+    GameManager::byebyeMenu.background->renderer.baseImage = endSprite;
+    GameManager::byebyeMenu.Present(true);
+  }
+
+  // #endregion
+}
+
+bool Board::IsMoveLegal(Piece *piece, Vector2Int target) {
+  // #region IsMoveLegal
+
+  Piece *originalBoardState[boardSize][boardSize]{nullptr};
+  for (short i = 0; i < boardSize; i++) {
+    for (short j = 0; j < boardSize; j++) {
+      if (board[i][j]) originalBoardState[i][j] = board[i][j];
+    }
+  }
+  Vector2Int originalPiecePosition = piece->position;
+
+
+  board[target.x][target.y] = piece;
+  board[originalPiecePosition.x][originalPiecePosition.y] = nullptr;
+  piece->position = target;
+
+  bool isKingInCheck = IsKingInCheck(piece->team);
+
+  for (short i = 0; i < boardSize; i++) {
+    for (short j = 0; j < boardSize; j++) {
+      board[i][j] = originalBoardState[i][j];
+    }
+  }
+
+  piece->position = originalPiecePosition;
+  return !isKingInCheck;
+
+  // #endregion
+}
+
+bool Board::IsKingInCheck(TEAM team) {
+  // #region IsKingInCheck
+  Piece *king = kings[team];
+  if (!king) return false;
 
   Vector2Int lines[4] = {
       {1, 0},
@@ -126,9 +325,8 @@ bool Board::EnsureLegal(Vector2Int targetTile, Vector2Int originalTile, Piece *p
       {1, -1},
       {-1, -1},
   };
+
   std::optional<Piece *> firstEnemy = std::nullopt;
-  Piece *king = currentTurn == 0 ? team0King : team1King;
-  bool cancelMove = false;
   for (Vector2Int direction : lines) {
     firstEnemy = std::nullopt;
     GetLineLegalMoves(king->position, direction, king, -1, firstEnemy);
@@ -136,172 +334,176 @@ bool Board::EnsureLegal(Vector2Int targetTile, Vector2Int originalTile, Piece *p
     if (!firstEnemy.has_value()) continue;
     if (firstEnemy.value()->pieceType == PieceType::Rook ||
         firstEnemy.value()->pieceType == PieceType::Queen) {
-      cancelMove = true;
-      break;
+      return true;
     }
 
     if (firstEnemy.value()->pieceType == PieceType::King &&
         firstEnemy.value()->team != king->team &&
         Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
-      cancelMove = true;
-      break;
+      return true;
     }
   }
 
-  if (!cancelMove) {
-    for (Vector2Int direction : diagonals) {
-      firstEnemy = std::nullopt;
-      GetDiagonalLegalMoves(king->position, direction, king, -1, firstEnemy);
-      if (!firstEnemy.has_value()) continue;
-      if (firstEnemy.value()->pieceType == PieceType::Bishop ||
-          firstEnemy.value()->pieceType == PieceType::Queen) {
+  for (Vector2Int direction : diagonals) {
+    firstEnemy = std::nullopt;
+    GetDiagonalLegalMoves(king->position, direction, king, -1, firstEnemy);
+    if (!firstEnemy.has_value()) continue;
+    if (firstEnemy.value()->pieceType == PieceType::Bishop ||
+        firstEnemy.value()->pieceType == PieceType::Queen) {
+      return true;
+    }
 
-        cancelMove = true;
-        break;
+    short pawnThreatDirection = currentTurn == 0 ? -1 : 1;
+    if (firstEnemy.value()->team != king->team &&
+        Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
+
+      if (firstEnemy.value()->pieceType == PieceType::King) {
+        return true;
       }
 
-      short bigNono = currentTurn == 0 ? -1 : 1;
-      if (firstEnemy.value()->team != king->team &&
-          Vector2::Distance(king->position, firstEnemy.value()->position) <= 1.5f) {
-
-        if (firstEnemy.value()->pieceType == PieceType::King) {
-          cancelMove = true;
-          break;
-        }
-
-        if (firstEnemy.value()->pieceType == PieceType::Pawn &&
-            (king->position.y - firstEnemy.value()->position.y) == bigNono) {
-          cancelMove = true;
-          break;
-        } else {
-          continue;
-        }
+      if (firstEnemy.value()->pieceType == PieceType::Pawn &&
+          (king->position.y - firstEnemy.value()->position.y) == pawnThreatDirection) {
+        return true;
       }
     }
   }
 
+  std::vector<Vector2Int> knightAtackSquares = GetKnightLegalMoves(king);
 
-  return cancelMove;
-};
+  for (Vector2Int squares : knightAtackSquares) {
+    Piece *atacking = board[squares.x][squares.y];
+    if (atacking != nullptr && atacking->pieceType == PieceType::Knight &&
+        atacking->team != king->team) {
 
-void Board::ConfigurePiece(Vector2Int boardPosition) {
-  // #region ConfigurePiece
-  Piece *piece = board[boardPosition.x][boardPosition.y];
-  if (!piece) return;
-  Vector2Int screenPosition = ToScreenPosition(boardPosition);
-
-  if (piece->pieceType == PieceType::King) {
-    if (piece->team == 0) team0King = piece;
-    else team1King = piece;
+      return true;
+    }
   }
 
-  piece->element->OnClick([this, piece] { this->CalculateLegalMoves(piece); });
-  piece->element->OnDragStart([this, piece] { this->CalculateLegalMoves(piece); });
 
-  piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
-    Vector2Int targetTile = Board::GetClosestTile(dropPosition);
-    Vector2Int originalTile = piece->position;
-    Vector2Int originalSceenPos = Board::ToScreenPosition(piece->position);
-    Vector2Int newScreenPos = Board::ToScreenPosition(targetTile);
+  return false;
 
-    if (selectedPiece != piece) {
-      std::cout << "Piece missmatch\n";
-      piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
-      return;
-    }
-
-
-    auto found = std::find_if(
-        currentLegalMoves.begin(), currentLegalMoves.end(),
-        [targetTile](Vector2Int pos) { return pos.x == targetTile.x && pos.y == targetTile.y; });
-    if (found == currentLegalMoves.end()) {
-      piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
-      return;
-    }
-
-    Piece *target = board[targetTile.x][targetTile.y];
-    bool cancelMove = EnsureLegal(targetTile, originalTile, piece);
-
-
-    if (cancelMove) {
-      board[originalTile.x][originalTile.y] = piece;
-      board[piece->position.x][piece->position.y] = nullptr;
-      piece->position = originalTile;
-      piece->element->SetPosition(originalSceenPos.x, originalSceenPos.y);
-
-      return;
-    } else {
-      if (target) delete target;
-      piece->element->SetPosition(newScreenPos.x, newScreenPos.y);
-
-      Vector2 offsets[8]{
-          {-1, -1}, {1, -1}, {-1, 1}, {1, -1}, {0, -1}, {0, 1}, {-1, 0}, {1, 0},
-      };
-
-
-      bool anyLegal = false;
-      for (Vector2 offset : offsets) {
-        for (size_t i = 0; i < 2; i++) {
-          Piece *king = currentTurn == 0 ? team0King : team1King;
-          if (!EnsureLegal(king->position, king->position + offset, king)) {
-            anyLegal = true;
-          }
-        }
-      }
-      if (!anyLegal) {
-        GameManager::inGame.Present(false);
-        GameManager::mainMenu.Present(true);
-      }
-    }
-
-    // TEMP
-    for (size_t i = 0; i < currentLegalMoveShowers.size(); i++) {
-      GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
-      delete currentLegalMoveShowers[i];
-    }
-    currentLegalMoveShowers.clear();
-
-    currentTurn = (currentTurn == 0) ? 1 : 0;
-  });
-
-
-
-  piece->element->SetPosition(screenPosition.x, screenPosition.y);
   // #endregion
 }
 
-void Board::CalculateLegalMoves(Piece *piece) {
-  // #region CalculateLegalMoves
 
-  selectedPiece = piece;
-  if (piece->team != currentTurn) {
-    currentLegalMoves.clear();
-    return;
-  }
-  currentLegalMoves = GetLegalMoves(piece);
+bool Board::RequestMove(Piece *piece, Vector2Int target) {
+  // #region RequestMove
 
+  if (piece->legalMoves.size() == 0) return false;
+  if (piece->team != currentTurn) return false;
 
+  auto it = std::find(piece->legalMoves.begin(), piece->legalMoves.end(), target);
+  if (it == piece->legalMoves.end()) return false;
 
-  // TEMP
-  for (size_t i = 0; i < currentLegalMoveShowers.size(); i++) {
-    GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
-    delete currentLegalMoveShowers[i];
-  }
-  currentLegalMoveShowers.clear();
-  for (size_t i = 0; i < currentLegalMoves.size(); i++) {
-    Vector2Int move = currentLegalMoves[i];
-    Vector2Int screenPos = ToScreenPosition(move);
-    SDL_FRect rect = {screenPos.x + (tileSize / 4), screenPos.y + (tileSize / 4), tileSize / 2,
-                      tileSize / 2};
-    Renderer renderer({0, 255, 0, 100}, 50);
-    Rectangle *moveShower = new Rectangle(rect, renderer);
-    GameManager::inGame.AppendElement(moveShower);
-    currentLegalMoveShowers.push_back(moveShower);
+  Piece *capturedPiece = board[target.x][target.y];
+  if (!capturedPiece || capturedPiece->team != piece->team) {
+    board[target.x][target.y] = piece;
+    board[piece->position.x][piece->position.y] = nullptr;
+    piece->position = target;
+    piece->hasMoved = true;
   }
 
 
+  if (capturedPiece) {
+    bool preventDelete = false;
+    if (piece->pieceType == PieceType::King && capturedPiece->team == piece->team) {
+      preventDelete = true;
+      short y = piece->position.y;
+      short rookX = capturedPiece->position.x == 0 ? 3 : 5;
+      short kingX = capturedPiece->position.x == 0 ? 2 : 6;
+
+      board[capturedPiece->position.x][y] = nullptr;
+      board[rookX][y] = capturedPiece;
+      capturedPiece->position = Vector2(rookX, y);
+      Vector2 rookScreenPos = ToScreenPosition(capturedPiece->position);
+      capturedPiece->element->SetPosition(rookScreenPos.x, rookScreenPos.y);
+      capturedPiece->hasMoved = true;
+
+      board[piece->position.x][y] = nullptr;
+      board[kingX][y] = piece;
+      piece->position = Vector2(kingX, y);
+      Vector2 kingScreenPos = ToScreenPosition(piece->position);
+      piece->element->SetPosition(kingScreenPos.x, kingScreenPos.y);
+      piece->hasMoved = true;
+    }
+
+    if (capturedPiece->pieceType == PieceType::King) {
+      kings[capturedPiece->team] = nullptr;
+    }
+    if (lastMovedPiece == capturedPiece) {
+      lastMovedPiece = nullptr;
+    }
+    if (!preventDelete) delete capturedPiece;
+    capturedPiece = nullptr;
+  }
+
+
+  if (piece->pieceType == PieceType::Pawn) {
+    short y = piece->team == 0 ? 7 : 0;
+    if (piece->position.y == y) {
+
+      GameManager::supersayanPawn.knightButton->RemoveListeners();
+      GameManager::supersayanPawn.knightButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Knight;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Knight.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.bishopButton->RemoveListeners();
+      GameManager::supersayanPawn.bishopButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Bishop;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Bishop.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.rookButton->RemoveListeners();
+      GameManager::supersayanPawn.rookButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Rook;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Rook.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.queenButton->RemoveListeners();
+      GameManager::supersayanPawn.queenButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Queen;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Queen.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.Present(true);
+    }
+  }
+
+  try {
+    HideLegalMoves();
+    currentTurn = currentTurn == 0 ? 1 : 0;
+    isKingInCheck = IsKingInCheck(currentTurn);
+
+    StartTurn();
+
+  } catch (...) {
+    std::cerr << "Error hiting legal moves" << std::endl;
+  }
+  return true;
   // #endregion
 }
+
 
 std::vector<Vector2Int> Board::GetLegalMoves(Piece *piece) {
   // #region GetLegalMoves
@@ -474,6 +676,18 @@ std::vector<Vector2Int> Board::GetKingLegalMoves(Piece *piece) {
   for (Vector2Int direction : lines) {
     std::vector<Vector2Int> lineMoves = GetLineLegalMoves(piece->position, direction, piece, 1);
     moves.insert(moves.end(), lineMoves.begin(), lineMoves.end());
+    if (direction.y == 1 || piece->hasMoved) continue;
+    short limit = (direction.x == 1) ? (boardSize - piece->position.x) - 1 : piece->position.x;
+    for (short positions = 1; positions <= limit; positions++) {
+      Vector2Int move = piece->position + (direction * positions);
+      move.x = std::clamp(move.x, 0, boardSize - 1);
+      move.y = std::clamp(move.y, 0, boardSize - 1);
+
+      if (!board[move.x][move.y]) continue;
+      if (board[move.x][move.y]->team != piece->team) break;
+      if (board[move.x][move.y]->pieceType != PieceType::Rook) break;
+      if (!board[move.x][move.y]->hasMoved) moves.push_back(move);
+    }
   }
 
   for (Vector2Int direction : diagonals) {
@@ -516,6 +730,8 @@ std::vector<Vector2Int> Board::GetLineLegalMoves(Vector2 startPosition, Vector2 
 
   for (short positions = 1; positions <= realLimit; positions++) {
     Vector2Int move = piece->position + (direction * positions);
+    move.x = std::clamp(move.x, 0, boardSize - 1);
+    move.y = std::clamp(move.y, 0, boardSize - 1);
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -562,6 +778,9 @@ std::vector<Vector2Int> Board::GetDiagonalLegalMoves(Vector2 startPosition, Vect
 
   for (short positions = 1; positions <= realLimit; positions++) {
     Vector2Int move = piece->position + (direction * positions);
+    move.x = std::clamp(move.x, 0, boardSize - 1);
+    move.y = std::clamp(move.y, 0, boardSize - 1);
+
     if (!CheckMove(move, moves)) {
       if (board[move.x][move.y] != nullptr && board[move.x][move.y]->team != piece->team) {
         moves.push_back(move);
@@ -582,6 +801,7 @@ bool Board::CheckMove(Vector2Int move, std::vector<Vector2Int> &moves) {
   if (board[move.x][move.y]) return false;
   moves.push_back(move);
   return true;
+  // return true;
   // #endregion
 }
 

@@ -1,6 +1,8 @@
 #pragma once
+#include "../ui/screens/byebyeScreen/ByebyeMenu.h"
 #include "../ui/screens/inGame/InGame.h"
 #include "../ui/screens/mainMenu/MainMenu.h"
+#include "../ui/screens/supersayanPawn/SupersayanPawn.h"
 #include <SDL3/SDL.h>
 #include <vector>
 
@@ -17,6 +19,11 @@ public:
   /// @brief The in-game screen
   static InGame inGame;
 
+  // /// @brief The byebye menu
+  static ByebyeMenu byebyeMenu;
+
+  // /// @brief Yes
+  static SupersayanPawn supersayanPawn;
 
 private:
   /// @brief Process user input

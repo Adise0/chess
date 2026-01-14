@@ -9,7 +9,7 @@ namespace Chess::Rendering::Elements {
 
 class Button : public Rectangle {
 
-private:
+public:
   /// @brief The color when pressed
   SDL_Color pressedColor;
   /// @brief The base color when unpressed
@@ -34,6 +34,8 @@ public:
   /// @brief Registers an onClick listener
   /// @param listener The listener to register
   void OnClick(std::function<void()> listener);
+
+  void RemoveListeners();
 
   /// @brief Whether the button is currently being pressed
   bool isPressed;

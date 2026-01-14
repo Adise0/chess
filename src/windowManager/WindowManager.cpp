@@ -37,6 +37,9 @@ SDL_Texture *WindowManager::LoadSprite(std::string spritePath) {
 
 
   SDL_Texture *texture = IMG_LoadTexture(renderer, spritePath.c_str());
+  if (!texture) {
+    throw std::runtime_error("Failed to load sprite: " + spritePath + ". Error: " + SDL_GetError());
+  }
   SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
   loadedSprites[spritePath] = texture;

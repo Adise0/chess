@@ -19,6 +19,8 @@ Element::Element() {
   // #region Element
   if (renderer.baseImage) hasColor = false;
   else hasColor = true;
+
+  softDeleted = false;
   // #endregion
 }
 } // namespace Chess::Rendering::Elements

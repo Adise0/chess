@@ -54,6 +54,8 @@ void Screen::Load() {
   // #endregion
 }
 
+void Screen::Update() {}
+
 std::vector<Element *> Screen::GetElementsToRender() {
   // #region GetElementsToRender
   throw std::runtime_error("Get elements not implemented");
@@ -68,8 +70,8 @@ void Screen::AppendElement(Element *element) {
 
 void Screen::RemoveElement(Element *element) {
   // #region RemoveElement
-  auto it = std::find(screenElements.begin(), screenElements.end(), element);
-  if (it != screenElements.end()) screenElements.erase(it);
+
+  element->softDeleted = true;
   // #endregion
 }
 

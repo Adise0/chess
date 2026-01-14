@@ -12,6 +12,7 @@ Draggable::Draggable(SDL_FRect rect, SDL_FRect rendererRect, Renderer renderer)
   isPressed = false;
   isBeingDragged = false;
   sortingLayerBackup = renderer.sortingLayer;
+  softDeleted = false;
   // #endregion
 }
 

@@ -27,104 +27,24 @@ public:
   static constexpr short pieceSize = 70;
   /// @brief The size of a tile in pixels
   static constexpr short tileSize = 90;
+  /// @brief The top padding of the board
+  static constexpr short topPadding = 20;
 
   /// @brief The board array
-  Piece *board[boardSize][boardSize]{
-      // #region Initial array
-      {
-          new Piece({0, 0}, PieceType::Rook, 0),
-          new Piece({0, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({0, 6}, PieceType::Pawn, 1),
-          new Piece({0, 7}, PieceType::Rook, 1),
-      },
-      {
-          new Piece({1, 0}, PieceType::Knight, 0),
-          new Piece({1, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({1, 6}, PieceType::Pawn, 1),
-          new Piece({1, 7}, PieceType::Knight, 1),
-      },
-      {
-          new Piece({2, 0}, PieceType::Bishop, 0),
-          new Piece({2, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({2, 6}, PieceType::Pawn, 1),
-          new Piece({2, 7}, PieceType::Bishop, 1),
-      },
-      {
-          new Piece({3, 0}, PieceType::Queen, 0),
-          new Piece({3, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({3, 6}, PieceType::Pawn, 1),
-          new Piece({3, 7}, PieceType::Queen, 1),
-      },
-      {
-          new Piece({4, 0}, PieceType::King, 0),
-          new Piece({4, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({4, 6}, PieceType::Pawn, 1),
-          new Piece({4, 7}, PieceType::King, 1),
-      },
-      {
-          new Piece({5, 0}, PieceType::Bishop, 0),
-          new Piece({5, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({5, 6}, PieceType::Pawn, 1),
-          new Piece({5, 7}, PieceType::Bishop, 1),
-      },
-      {
-          new Piece({6, 0}, PieceType::Knight, 0),
-          new Piece({6, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({6, 6}, PieceType::Pawn, 1),
-          new Piece({6, 7}, PieceType::Knight, 1),
-      },
-      {
-          new Piece({7, 0}, PieceType::Rook, 0),
-          new Piece({7, 1}, PieceType::Pawn, 0),
-          nullptr,
-          nullptr,
-          nullptr,
-          nullptr,
-          new Piece({7, 6}, PieceType::Pawn, 1),
-          new Piece({7, 7}, PieceType::Rook, 1),
-      },
-      // #endregion
-  };
+  Piece *board[boardSize][boardSize]{};
+  Piece *selectedPiece;
 
+
+  Piece *lastMovedPiece;
+  bool isKingInCheck;
 
 private:
   /// @brief The current turn
   TEAM currentTurn;
 
-  std::vector<Vector2Int> currentLegalMoves;
   std::vector<Element *> currentLegalMoveShowers;
-  Piece *selectedPiece;
 
-  Piece *team0King = nullptr;
-  Piece *team1King = nullptr;
+  Piece *kings[2];
 
 public:
   /// @brief Constructor
@@ -134,27 +54,50 @@ public:
   /// @return Whether the current turnn is black or white
   TEAM GetTurn();
 
-  /// @brief Creates the board
-  void ConstructBoard();
-
-  /// @brief Creates a square
-  /// @param rect x, y, width, height
-  /// @param renderer a renderer
-  void CreateTile(SDL_FRect rect, Renderer renderer);
-
-  /// @brief Configures a piece
-  /// @param boardPosition The board position to "atach" to the piece
-  void ConfigurePiece(Vector2Int boardPosition);
-
   /// @brief Gets the legal moves of a piece
   /// @param piece The piece to get moves for
   /// @return A vector of legal moves
   std::vector<Vector2Int> GetLegalMoves(Piece *piece);
 
+  /// @brief Requests for a piece to move to a target position
+  /// @param piece The piece to move
+  /// @param target The target position
+  /// @return Whether the move could be done
+  bool RequestMove(Piece *piece, Vector2Int target);
+
 private:
+  /// @brief Populates the board
+  void PopulateBoard();
+
+  /// @brief Configures a piece
+  /// @param piece The piece to configure
+  void ConfigurePiece(Piece *piece);
+
+
+  /// @brief Shows the legal moves of the passed piece
+  /// @param piece The piece to show the legal moves for
+  void ShowLegalMoves(Piece *piece);
+
+  /// @brief Hides the legal moves
+  void HideLegalMoves();
+
+  /// @brief Starts a turn
+  void StartTurn();
+
+  /// @brief Checks if a move is legal
+  /// @param piece The piece that wants to move
+  /// @param target The target square
+  /// @return Whether it is fully legal
+  bool IsMoveLegal(Piece *piece, Vector2Int target);
+
+  /// @brief Checks if a king is in check
+  /// @param team The team of the king
+  /// @return Whether that king is in check
+  bool IsKingInCheck(TEAM team);
+
   /// @brief Caluclates and shows a piece's currrent legal moves
   /// @param piece The piece to calculate moves for
-  void CalculateLegalMoves(Piece *piece);
+  // void CalculateLegalMoves(Piece *piece);
 
   /// @brief Gets the pawn legal moves
   /// @param piece The pawn piece
