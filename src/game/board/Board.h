@@ -31,7 +31,7 @@ public:
   static constexpr short topPadding = 20;
 
   /// @brief The board array
-  Piece *board[boardSize][boardSize];
+  Piece *board[boardSize][boardSize]{nullptr};
   Piece *selectedPiece;
 
 private:
@@ -70,10 +70,12 @@ private:
   void ConfigurePiece(Piece *piece);
 
 
-
   /// @brief Shows the legal moves of the passed piece
   /// @param piece The piece to show the legal moves for
   void ShowLegalMoves(Piece *piece);
+
+  /// @brief Hides the legal moves
+  void HideLegalMoves();
 
   /// @brief Starts a turn
   void StartTurn();

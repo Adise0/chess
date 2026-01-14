@@ -16,8 +16,10 @@ Board::Board() {
 
   currentTurn = 1;
   selectedPiece = nullptr;
-  // currentLegalMoves.clear();
+
   currentLegalMoveShowers.clear();
+
+  StartTurn();
   // #endregion
 }
 
@@ -173,7 +175,8 @@ void Board::ConfigurePiece(Piece *piece) {
     ShowLegalMoves(piece);
   });
   piece->element->OnDragEnd([this, piece](Vector2 dropPosition) {
-    RequestMove(piece, dropPosition);
+    Vector2 tile = GetClosestTile(dropPosition);
+    RequestMove(piece, tile);
     Vector2 screenPos = ToScreenPosition(piece->position);
     piece->element->SetPosition(screenPos.x, screenPos.y);
   });
@@ -182,11 +185,11 @@ void Board::ConfigurePiece(Piece *piece) {
 
 void Board::ShowLegalMoves(Piece *piece) {
   // #region ShowLegalMoves
-  for (short i = 0; i < currentLegalMoveShowers.size(); i++) {
-    GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
-    delete currentLegalMoveShowers[i];
-  }
-  currentLegalMoveShowers.clear();
+
+  std::cout << "Piece selected at: (" << piece->position.x << "," << piece->position.y
+            << ") nOfLegalMoves:" << piece->legalMoves.size() << std::endl;
+
+  HideLegalMoves();
 
 
   for (short i = 0; i < piece->legalMoves.size(); i++) {
@@ -200,6 +203,16 @@ void Board::ShowLegalMoves(Piece *piece) {
     currentLegalMoveShowers.push_back(moveShower);
   }
 
+  // #endregion
+}
+
+void Board::HideLegalMoves() {
+  // #region HideLegalMoves
+  for (short i = 0; i < currentLegalMoveShowers.size(); i++) {
+    GameManager::inGame.RemoveElement(currentLegalMoveShowers[i]);
+    delete currentLegalMoveShowers[i];
+  }
+  currentLegalMoveShowers.clear();
   // #endregion
 }
 
@@ -327,6 +340,10 @@ bool Board::IsKingInCheck(TEAM team) {
 
 bool Board::RequestMove(Piece *piece, Vector2Int target) {
   // #region RequestMove
+  std::cout << "Piece selected at: (" << piece->position.x << "," << piece->position.y
+            << ") wants to go to: (" << target.x << "," << target.y << ")" << std::endl;
+
+
   if (piece->legalMoves.size() == 0) return false;
 
   auto it = std::find(piece->legalMoves.begin(), piece->legalMoves.end(), target);
@@ -338,6 +355,9 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
   piece->position = target;
 
   if (capturedPiece) delete capturedPiece;
+  HideLegalMoves();
+  currentTurn = currentTurn == 0 ? 1 : 0;
+  StartTurn();
   return true;
   // #endregion
 }

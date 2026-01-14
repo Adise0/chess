@@ -13,6 +13,8 @@ void InGame::Load() {
   background = new Rectangle(backgroundRect, backgroundRenderer);
   AppendElement(background);
 
+  ConstructBoard();
+
   board = new Board();
   // #endregion
 }
@@ -50,11 +52,8 @@ void InGame::ConstructBoard() {
         else renderer = &lightTileRenderer;
       }
 
-      CreateTile(currentX, currentY, tileRect, *renderer);
-      // ConfigurePiece({
-      //     (short)row,
-      //     (short)col,
-      // });
+      CreateTile(col, row, tileRect, *renderer);
+
       currentY += Board::tileSize;
     }
     currentX += Board::tileSize;
@@ -69,6 +68,8 @@ void InGame::CreateTile(short x, short y, SDL_FRect rect, Renderer renderer) {
   createdTile->OnClick([this, x, y] {
     if (board->selectedPiece != nullptr) {
       board->RequestMove(board->selectedPiece, Vector2Int(x, y));
+      Vector2 screenPos = Board::ToScreenPosition(board->selectedPiece->position);
+      board->selectedPiece->element->SetPosition(screenPos.x, screenPos.y);
     }
     board->selectedPiece = nullptr;
   });
