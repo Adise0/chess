@@ -245,6 +245,12 @@ void Board::StartTurn() {
     GameManager::mainMenu.Present(true);
     GameManager::inGame.Present(false);
     GameManager::inGame.Load();
+
+    for (short i = 0; i < boardSize; i++) {
+      for (short j = 0; j < boardSize; j++) {
+        delete board[i][j];
+      }
+    }
   }
 
   // #endregion
@@ -261,7 +267,7 @@ bool Board::IsMoveLegal(Piece *piece, Vector2Int target) {
   Vector2Int originalPiecePosition = piece->position;
 
   board[target.x][target.y] = piece;
-  board[piece->position.x][piece->position.y] = nullptr;
+  board[originalPiecePosition.x][originalPiecePosition.y] = nullptr;
   piece->position = target;
 
   bool isKingInCheck = IsKingInCheck(piece->team);
