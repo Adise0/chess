@@ -43,6 +43,7 @@ struct Vector2Int {
   Vector2Int operator*(const Vector2Int &other) const { return {x * other.x, y * other.y}; }
   Vector2Int operator*(int scalar) const { return {x * scalar, y * scalar}; }
   Vector2Int operator/(int scalar) const { return {x / scalar, y / scalar}; }
+  bool operator==(const Vector2Int &other) const { return x == other.x && y == other.y; }
 };
 
 // ---- out-of-class definitions (now both types are complete) ----

@@ -25,5 +25,14 @@ public:
   /// @brief Getter for the elements to render
   /// @return The vector of elements to render this frame
   virtual std::vector<Element *> GetElementsToRender() override;
+
+private:
+  /// @brief Constructs the board
+  void ConstructBoard();
+
+  /// @brief Creates a square
+  /// @param rect x, y, width, height
+  /// @param renderer a renderer
+  void CreateTile(short x, short y, SDL_FRect rect, Renderer renderer);
 };
 } // namespace Chess::Rendering::Screens

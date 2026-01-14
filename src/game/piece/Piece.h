@@ -20,6 +20,9 @@ public:
   /// @brief The underlying Draggable element
   Draggable *element;
 
+  /// @brief This piece's legal moves
+  std::vector<Vector2Int> legalMoves;
+
 public:
   Piece(Vector2Int startPosition, PieceType pieceType, TEAM team);
   Piece();
