@@ -267,25 +267,12 @@ void Board::StartTurn() {
 
   if (nOfLegalMoves == 0) {
 
-    // exit(0);
     SDL_Texture *endSprite = isKingInCheck
                                  ? WindowManager::LoadSprite("assets/sprites/CHECK-MATE.png")
                                  : WindowManager::LoadSprite("assets/sprites/STALE-MATE.png");
 
     GameManager::byebyeMenu.background->renderer.baseImage = endSprite;
     GameManager::byebyeMenu.Present(true);
-    // GameManager::mainMenu.Present(true);
-    // GameManager::inGame.Present(false);
-    // GameManager::inGame.Load();
-
-    // for (short i = 0; i < boardSize; i++) {
-    //   for (short j = 0; j < boardSize; j++) {
-    //     if (board[i][j]) {
-    //       delete board[i][j];
-    //       board[i][j] = nullptr;
-    //     }
-    //   }
-    // }
   }
 
   // #endregion
