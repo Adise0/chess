@@ -109,7 +109,6 @@ Vector2Int Board::GetClosestTile(Vector2 screenPosition) {
 
 bool Board::EnsureLegal(Vector2Int targetTile, Vector2Int originalTile, Piece *piece) {
 
-
   board[targetTile.x][targetTile.y] = piece;
   board[piece->position.x][piece->position.y] = nullptr;
   piece->position = targetTile;
@@ -176,6 +175,20 @@ bool Board::EnsureLegal(Vector2Int targetTile, Vector2Int originalTile, Piece *p
         } else {
           continue;
         }
+      }
+    }
+  }
+
+  if (!cancelMove) {
+    Piece *king = currentTurn == 0 ? team0King : team1King;
+    std::vector<Vector2Int> knightAtackSquares = GetKnightLegalMoves(king);
+
+    for (Vector2Int squares : knightAtackSquares) {
+      Piece *atacking = board[squares.x][squares.y];
+      if (atacking != nullptr && atacking->pieceType == PieceType::Knight &&
+          atacking->team != king->team) {
+        cancelMove = true;
+        break;
       }
     }
   }
