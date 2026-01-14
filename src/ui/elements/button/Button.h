@@ -35,6 +35,8 @@ public:
   /// @param listener The listener to register
   void OnClick(std::function<void()> listener);
 
+  void RemoveListeners();
+
   /// @brief Whether the button is currently being pressed
   bool isPressed;
 

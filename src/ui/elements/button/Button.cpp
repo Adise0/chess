@@ -59,6 +59,8 @@ void Button::OnClick(std::function<void()> listener) {
   // #endregion
 }
 
+void Button::RemoveListeners() { onClickListeners.clear(); }
+
 void Button::OnClickEvent() {
   // #region OnClickEvent
   for (const std::function<void()> &listener : onClickListeners) {

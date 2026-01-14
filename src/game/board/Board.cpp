@@ -446,6 +446,59 @@ bool Board::RequestMove(Piece *piece, Vector2Int target) {
     capturedPiece = nullptr;
   }
 
+
+  if (piece->pieceType == PieceType::Pawn) {
+    short y = piece->team == 0 ? 7 : 0;
+    if (piece->position.y == y) {
+
+      GameManager::supersayanPawn.knightButton->RemoveListeners();
+      GameManager::supersayanPawn.knightButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Knight;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Knight.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.bishopButton->RemoveListeners();
+      GameManager::supersayanPawn.bishopButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Bishop;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Bishop.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.rookButton->RemoveListeners();
+      GameManager::supersayanPawn.rookButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Rook;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Rook.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.queenButton->RemoveListeners();
+      GameManager::supersayanPawn.queenButton->OnClick([piece, this] {
+        piece->pieceType = PieceType::Queen;
+        std::string team = (currentTurn == 0 ? "white" : "black");
+        SDL_Texture *newSprite =
+            WindowManager::LoadSprite("assets/sprites/pieces/" + team + "Queen.png");
+        piece->element->renderer.baseImage = newSprite;
+        piece->element->renderer.pressedImage = newSprite;
+        GameManager::supersayanPawn.Present(false);
+      });
+
+      GameManager::supersayanPawn.Present(true);
+    }
+  }
+
   try {
     HideLegalMoves();
     currentTurn = currentTurn == 0 ? 1 : 0;

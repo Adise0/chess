@@ -1,8 +1,10 @@
 #pragma once
+#include "../../../types/vector2/Vector2.h"
 #include "../../elements/button/Button.h"
 #include "../../elements/rectangle/Rectangle.h"
 #include "../screen/Screen.h"
 #include <SDL3/SDL.h>
+
 
 namespace Chess::Rendering::Screens {
 using namespace Elements;
@@ -13,13 +15,11 @@ private:
   /// @brief The background image
   Rectangle *background;
 
+public:
   Button *knightButton;
   Button *bishopButton;
   Button *rookButton;
   Button *queenButton;
-
-public:
-  // Vector2 position;
 
 
 
